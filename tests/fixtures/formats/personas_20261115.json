@@ -1,0 +1,27 @@
+{
+    "personas": {
+        "user-default.png": "Jonas",
+        "1731670000-Wanderin.png": "Wanderin"
+    },
+    "persona_descriptions": {
+        "user-default.png": {
+            "description": "Jonas ist Zimmermann aus Husum, ruhig und hilfsbereit.",
+            "position": 0,
+            "depth": 2,
+            "role": 0,
+            "lorebook": "",
+            "title": "",
+            "connections": []
+        },
+        "1731670000-Wanderin.png": {
+            "description": "Eine Wanderin mit Rucksack und Landkarte, unterwegs von Hütte zu Hütte.",
+            "position": 0,
+            "depth": 2,
+            "role": 0,
+            "lorebook": "",
+            "title": "Bergsteigerin",
+            "connections": []
+        }
+    },
+    "default_persona": "user-default.png"
+}

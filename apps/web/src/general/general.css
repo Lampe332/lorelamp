@@ -1,0 +1,44 @@
+/* Settings tab "Allgemein": the rows about how the app behaves (general/Rows.tsx). Prefix gen-.
+   Tokens only; controls are at least 44 px high wherever a finger may use them. */
+
+/* A choice from a short list: the words on the left, the list (or a button) at the right edge. */
+.gen-line { display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; flex-wrap: wrap; }
+.gen-line > label, .gen-folder-text { display: grid; gap: 3px; min-width: 0; flex: 1 1 260px; }
+.gen-line b { font-weight: 500; }
+.gen-line > label span { color: var(--faint); font-size: 13px; line-height: 1.5; }
+.gen-line > label a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+.gen-line > label a:hover { color: var(--text); }
+.gen-line select.input { width: auto; min-width: 210px; min-height: 44px; flex: none; }
+.gen-line .btn { min-height: 44px; flex: none; }
+
+/* The data folder: its path can be long, so it breaks anywhere and can be selected as a whole. */
+.gen-path { font: 400 13px/1.5 var(--font); color: var(--muted); overflow-wrap: anywhere; user-select: all; }
+.gen-opened { flex: 1 1 100%; margin-top: -4px; }
+/* The welcome tour, once more (tutorial/). */
+.gen-tour .gen-folder-text span { color: var(--faint); font-size: 13px; line-height: 1.5; }
+.gen-tour .gen-folder-text .bad { color: var(--negative); }
+
+/* Something this page cannot do here (starting with Windows from a browser). */
+.gen-note { display: grid; gap: 4px; padding: 16px 18px; border-radius: var(--radius-inner); background: var(--raised); }
+.gen-note b { font-weight: 500; }
+.gen-note span { color: var(--muted); font-size: 13.5px; line-height: 1.5; }
+
+/* The two ways to send: the keys are the name of the choice. */
+.gen-send { margin-top: -12px; }
+/* The app's languages, each under its own name: four in a row where there is room, else two by two
+   (never three and one). */
+.set-panel:has(> .gen-languages) { container-type: inline-size; }
+.gen-languages { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@container (min-width: 560px) {
+  .gen-languages { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.gen-languages .choice { align-items: center; padding-block: 13px; }
+.gen-send .choice-text b { gap: 0; align-items: center; }
+.gen-send kbd { font-size: 12.5px; padding: 4px 7px; color: var(--text); }
+
+.gen-problem { font-size: 14px; }
+
+@media (max-width: 767px) {
+  .gen-line select.input, .gen-line .btn { width: 100%; }
+  .gen-line > label, .gen-folder-text { flex-basis: 100%; }
+}

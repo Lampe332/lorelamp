@@ -1,0 +1,436 @@
+/* The chat's own look (prefix cv-): reading settings applied to the story, the character's large
+   picture, the backdrop, new text fading in, and the "Aussehen" panel. Tokens only. */
+
+/* The measure follows the type size set for this chat (the root's own value was computed from the
+   root's size); a width chosen by hand replaces it inline. */
+[data-cv-style] { --measure: calc(var(--read-size) * 36.3); }
+
+/* ---------- Frame: story and message field, the large picture beside them ---------- */
+.cv-frame { flex: 1; min-height: 0; min-width: 0; display: flex; position: relative; }
+.cv-main { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; position: relative; }
+.cv-main > .chat-body, .cv-main > .composer { position: relative; z-index: 1; }
+
+/* Beside the story as long as the chat itself (not the window: the sidebar takes its share) has
+   room for both; `data-cv-stage` comes from the frame's measured width (look.ts `useStageSide`).
+   A column narrower than a third of a small chat still shows the whole figure. */
+.cv-stage { order: 2; flex: 0 0 clamp(240px, 30%, 560px); min-width: 0; min-height: 0; position: relative; background: var(--surface); border-left: 1px solid var(--border); overflow: hidden; animation: fade-in .28s var(--ease-out); }
+.cv-stage-pic { position: relative; display: block; width: 100%; height: 100%; object-fit: cover; }
+/* The picture never shows as a slice of itself: where filling the area would cut away too much
+   (Stage.tsx `stageFit`), the whole picture is shown, and what it leaves free is filled with a
+   soft, dimmed copy of it. */
+.cv-stage[data-fit="contain"]::before { content: ""; position: absolute; inset: -32px; background: var(--cv-pic, none) center / cover; filter: blur(24px); opacity: .38; }
+.cv-stage[data-fit="contain"] .cv-stage-pic:not(.initial) { object-fit: contain; object-position: 50% 50% !important; }
+.cv-stage-pic.initial { font-size: clamp(72px, 12vw, 180px); }
+.cv-stage .cv-stage-close { position: absolute; top: 10px; right: 10px; background: var(--scrim); color: var(--text); opacity: 0; transition: opacity .15s, background-color .15s, transform .12s var(--ease-out); }
+.cv-stage:hover .cv-stage-close, .cv-stage .cv-stage-close:focus-visible { opacity: 1; }
+.cv-stage .cv-stage-close:hover { background: var(--active); }
+
+/* The picture in the bar is the switch for the large one. */
+.cv-av { display: grid; place-items: center; flex: none; border-radius: 12px; transition: transform .12s var(--ease-out); }
+.cv-av:active { transform: scale(.94); }
+.cv-av .av { transition: box-shadow .15s; }
+.cv-av:hover .av { box-shadow: 0 0 0 2px var(--ground), 0 0 0 3px var(--control); }
+.cv-av[aria-pressed="true"] .av { box-shadow: 0 0 0 2px var(--ground), 0 0 0 4px hsl(var(--h, 30) var(--hue-caret)); }
+
+/* A narrow chat (a phone, a slim window): the picture is a band above the story, as tall as the
+   room allows, so it stays while the keyboard is open. */
+.cv-frame[data-cv-stage="band"] { flex-direction: column; }
+[data-cv-stage="band"] .cv-stage { order: 0; flex: 0 0 clamp(120px, 36%, 340px); border-left: 0; border-bottom: 1px solid var(--border); }
+[data-cv-stage="band"] .cv-stage .cv-stage-close { opacity: 1; }
+@media (max-width: 767px), (pointer: coarse) {
+  .cv-av { min-width: 44px; min-height: 44px; }
+  .cv-stage .cv-stage-close { opacity: 1; width: 44px; height: 44px; top: 6px; right: 6px; }
+}
+
+/* ---------- Backdrop ---------- */
+.cv-backdrop { position: absolute; inset: 0; overflow: hidden; z-index: 0; background: var(--ground); animation: fade-in .4s var(--ease-out); }
+.cv-backdrop img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.cv-backdrop i { position: absolute; inset: 0; background: var(--ground); }
+/* Over a picture the quiet lines need a little more ink, and the message field with its hints
+   stands on the theme's ground again (a plain veil that rises under it, whatever the picture). */
+.cv-has-bg .msg-note { color: var(--muted); }
+.cv-has-bg .composer { background: linear-gradient(to bottom, transparent, var(--ground) 62%); }
+
+/* ---------- Reading settings ---------- */
+[data-cv-justify="on"] .prose { text-align: justify; }
+[data-cv-timings="off"] .msg-note { display: none; }
+[data-cv-style] .prose p:not(:last-child) { margin-bottom: var(--cv-para, .85em); }
+[data-cv-avatars="off"] .msg .msg-head .av.av { display: none; }
+/* Inks: spoken words and *actions*. `--cv-say` / `--cv-act` are set when the look names another ink
+   than the app's own (the character's colour for speech, the quiet narration ink for actions). In
+   your own messages they apply only when asked for. */
+[data-cv-speech="on"] .msg.ai .cv-say, [data-cv-speech="on"][data-cv-mine="on"] .msg.user .cv-say { color: var(--cv-say, hsl(var(--h, 30) var(--hue-name))); }
+[data-cv-speech="on"][data-cv-say-bold="on"] .msg.ai .cv-say, [data-cv-speech="on"][data-cv-say-bold="on"][data-cv-mine="on"] .msg.user .cv-say { font-weight: 600; }
+[data-cv-style] .msg.ai .prose em, [data-cv-mine="on"] .msg.user .prose em { color: var(--cv-act, var(--narration)); }
+[data-cv-act-italic="off"] .prose em { font-style: normal; }
+
+/* Both sides (theirs left, yours right): each message a bubble at its own edge, the picture
+   beside it at the foot, the name above. "Messenger" keeps them in a column in the middle, a
+   little wider than a book's, since no line runs its whole width; "Messenger breit" (wide) spreads
+   them over the whole chat, theirs at its left edge, yours at its right. */
+[data-cv-style="sides"] .col { max-width: calc(var(--measure) * 1.25); }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg.msg { display: grid; align-items: end; }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg.ai { grid-template-columns: auto minmax(0, 1fr); }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg.user { grid-template-columns: minmax(0, 1fr) auto; }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg-head { display: contents; }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg .msg-head .av { grid-row: 2; width: 32px; height: 32px; font-size: 14px; }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg.ai .msg-head .av { grid-column: 1; margin-right: 10px; }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg.user .msg-head .av { grid-column: 2; margin-left: 10px; }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg .msg-head b { grid-row: 1; margin-bottom: 5px; font-size: 12.5px; }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg.ai .msg-head b { grid-column: 2; padding-left: 14px; }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg.user .msg-head b { grid-column: 1; justify-self: end; padding-right: 14px; }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg.ai > :not(.msg-head) { grid-column: 2; }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg.user > :not(.msg-head) { grid-column: 1; }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg .prose, :is([data-cv-style="sides"], [data-cv-style="wide"]) .msg .msg-edit { grid-row: 2; }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg .prose { width: fit-content; max-width: min(84%, 46em); padding: 12px 18px; }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg.ai .prose { justify-self: start; background: var(--cv-ai-bg, hsl(var(--h, 30) var(--hue-field))); border-radius: 18px 18px 18px 5px; }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg.user .prose { justify-self: end; border-radius: 18px 18px 5px 18px; }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg .msg-edit { width: 100%; }
+/* Under a bubble at the left, what can be done with it stands at the left too. */
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg.ai .msg-foot { padding-left: 6px; gap: 0 6px; }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg.ai .msg-actions { margin: 0; order: 1; }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg.ai .x7-swipe { margin-left: -6px; }
+:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg.ai .msg-note { order: 2; flex: 0 1 auto; margin-left: 8px; }
+@media (max-width: 767px) {
+  :is([data-cv-style="sides"], [data-cv-style="wide"]) .msg .prose { max-width: 90%; padding: 10px 14px; }
+  :is([data-cv-style="sides"], [data-cv-style="wide"]) .msg .msg-head .av { width: 28px; height: 28px; font-size: 13px; }
+}
+
+/* Wide: the column is the whole chat, with a margin that grows with the window (or the one set).
+   Message field and messages share the same edges. A bubble stays narrow enough to read (about
+   70 characters); wider only when asked for. The stream keeps its scrollbar's room on the right
+   only, so the left edge is the chat's own. */
+[data-cv-style="wide"] .stream { padding-inline: 0; scrollbar-gutter: stable; }
+[data-cv-style="wide"] .composer { padding-inline: 0; }
+[data-cv-style="wide"] :is(.stream, .composer) > .col { max-width: none; padding-inline: var(--cv-edge, clamp(12px, 2.2vw, 44px)); }
+[data-cv-style="wide"] .composer > .col { padding-right: calc(var(--cv-edge, clamp(12px, 2.2vw, 44px)) + var(--cv-sb, 0px)); }
+[data-cv-style="wide"] .msg .prose { max-width: min(78%, 44em); }
+/* Notes that are not messages keep a reading width in the middle. */
+[data-cv-style="wide"] .stream > .col > :is(.chat-empty, .msg-error) { max-width: var(--measure); margin-inline: auto; }
+@media (max-width: 767px) {
+  [data-cv-style="wide"] .msg .prose { max-width: 88%; }
+}
+
+/* Swapped sides (both two-sided layouts): yours on the left, theirs on the right. */
+:is([data-cv-style="sides"], [data-cv-style="wide"])[data-cv-flip="on"] .msg.ai { grid-template-columns: minmax(0, 1fr) auto; }
+:is([data-cv-style="sides"], [data-cv-style="wide"])[data-cv-flip="on"] .msg.user { grid-template-columns: auto minmax(0, 1fr); }
+:is([data-cv-style="sides"], [data-cv-style="wide"])[data-cv-flip="on"] .msg.ai .msg-head .av { grid-column: 2; margin: 0 0 0 10px; }
+:is([data-cv-style="sides"], [data-cv-style="wide"])[data-cv-flip="on"] .msg.user .msg-head .av { grid-column: 1; margin: 0 10px 0 0; }
+:is([data-cv-style="sides"], [data-cv-style="wide"])[data-cv-flip="on"] .msg.ai .msg-head b { grid-column: 1; justify-self: end; padding: 0 14px 0 0; }
+:is([data-cv-style="sides"], [data-cv-style="wide"])[data-cv-flip="on"] .msg.user .msg-head b { grid-column: 2; justify-self: start; padding: 0 0 0 14px; }
+:is([data-cv-style="sides"], [data-cv-style="wide"])[data-cv-flip="on"] .msg.ai > :not(.msg-head) { grid-column: 1; }
+:is([data-cv-style="sides"], [data-cv-style="wide"])[data-cv-flip="on"] .msg.user > :not(.msg-head) { grid-column: 2; }
+:is([data-cv-style="sides"], [data-cv-style="wide"])[data-cv-flip="on"] .msg.ai .prose { justify-self: end; border-radius: 18px 18px 5px 18px; }
+:is([data-cv-style="sides"], [data-cv-style="wide"])[data-cv-flip="on"] .msg.user .prose { justify-self: start; border-radius: 18px 18px 18px 5px; }
+:is([data-cv-style="sides"], [data-cv-style="wide"])[data-cv-flip="on"] .msg.ai .msg-foot { padding-left: 0; }
+:is([data-cv-style="sides"], [data-cv-style="wide"])[data-cv-flip="on"] .msg.ai .msg-actions { margin: 0 -8px 0 auto; order: 0; }
+:is([data-cv-style="sides"], [data-cv-style="wide"])[data-cv-flip="on"] .msg.ai .msg-note { order: 0; flex: 1 1 auto; margin-left: 0; }
+
+/* Bubbles: the character's words in a field of its own colour, yours stay on the right. */
+[data-cv-style="bubbles"] .msg.ai .prose { background: var(--cv-ai-bg, hsl(var(--h, 30) var(--hue-field))); border-radius: 20px 20px 20px 6px; padding: 14px 20px; width: fit-content; max-width: 94%; }
+[data-cv-style="bubbles"] .msg.ai .msg-head { margin-bottom: 8px; padding-left: 6px; }
+
+/* Tight: no pictures, less air. */
+[data-cv-style="compact"] .msg { margin-bottom: 16px; }
+[data-cv-style="compact"] .msg:has(.msg-foot) { margin-bottom: 4px; }
+[data-cv-style="compact"] .msg-head { margin-bottom: 4px; }
+[data-cv-style="compact"] .msg-head .av { display: none; }
+[data-cv-style="compact"] .prose p:not(:last-child) { margin-bottom: var(--cv-para, .5em); }
+[data-cv-style="compact"] .msg.user .prose { padding: 9px 16px; border-radius: 16px 16px 6px 16px; }
+
+/* ---------- The finer settings (each rule only acts once the look sets it; look.ts lookProps) ---------- */
+/* Fills: your bubble in every layout, theirs where it is a bubble. */
+[data-cv-style] .msg.user .prose { background: var(--cv-me-bg, var(--surface)); }
+/* Inks of narration and of thoughts (`…`); in your own messages only when asked for. */
+[data-cv-style] .msg.ai .prose, [data-cv-mine="on"] .msg.user .prose { color: var(--cv-story, var(--story)); }
+.cv-think { font-style: italic; }
+[data-cv-style] .msg.ai .cv-think, [data-cv-mine="on"] .msg.user .cv-think { color: var(--cv-think, var(--narration)); }
+
+/* Widest bubble, as a share of its row. */
+[data-cv-bubble="on"] .msg.user .prose,
+[data-cv-bubble="on"]:is([data-cv-style="bubbles"], [data-cv-style="sides"], [data-cv-style="wide"]) .msg.ai .prose { max-width: var(--cv-bubble); }
+
+/* Corners: one radius for all, the one next to the speaker smaller (or the same: no point). */
+[data-cv-shape="on"] .msg.user .prose { border-radius: var(--cv-r) var(--cv-r) var(--cv-rt) var(--cv-r); }
+[data-cv-shape="on"]:is([data-cv-style="bubbles"], [data-cv-style="sides"], [data-cv-style="wide"]) .msg.ai .prose { border-radius: var(--cv-r) var(--cv-r) var(--cv-r) var(--cv-rt); }
+[data-cv-shape="on"][data-cv-flip="on"]:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg.user .prose { border-radius: var(--cv-r) var(--cv-r) var(--cv-r) var(--cv-rt); }
+[data-cv-shape="on"][data-cv-flip="on"]:is([data-cv-style="sides"], [data-cv-style="wide"]) .msg.ai .prose { border-radius: var(--cv-r) var(--cv-r) var(--cv-rt) var(--cv-r); }
+
+/* Shadow and frosted glass: only on a bubble that has a fill. */
+[data-cv-shadow="on"][data-cv-me-fill="on"] .msg.user .prose,
+[data-cv-shadow="on"][data-cv-ai-fill="on"]:is([data-cv-style="bubbles"], [data-cv-style="sides"], [data-cv-style="wide"]) .msg.ai .prose { box-shadow: var(--float-shadow); }
+[data-cv-frost="on"][data-cv-me-fill="on"] .msg.user .prose,
+[data-cv-frost="on"][data-cv-ai-fill="on"]:is([data-cv-style="bubbles"], [data-cv-style="sides"], [data-cv-style="wide"]) .msg.ai .prose { -webkit-backdrop-filter: blur(var(--cv-frost)); backdrop-filter: blur(var(--cv-frost)); }
+
+/* Space below each message (the row of actions under it stays). */
+[data-cv-gap="on"] .msg, [data-cv-gap="on"] .msg:has(.msg-foot) { margin-bottom: var(--cv-gap); }
+
+/* Name, time and picture. */
+.msg-time { margin-left: 8px; font-size: 11.5px; font-weight: 400; color: var(--faint); white-space: nowrap; }
+[data-cv-names="off"] .msg-head .msg-name { display: none; }
+[data-cv-names="off"] .msg-head .msg-time { margin-left: 0; }
+[data-cv-names="off"][data-cv-times="off"] .msg-head b { display: none; }
+[data-cv-names="off"][data-cv-times="off"]:is([data-cv-avatars="off"], [data-cv-style="compact"]) .msg-head { display: none; }
+[data-cv-av-size="on"] .msg .msg-head .av.av { width: var(--cv-av); height: var(--cv-av); font-size: calc(var(--cv-av) * .44); }
+[data-cv-av-shape="soft"] .msg .msg-head .av.av { border-radius: 30%; }
+[data-cv-av-shape="square"] .msg .msg-head .av.av { border-radius: 4px; }
+
+/* How a new message comes on screen (only those that arrive while the chat is open). */
+@media (prefers-reduced-motion: no-preference) {
+  [data-cv-enter="fade"] .msg.cv-new { animation: cv-enter-fade .32s var(--ease-out) both; }
+  [data-cv-enter="rise"] .msg.cv-new { animation: cv-enter-rise .38s var(--ease-out) both; }
+  [data-cv-enter="pop"] .msg.cv-new .prose { animation: cv-enter-pop .3s var(--ease-out) both; transform-origin: 0 100%; }
+  [data-cv-enter="pop"] .msg.user.cv-new .prose { transform-origin: 100% 100%; }
+}
+@keyframes cv-enter-fade { from { opacity: 0; } }
+@keyframes cv-enter-rise { from { opacity: 0; transform: translateY(14px); } }
+@keyframes cv-enter-pop { from { opacity: 0; transform: scale(.9); } }
+
+/* ---------- An answer being written ---------- */
+/* Each piece of new text (one screen frame's worth of tokens) fades in on its own; only opacity
+   moves, so nothing is laid out again and the scroll position holds. */
+.cv-in { animation: cv-in 420ms cubic-bezier(.3, .7, .4, 1) both; }
+@keyframes cv-in { from { opacity: 0; } }
+/* Before the first word: three dots in the character's colour. */
+.cv-typing { display: flex; align-items: center; gap: 6px; height: calc(var(--read-size) * var(--read-lh)); }
+.cv-typing i { width: 7px; height: 7px; border-radius: 50%; background: hsl(var(--h, 30) var(--hue-caret)); animation: cv-dot 1.2s var(--ease-in-out) infinite; }
+.cv-typing i:nth-child(2) { animation-delay: .15s; }
+.cv-typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes cv-dot { 0%, 60%, 100% { opacity: .3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+/* "Mara schreibt …" beside the dots when the look asks for it (screen readers keep hearing the
+   short "Schreibt …"). Nothing at all: the reply stays away until its first word. */
+.cv-typing-name { display: none; }
+[data-cv-typing="name"] .cv-typing-name { display: inline; margin-left: 6px; font: 400 14px/1.2 var(--font); color: var(--muted); }
+[data-cv-typing="none"] .msg:has(> .prose > .cv-typing) { display: none; }
+/* Written again: the old text stays, faded, with the caret at its start, until the first new word.
+   The caret has no offsets, so it sits where the text starts in every layout (its static place). */
+.msg.cv-rewrite .prose { position: relative; }
+.msg.cv-rewrite .prose > p { opacity: .4; }
+.msg.cv-rewrite .prose > p:first-child { text-indent: calc(.45em + 6px); }
+.msg.cv-rewrite .prose::before { content: ""; position: absolute; width: .45em; height: 1.05em; margin-top: calc((var(--read-lh) - 1.05) * .5em); border-radius: 2px; background: hsl(var(--h, 30) var(--hue-caret)); animation: caret 1.05s steps(1) infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .cv-in { animation: none; }
+  .cv-typing i { animation: none; opacity: .7; }
+  .cv-stage, .cv-backdrop, .cv-panel { animation: none; }
+}
+
+/* ---------- Message field: the action mark ---------- */
+.box .cv-star { width: 42px; height: 42px; color: var(--faint); }
+.cv-star span { font: 400 26px/1 var(--display); translate: 0 5px; }
+.box .cv-star:hover { color: var(--text); }
+/* "Aussehen" inside the message field: phones only (the bar there is full). While you type it
+   makes room for the action mark. */
+.box .cv-look-box { display: none; width: 44px; height: 44px; margin-left: -10px; color: var(--faint); }
+@media (max-width: 767px) {
+  .box .cv-star { width: 44px; height: 44px; }
+  .chat-tools .cv-look-btn.cv-look-btn { display: none; }
+  .box .cv-look-box { display: inline-grid; }
+  .box:has(textarea:focus, .cv-star:focus) .cv-look-box, .box:not(:has(textarea:focus, .cv-star:focus)) .cv-star { display: none; }
+}
+
+/* ---------- "Aussehen" of a chat: panel beside the story, sheet on a phone ---------- */
+.cv-panel { position: absolute; top: 0; right: 0; bottom: 0; z-index: 6; width: min(420px, 100%); display: flex; flex-direction: column; background: var(--surface); border-left: 1px solid var(--border); box-shadow: var(--float-shadow); outline: none; animation: cv-slide .26s var(--ease-out); }
+/* It never starts blank: the room it takes opens at once, so its content is there from the first frame. */
+@keyframes cv-slide { from { transform: translateX(24px); opacity: .55; } }
+.cv-panel-wait { gap: 14px; }
+.cv-panel-wait .bar-ph { height: 14px; }
+.cv-ph-pic { aspect-ratio: 16 / 9; border-radius: var(--radius-inner); background: var(--raised); }
+.cv-panel.over { box-shadow: var(--float-shadow), inset 0 0 0 2px var(--focus-line); }
+.cv-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 12px 12px 22px; flex: none; }
+.cv-panel-head h2 { font: 400 20px/1.2 var(--display); }
+.cv-panel-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; padding: 4px 22px 28px; display: grid; gap: 30px; align-content: start; }
+.cv-sec { display: grid; gap: 14px; min-width: 0; }
+.cv-sec h3 { margin: 0; font: 600 13px/1.3 var(--font); color: var(--muted); }
+.cv-sec .link { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+.btn.cv-wide { justify-self: start; white-space: normal; height: auto; min-height: var(--ctl); padding-block: 6px; text-align: left; }
+.cv-status { min-height: 18px; font-size: 13px; color: var(--muted); }
+.cv-status:empty { display: none; }
+.cv-bg-thumb { position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius-inner); overflow: hidden; background: var(--raised); }
+.cv-bg-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.cv-bg-thumb span { position: absolute; left: 8px; bottom: 8px; padding: 3px 9px; border-radius: 999px; background: var(--scrim); color: var(--text); font-size: 12px; }
+/* The choice inside a panel: a quiet track, the chosen one lifted out of it. (On phones the app's
+   own .seg runs edge to edge as a filter row; here it stays a compact control.) */
+.seg.cv-seg { background: var(--raised); align-self: start; justify-self: start; width: auto; margin: 0; padding: 3px; gap: 2px; border-radius: 999px; }
+.seg.cv-seg button { background: none; }
+.seg.cv-seg button[aria-pressed="true"] { background: var(--active); color: var(--text); box-shadow: inset 0 0 0 1px var(--focus-line); }
+.seg.cv-seg button:disabled { opacity: .4; }
+/* A wide window: the panel takes its own column, so nothing of the chat lies under it and the
+   text reflows as you change it. With the large picture also on show there is room for both only
+   on very wide windows; below that the panel lies over the picture. */
+@media (min-width: 1180px) {
+  .cv-panel { position: relative; order: 3; flex: 0 0 min(420px, 42%); width: auto; box-shadow: none; }
+}
+@media (min-width: 1180px) and (max-width: 1599px) {
+  .cv-staged .cv-panel { position: absolute; width: min(420px, 100%); box-shadow: var(--float-shadow); }
+}
+@media (max-width: 767px) {
+  .cv-panel { top: auto; left: 0; width: 100%; max-height: 64%; border-left: 0; border-radius: 18px 18px 0 0; animation: sheet-in .28s var(--ease-out); padding-bottom: env(safe-area-inset-bottom); }
+  .cv-panel-head { padding: 12px 8px 8px 18px; }
+  .cv-panel-head .icon-btn { width: 44px; height: 44px; }
+  .cv-panel-body { padding: 4px 18px 22px; }
+  .seg.cv-seg button { height: 40px; padding: 0 14px; }
+  .cv-panel .btn { min-height: 44px; }
+}
+
+/* ---------- The last reply once more: "Neu generieren", "Weiter schreiben" ---------- */
+/* They stand first in the row, a little apart from what every message offers. */
+.msg-actions .cv-write { position: relative; display: flex; gap: 2px; margin-right: 8px; padding-right: 8px; }
+.msg-actions .cv-write::after { content: ""; position: absolute; right: 0; top: 50%; width: 1px; height: 16px; translate: 0 -50%; background: var(--border); }
+.cv-write-note { order: 9; flex: 1 0 100%; margin: 2px 0 0; font-size: 12.5px; color: var(--negative); }
+.msg-foot:has(.cv-write-note) { flex-wrap: wrap; }
+/* A phone has no room for variants and six actions in one row: they wrap into two. */
+@media (max-width: 767px) {
+  .msg-foot:has(.cv-write) { flex-wrap: wrap; }
+  .msg-actions .cv-write { gap: 0; margin-right: 4px; padding-right: 4px; }
+}
+/* Past the last variant of the chat's last reply the arrow writes a new one: it is not an end. */
+.x7-swipe .x7-next.cv-new-variant:not([aria-disabled="true"]) { color: var(--muted); }
+
+/* "Speichern und neu antworten" beside "Speichern": on a narrow screen the row wraps rather than
+   squeezing the buttons. */
+.msg-edit-bar:has(.cv-save-again) { flex-wrap: wrap; }
+@media (max-width: 520px) {
+  .msg-edit-bar .cv-save-again { order: 1; flex: 1 0 100%; }
+}
+html[data-form="tablet"] .msg-edit .btn.sm { min-height: 48px; padding-inline: 18px; }
+html[data-form="tablet"] .x7-swipe .icon-btn { width: 48px; height: 48px; }
+
+/* The measurements under a reply: the short line in view (all of it on hover, `title`). Where the
+   row under the message is narrow (a phone, a chat beside the "Aussehen" panel), all of it gets a
+   line of its own and wraps instead of being cut. */
+.msg-foot { flex-wrap: wrap; container-type: inline-size; }
+.msg-note .cv-tm-full { display: none; }
+@container (max-width: 600px) {
+  .msg .msg-foot .msg-note.msg-note { order: 8; flex: 1 0 100%; margin: 0; white-space: normal; overflow: visible; }
+  .msg-note .cv-tm-short { display: none; }
+  .msg-note .cv-tm-full { display: inline; }
+}
+
+/* Narrow columns (a phone, a tablet, a chat beside the panel): balanced line ends leave holes at the
+   right of a short measure, so lines simply fill up there. */
+@media (max-width: 1023px) {
+  .msg .prose { text-wrap: wrap; }
+}
+@media (max-width: 1599px) {
+  :is(.cv-staged, .cv-frame:has(> .cv-panel)) .msg .prose { text-wrap: wrap; }
+}
+
+/* The key hints under the message field stay one line: what does not fit beside the first ones
+   (sending, a new line) is left out rather than wrapped. */
+.composer .hint { max-height: 19px; overflow: clip; overflow-clip-margin: 3px; }
+.composer .hint > span { white-space: nowrap; }
+
+/* A tablet goes to the next variant by a sideways swipe; at the last one the swipe writes a new one. */
+html[data-form="tablet"] .msg:has(.x7-regen) .prose { touch-action: pan-y; }
+html[data-form="tablet"] .cv-ink { width: 48px; height: 48px; }
+html[data-form="tablet"] .cv-style { min-height: 48px; }
+
+/* ---------- The controls (panel and settings tab) ---------- */
+.cv-fields { display: grid; gap: 36px; min-width: 0; }
+.cv-group { display: grid; gap: 22px; min-width: 0; scroll-margin-top: 64px; }
+.cv-group > h3 { margin: 0; font: 600 13px/1.3 var(--font); color: var(--muted); }
+/* The groups at a glance: a row of names that jumps to each. In the panel it stays at the top
+   while the controls scroll under it. */
+.cv-jump { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: -12px; }
+.cv-jump-btn { height: 30px; padding: 0 12px; border-radius: 999px; background: var(--raised); color: var(--muted); font-size: 12.5px; font-weight: 500; white-space: nowrap; transition: background-color .15s, color .15s, transform .12s var(--ease-out); }
+.cv-jump-btn:hover { background: var(--active); color: var(--text); }
+.cv-jump-btn:active { transform: scale(.97); }
+.cv-panel .cv-jump { position: sticky; top: -4px; z-index: 2; margin: -4px -22px -12px; padding: 8px 22px 10px; background: var(--surface); box-shadow: 0 1px 0 var(--border); }
+@media (max-width: 767px), (pointer: coarse) {
+  .cv-jump-btn { height: 40px; padding: 0 14px; }
+  .cv-panel .cv-jump { margin-inline: -18px; padding-inline: 18px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+}
+/* How messages are set: one tile per layout, each with a small drawing of the page. */
+.cv-styles { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+.cv-style { display: grid; gap: 8px; align-content: start; padding: 8px 8px 9px; border-radius: var(--radius-inner); background: var(--raised); font-size: 13px; font-weight: 500; line-height: 1.25; text-align: center; min-width: 0; transition: background-color .15s, box-shadow .15s, transform .12s var(--ease-out); }
+.cv-style:hover { background: var(--active); }
+.cv-style:active { transform: scale(.98); }
+.cv-style[aria-checked="true"] { box-shadow: inset 0 0 0 2px var(--text); }
+.cv-style > span:last-child { overflow-wrap: anywhere; text-wrap: balance; }
+/* A few named choices side by side (picture shape, how new messages come). */
+.seg.cv-choice { flex-wrap: wrap; border-radius: 18px; }
+/* Wrapped onto two rows (a phone), each row fills the width, so no word stands alone in a corner. */
+.seg.cv-choice button { flex: 1 1 auto; }
+.seg.cv-choice button[aria-checked="true"] { background: var(--active); color: var(--text); box-shadow: inset 0 0 0 1px var(--focus-line); }
+/* Fills: the swatch is the field itself (as the theme draws it) inside a ring in the hue's ink, so
+   deep fields on a dark theme, a plain one and none at all still tell apart. */
+.cv-ink.cv-fill i { background: var(--sw-fill); box-shadow: inset 0 0 0 2px currentColor; }
+.cv-ink.cv-fill[data-value="none"] i { background: linear-gradient(135deg, transparent 45%, currentColor 45% 55%, transparent 55%); }
+.cv-sketch { display: grid; gap: 4px; align-content: center; height: 58px; padding: 0 9px; border-radius: 8px; background: var(--ground); }
+.cv-sketch i { height: 5px; border-radius: 3px; background: var(--control); }
+.cv-sketch .s { width: 72%; }
+.cv-sketch .u { width: 44%; height: 10px; border-radius: 5px; justify-self: end; background: var(--faint); }
+.cv-sketch-bubbles .a, .cv-sketch-sides .a { height: 10px; border-radius: 5px; }
+.cv-sketch-bubbles .a { width: 84%; }
+.cv-sketch-bubbles .s { display: none; }
+.cv-sketch-bubbles .a:last-child { width: 62%; }
+.cv-sketch-sides { padding: 0 15px; }
+.cv-sketch-sides .a { width: 58%; }
+.cv-sketch-sides .s { width: 38%; }
+/* Wide: the same bubbles, pushed out to the drawing's edges. */
+.cv-sketch-wide { padding: 0 4px; }
+.cv-sketch-wide .a { width: 46%; height: 10px; border-radius: 5px; }
+.cv-sketch-wide .s { width: 30%; }
+.cv-sketch-wide .u { width: 40%; }
+.cv-sketch-compact { gap: 3px; }
+.cv-sketch-compact i { height: 4px; }
+.cv-sketch-compact .u { height: 6px; }
+/* Inks: round swatches in the ink itself, and a slider through all hues. */
+.cv-inks { display: flex; flex-wrap: wrap; gap: 4px; margin-left: -6px; }
+.cv-ink { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; transition: background-color .15s, box-shadow .15s, transform .12s var(--ease-out); }
+.cv-ink i { width: 22px; height: 22px; border-radius: 50%; background: currentColor; }
+.cv-ink:hover { background: var(--raised); }
+.cv-ink:active { transform: scale(.94); }
+.cv-ink[aria-checked="true"] { box-shadow: inset 0 0 0 2px var(--text); }
+.cv-hue { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 14px; font-size: 13px; color: var(--muted); }
+.cv-range.cv-range-hue::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: linear-gradient(to right, hsl(0 var(--hue-name)), hsl(60 var(--hue-name)), hsl(120 var(--hue-name)), hsl(180 var(--hue-name)), hsl(240 var(--hue-name)), hsl(300 var(--hue-name)), hsl(359 var(--hue-name))); }
+.cv-range.cv-range-hue::-moz-range-track { height: 6px; border-radius: 3px; background: linear-gradient(to right, hsl(0 var(--hue-name)), hsl(60 var(--hue-name)), hsl(120 var(--hue-name)), hsl(180 var(--hue-name)), hsl(240 var(--hue-name)), hsl(300 var(--hue-name)), hsl(359 var(--hue-name))); }
+.cv-range.cv-range-hue::-webkit-slider-thumb { margin-top: -7px; box-shadow: 0 0 0 2px var(--surface); }
+@media (max-width: 767px), (pointer: coarse) {
+  .cv-ink { width: 44px; height: 44px; }
+  .cv-ink i { width: 26px; height: 26px; }
+  .cv-style { min-height: 44px; }
+}
+.cv-field { display: grid; gap: 8px; min-width: 0; }
+.cv-field-head { display: flex; align-items: baseline; gap: 12px; min-width: 0; }
+.cv-field-head > :first-child { font-weight: 500; margin-right: auto; }
+.cv-field-head output { color: var(--muted); font-size: 13px; white-space: nowrap; }
+.cv-reset { font-size: 12.5px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; border-radius: 6px; }
+.cv-reset:hover { color: var(--text); }
+.cv-switch { display: grid; gap: 4px; }
+.cv-switch .cv-reset { justify-self: start; }
+.cv-range { appearance: none; -webkit-appearance: none; width: 100%; height: 32px; margin: 0; background: none; cursor: pointer; }
+.cv-range::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: var(--control); }
+.cv-range::-moz-range-track { height: 4px; border-radius: 2px; background: var(--control); }
+.cv-range::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; margin-top: -8px; border: 0; border-radius: 50%; background: var(--primary-bg); transition: transform .12s var(--ease-out); }
+.cv-range::-moz-range-thumb { width: 20px; height: 20px; border: 0; border-radius: 50%; background: var(--primary-bg); }
+.cv-range:active::-webkit-slider-thumb { transform: scale(1.12); }
+.cv-range:focus-visible { outline: none; }
+.cv-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px var(--focus); }
+.cv-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px var(--focus); }
+@media (max-width: 767px), (pointer: coarse) { .cv-range { height: 44px; } .cv-reset { min-height: 32px; } }
+.cv-fonts { display: grid; grid-template-columns: repeat(auto-fill, minmax(158px, 1fr)); gap: 8px; }
+.cv-font { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 8px 12px; border-radius: var(--radius-inner); background: var(--raised); text-align: left; min-width: 0; transition: background-color .15s, box-shadow .15s, transform .12s var(--ease-out); }
+.cv-font:hover { background: var(--active); }
+.cv-font:active { transform: scale(.98); }
+.cv-font[aria-checked="true"] { box-shadow: inset 0 0 0 2px var(--text); }
+.cv-font-aa { font: 400 24px/1 var(--read); width: 34px; flex: none; text-align: center; color: var(--story); }
+.cv-font-name { display: grid; min-width: 0; font-weight: 500; line-height: 1.3; }
+.cv-font-name small { color: var(--faint); font-size: 12px; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ---------- Settings tab "Chat": the controls and a sample that follows them ---------- */
+.cv-tab { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(24px, 2.5vw, 48px); align-items: start; }
+.cv-tab .set-panel { gap: 26px; }
+.cv-sample { position: sticky; top: 16px; display: grid; gap: 12px; min-width: 0; }
+.cv-sample-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cv-sample-head h2 { font: 400 21px/1.2 var(--display); }
+.cv-sample-box { background: var(--ground); border-radius: var(--radius-card); box-shadow: inset 0 0 0 1px var(--border); padding: 28px 24px 22px; overflow: hidden; min-height: 300px; }
+.cv-sample-box .msg { content-visibility: visible; }
+.cv-sample-box .msg:last-child { margin-bottom: 0; }
+@media (max-width: 1279px) {
+  .cv-tab { grid-template-columns: minmax(0, 1fr); }
+  .cv-sample { position: static; order: -1; }
+}
+@media (max-width: 767px) {
+  .cv-sample-box { padding: 18px 14px 14px; }
+}

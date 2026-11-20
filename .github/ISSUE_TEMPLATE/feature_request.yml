@@ -1,0 +1,26 @@
+name: Feature request
+description: An idea for Lorelamp.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What do you want to do?
+      description: Describe the situation and what is missing or awkward today. The "why" helps more than a finished design.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: How could it work?
+      description: Optional. Screens, steps, how another app does it.
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where would you use it?
+      multiple: true
+      options:
+        - Desktop window
+        - Android app
+        - Phone browser
+        - Tablet

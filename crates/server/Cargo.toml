@@ -1,0 +1,52 @@
+[package]
+name = "rp-server"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "rp_server"
+path = "src/lib.rs"
+
+[[bin]]
+name = "rp-server"
+path = "src/main.rs"
+
+[features]
+# Embed the built web UI (`apps/web/dist`, run `npm run build` in apps/web first) into the program.
+# Used by rp-desktop; rp-server then serves it when no `--web-dir` is given.
+embed-ui = ["dep:rust-embed"]
+
+[dependencies]
+axum = { version = "0.8", features = ["ws", "multipart"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "sync", "signal", "fs", "time"] }
+tower-http = { version = "0.6", features = ["fs"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "stream", "rustls-tls"] }
+# `url::Host` for the address check of the link import (the crate reqwest already uses).
+url = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+futures-util = "0.3"
+rand = "0.9"
+rp-core = { path = "../core" }
+# PC scan (GPU, driver, VRAM counters, RAM, ROCm runtime) and the engine download.
+hw = { path = "../hw" }
+rp-models = { path = "../models" }
+rusqlite = { version = "0.42", features = ["bundled", "backup"] }
+rust-embed = { version = "8", optional = true, features = ["debug-embed", "mime-guess"] }
+# Import/export: card bundles and persona backups are zip files (deflate only, like rp-core).
+zip = { version = "4.6", default-features = false, features = ["deflate-flate2"] }
+# Content hash of imported cards (duplicates) and of the page's inline script for its CSP.
+sha2 = "0.10"
+base64 = "0.22"
+# Pure Rust decoders/encoders: JPEG/WebP/GIF avatars become PNG for export, thumbnails are WebP.
+# No C library, so Android/iOS builds need no extra toolchain.
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp", "gif"] }
+
+[target.'cfg(windows)'.dependencies]
+# Registry: "Mit Windows starten" writes the user's own Run key (autostart.rs).
+# Job object: model servers the app started end with it, also when it ends hard (`engine/job.rs`).
+windows-sys = { version = "0.61", features = ["Win32_Foundation", "Win32_Security", "Win32_System_JobObjects", "Win32_System_Registry", "Win32_System_Threading"] }
+
+[dev-dependencies]
+reqwest = { version = "0.12", default-features = false, features = ["json", "multipart"] }

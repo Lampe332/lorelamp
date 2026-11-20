@@ -1,0 +1,39 @@
+# Rust
+target/
+
+# Node
+node_modules/
+dist/
+*.log
+apps/web/test-results/
+apps/web/playwright-report/
+
+# Local engines, models, caches, measurement raw data
+engines/
+models/
+!crates/models/
+!apps/web/src/models/
+*.gguf
+kv-cache/
+bench/raw/
+
+# Private test data (never commit)
+private/
+.env
+.env.*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Tauri generated
+apps/desktop/src-tauri/gen/
+# apps/mobile/src-tauri/gen/android is the Android project and is kept; its own .gitignore
+# files leave out what a build writes.
+apps/mobile/src-tauri/gen/schemas/
+
+# Agent worktrees and local Claude files
+.claude/
+release-*/

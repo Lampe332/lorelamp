@@ -1,0 +1,29 @@
+{
+  "name": "rp-web",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "qrcode-generator": "2.0.4",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.13",
+    "@playwright/test": "^1.65.1",
+    "@rolldown/plugin-babel": "^0.3.1",
+    "@types/babel__core": "^7.20.5",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.3.0",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "jsqr": "1.4.0",
+    "typescript": "^5",
+    "vite": "^8.3.8"
+  }
+}

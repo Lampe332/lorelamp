@@ -1,0 +1,28 @@
+[package]
+name = "rp-mobile"
+description = "Lorelamp for Android: connects to Lorelamp on a PC in the same network and shows its interface"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "rp_mobile_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-barcode-scanner = "2"
+tauri-plugin-deep-link = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+url = "2"
+# Plain HTTP only: the PC is reached in the home network, where no certificate can exist.
+reqwest = { version = "0.12", default-features = false }
+tokio = { version = "1", features = ["net", "time"] }
+if-addrs = "0.13"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["rt", "net", "time"] }

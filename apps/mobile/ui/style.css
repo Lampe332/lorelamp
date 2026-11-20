@@ -1,0 +1,327 @@
+/* Start page of the Android app.
+   The ground is the Graphit theme's of the main interface (apps/web/src/style.css) and of the app's
+   window behind the system bars (res/values/colors.xml), so neither the bars nor the hand-over to
+   the PC's interface show a seam. On it: the logo's own colours. Lamp-lit paper for the one main
+   action, candle amber for what is chosen or typed next, warm greys for everything else.
+   The page is dark in both system themes, like the window and its bars. */
+:root {
+  --ground: #09090b;
+  --surface: #151311;
+  --raised: #1e1b18;
+  --pressed: #282420;
+  --line: #2f2a25;
+  --control: #4a433c;
+  --text: #f0ebe2;
+  --muted: #b3aa9e;
+  --faint: #91887c;
+  --paper: #efe4d0;
+  --paper-pressed: #d9cdb6;
+  --ink: #17130f;
+  --amber: #e3a857;
+  --amber-tint: #2a2117;
+  --warn: #f0b072;
+  --warn-tint: #2b1f13;
+  --font: Roboto, system-ui, "Segoe UI", sans-serif;
+  --display: "Noto Serif", "Sitka Heading", Georgia, serif;
+  --ctl: 56px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; margin: 0; }
+
+html, body { height: 100%; }
+html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; overscroll-behavior: none; }
+
+/* The WebView reaches under the status and navigation bars. The page is a fixed frame inside the
+   safe area and each view scrolls within it, so nothing ever slides under the bars. */
+body {
+  position: fixed;
+  inset: 0;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  background: var(--ground);
+  color: var(--text);
+  font: 400 16px/1.5 var(--font);
+  overscroll-behavior: none;
+}
+
+button, input { font: inherit; color: inherit; }
+button { touch-action: manipulation; user-select: none; -webkit-user-select: none; cursor: pointer; }
+[hidden] { display: none !important; }
+.defs { position: absolute; width: 0; height: 0; }
+.ic { width: 24px; height: 24px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+.view {
+  display: none;
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 20px 20px 24px;
+}
+.view > * { flex: none; }
+
+body[data-view="load"] [data-name="load"],
+body[data-view="start"] [data-name="start"],
+body[data-view="scan"] [data-name="scan"],
+body[data-view="code"] [data-name="code"],
+body[data-view="down"] [data-name="down"],
+body[data-view="offer"] [data-name="offer"] { display: flex; animation: view-on .26s var(--ease-out) both; }
+body[data-dir="back"] .view { animation-name: view-back; }
+body[data-view="load"] [data-name="load"], body[data-view="scan"] [data-name="scan"] { animation-name: view-fade; }
+@keyframes view-on { from { opacity: 0; transform: translateX(18px); } }
+@keyframes view-back { from { opacity: 0; transform: translateX(-18px); } }
+@keyframes view-fade { from { opacity: 0; } }
+
+h1 { font: 500 34px/1.12 var(--display); letter-spacing: -0.015em; }
+.lead { color: var(--muted); font-size: 16px; line-height: 1.5; max-width: 34ch; }
+.quiet { color: var(--faint); font-size: 14px; line-height: 1.45; }
+
+/* What went wrong, in the place where the next step is taken. */
+.msg { display: flex; align-items: flex-start; gap: 12px; padding: 13px 16px; border-radius: 16px; background: var(--warn-tint); color: var(--warn); font-size: 15px; font-weight: 500; line-height: 1.4; animation: msg-in .22s var(--ease-out) both; }
+.msg .ic { width: 20px; height: 20px; margin-top: 1px; }
+@keyframes msg-in { from { opacity: 0; transform: translateY(-6px); } }
+
+/* ---------- Start: the lamp and what the app is for above, the two ways in at the thumb ---------- */
+.hero { display: flex; flex-direction: column; gap: 12px; margin-block: auto; padding-block: 28px 20px; }
+[data-name="start"] .hero { flex: 1 0 auto; justify-content: center; margin-block: 0; }
+/* The logo's <picture> only chooses the file (flickering flame, or still with reduced motion). */
+picture { display: contents; }
+.logo { display: block; border-radius: 22%; margin-bottom: 10px; }
+.logo.dim { opacity: .5; filter: saturate(.35); }
+
+.where { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 18px; background: var(--surface); color: var(--muted); font-size: 14px; line-height: 1.4; }
+.where .ic { color: var(--faint); }
+.where b { display: block; color: var(--text); font-size: 16px; font-weight: 500; }
+.where i { font-style: normal; color: var(--amber); padding-inline: 2px; }
+
+.actions { display: flex; flex-direction: column; gap: 10px; }
+
+/* A way in: what it is in the first line, what it takes in the second. */
+.act {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 76px;
+  padding: 14px 14px 14px 20px;
+  border: 0;
+  border-radius: 22px;
+  background: var(--raised);
+  color: var(--text);
+  text-align: left;
+  transition: transform .14s var(--ease-out), background-color .14s;
+}
+.act span { flex: 1; min-width: 0; }
+.act b { display: block; font-size: 18px; font-weight: 500; line-height: 1.25; }
+.act small { display: block; margin-top: 2px; color: var(--muted); font-size: 14px; line-height: 1.35; }
+.act .go { color: var(--faint); }
+.act.primary { background: var(--paper); color: var(--ink); }
+.act.primary small { color: #5b5042; }
+.act.primary .go { color: #6f6353; }
+.act:active { transform: scale(.975); background: var(--pressed); }
+.act.primary:active { background: var(--paper-pressed); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 1.5px solid var(--control);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  font: 500 17px/1.2 var(--font);
+  transition: transform .14s var(--ease-out), background-color .14s, opacity .14s;
+}
+.btn.big { min-height: var(--ctl); }
+.btn.primary { background: var(--paper); color: var(--ink); border-color: transparent; }
+.btn.plain { border-color: transparent; color: var(--muted); font-size: 15px; text-decoration: underline; text-decoration-color: var(--control); text-underline-offset: 4px; }
+.btn:active:not(:disabled) { transform: scale(.97); background: var(--raised); }
+.btn.primary:active:not(:disabled) { background: var(--paper-pressed); }
+.btn:disabled { opacity: .5; }
+:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+.foot { text-align: center; padding-top: 2px; }
+
+/* A round button for leaving a view: back, close. */
+.round { display: grid; place-items: center; width: 48px; height: 48px; flex: none; border: 0; border-radius: 50%; background: transparent; color: var(--text); transition: background-color .14s, transform .14s var(--ease-out); }
+.round:active { background: var(--raised); transform: scale(.94); }
+
+/* ---------- Code entry ---------- */
+.bar { display: flex; align-items: center; gap: 4px; margin: -8px 0 4px -12px; }
+.bar h1 { font-size: 26px; }
+.view > form { display: flex; flex-direction: column; gap: 28px; flex: 1 0 auto; }
+fieldset { border: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.group-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px; }
+legend, label, .group-head label { float: left; padding: 0; color: var(--muted); font-size: 14px; font-weight: 500; }
+.link { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; margin-block: -6px; padding: 0 4px; border: 0; border-radius: 10px; background: none; color: var(--amber); font-size: 15px; font-weight: 500; }
+.link .ic { width: 18px; height: 18px; }
+.link:active { opacity: .6; }
+
+/* The search and the retry: a small lamp that pulses while the app is asking. */
+.searching { display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 12px 16px; border-radius: 18px; background: var(--surface); color: var(--muted); font-size: 15px; line-height: 1.4; }
+.searching.busy::before, #down-state::before { content: ""; flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--amber); animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .25; transform: scale(.7); } }
+
+.list { display: flex; flex-direction: column; gap: 8px; }
+.list:empty { display: none; }
+.pick {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 64px;
+  padding: 10px 16px;
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1.5px transparent;
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 500;
+  transition: background-color .16s, box-shadow .16s;
+  animation: msg-in .24s var(--ease-out) both;
+}
+/* The radio itself stays for the keyboard and screen readers; the row shows the choice. */
+.pick input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.pick > .ic:first-of-type { color: var(--faint); }
+.pick span { flex: 1; min-width: 0; overflow-wrap: anywhere; line-height: 1.3; }
+.pick small { display: block; color: var(--faint); font-size: 14px; font-weight: 400; font-variant-numeric: tabular-nums; }
+.pick .tick { color: var(--amber); opacity: 0; transform: scale(.6); transition: opacity .16s, transform .2s var(--ease-out); }
+.pick:has(input:checked) { background: var(--amber-tint); box-shadow: inset 0 0 0 1.5px var(--amber); }
+.pick:has(input:checked) .tick { opacity: 1; transform: none; }
+.pick:has(input:checked) > .ic:first-of-type { color: var(--amber); }
+.pick:has(input:focus-visible) { outline: 2px solid var(--amber); outline-offset: 3px; }
+.pick:active { background: var(--raised); }
+
+#manual { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; animation: msg-in .22s var(--ease-out) both; }
+#manual label { float: none; }
+#addr {
+  width: 100%;
+  height: var(--ctl);
+  padding: 0 18px;
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  color: var(--text);
+  font: 400 18px/1 var(--font);
+  font-variant-numeric: tabular-nums;
+  transition: border-color .16s;
+}
+#addr:focus { outline: none; border-color: var(--amber); }
+#addr::placeholder { color: var(--control); }
+
+.code-block { display: flex; flex-direction: column; gap: 10px; }
+.otp { position: relative; }
+.cells { display: flex; gap: 8px; align-items: stretch; }
+.cells i {
+  flex: 1 1 0;
+  display: grid;
+  place-items: center;
+  height: 64px;
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1.5px var(--line);
+  font: 500 30px/1 var(--font);
+  font-variant-numeric: tabular-nums;
+  transition: box-shadow .14s, background-color .14s, transform .18s var(--ease-out);
+}
+.cells b { flex: none; width: 6px; }
+.cells i.filled { background: var(--raised); animation: digit-in .18s var(--ease-out); }
+.cells i.next { box-shadow: inset 0 0 0 2px var(--amber); background: var(--amber-tint); }
+.cells i.next:not(.filled)::after { content: ""; width: 2px; height: 26px; border-radius: 1px; background: var(--amber); animation: caret 1.1s steps(1) infinite; }
+@keyframes digit-in { from { transform: scale(.86); } }
+@keyframes caret { 50% { opacity: 0; } }
+.otp.wrong .cells { animation: shake .36s var(--ease-out); }
+.otp.wrong .cells i { box-shadow: inset 0 0 0 1.5px var(--warn); }
+@keyframes shake { 20% { transform: translateX(-7px); } 45% { transform: translateX(6px); } 70% { transform: translateX(-3px); } }
+/* The real field lies over the cells and shows nothing itself. 16 px keeps browsers from zooming. */
+#code {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: transparent;
+  caret-color: transparent;
+  font-size: 16px;
+  letter-spacing: 2em;
+  text-indent: 100vw; /* the text itself out of sight, so no selection handles sit on the cells */
+  outline: none;
+}
+#code::selection { background: transparent; }
+
+.dock { margin-top: auto; padding-top: 8px; }
+
+/* ---------- PC not reachable ---------- */
+[data-name="down"] .hero { margin-block: auto 0; }
+[data-name="down"] h1 { font-size: 30px; }
+.checks { list-style: none; padding: 6px 16px; border-radius: 18px; background: var(--surface); }
+.checks li { display: flex; align-items: center; gap: 14px; min-height: 48px; color: var(--text); font-size: 15.5px; line-height: 1.35; }
+.checks li + li { box-shadow: inset 0 1px 0 var(--line); }
+.checks .ic { width: 20px; height: 20px; color: var(--faint); }
+#down-state { min-height: 44px; padding: 0 4px; background: none; font-size: 14px; color: var(--faint); }
+[data-name="down"] .actions { margin-bottom: auto; }
+
+/* ---------- A link from outside: asked, never connected on its own ---------- */
+[data-name="offer"] .hero { margin-block: auto 0; }
+[data-name="offer"] h1 { font-size: 30px; }
+#offer-target { font-variant-numeric: tabular-nums; }
+#offer-replace { padding: 0 4px; font-size: 14px; color: var(--muted); line-height: 1.45; }
+[data-name="offer"] .actions { margin-bottom: auto; }
+
+/* ---------- Loading: the lamp breathes ---------- */
+[data-name="load"] { align-items: center; justify-content: center; gap: 20px; }
+[data-name="load"] .logo { margin: 0; }
+.breathe { animation: breathe 2.2s ease-in-out infinite; }
+@keyframes breathe { 50% { opacity: .55; transform: scale(.96); } }
+
+/* ---------- Scanner: the camera picture lies behind the page, so the page is see-through ---------- */
+html:has(body[data-view="scan"]), body[data-view="scan"] { background: transparent; }
+[data-name="scan"] { align-items: center; justify-content: space-between; max-width: none; overflow: visible; padding: 12px 16px 28px; }
+.scan-top { position: relative; z-index: 1; display: flex; align-items: center; gap: 10px; align-self: stretch; }
+.scan-top .round, .scan-hint, .btn.chip { background: var(--ground); }
+.scan-hint { flex: 1; min-height: 48px; display: flex; align-items: center; justify-content: center; margin-right: 58px; padding: 8px 18px; border-radius: 999px; font-size: 15px; font-weight: 500; text-align: center; }
+.scan-frame {
+  position: relative;
+  width: min(72vw, 62vh, 320px);
+  aspect-ratio: 1;
+  border-radius: 30px;
+  /* Dims everything around the frame. */
+  box-shadow: 0 0 0 100vmax rgba(9, 9, 11, .6);
+}
+/* Four corners instead of a closed box: the code may be larger than the frame. */
+.scan-frame i { position: absolute; width: 44px; height: 44px; border: 4px solid var(--paper); animation: corners 2.4s ease-in-out infinite; }
+.scan-frame i:nth-child(1) { left: 0; top: 0; border-right: 0; border-bottom: 0; border-top-left-radius: 30px; }
+.scan-frame i:nth-child(2) { right: 0; top: 0; border-left: 0; border-bottom: 0; border-top-right-radius: 30px; }
+.scan-frame i:nth-child(3) { left: 0; bottom: 0; border-right: 0; border-top: 0; border-bottom-left-radius: 30px; }
+.scan-frame i:nth-child(4) { right: 0; bottom: 0; border-left: 0; border-top: 0; border-bottom-right-radius: 30px; }
+@keyframes corners { 50% { border-color: var(--amber); } }
+.btn.chip { position: relative; z-index: 1; border-color: transparent; min-height: 52px; font-size: 16px; }
+.btn.chip .ic { width: 20px; height: 20px; color: var(--muted); }
+
+@media (max-height: 640px) {
+  .hero { padding-block: 8px 8px; }
+  .logo { width: 64px; height: 64px; margin-bottom: 4px; }
+  h1 { font-size: 28px; }
+  .cells i { height: 56px; }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .view { gap: 12px; padding-block: 12px 16px; }
+  [data-name="start"] .hero { flex: none; }
+  .logo { width: 48px; height: 48px; }
+  .foot { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .searching.busy::before, #down-state::before { animation: none; }
+}

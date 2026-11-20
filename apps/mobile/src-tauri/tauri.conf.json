@@ -1,0 +1,27 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Lorelamp",
+  "version": "0.2.0",
+  "identifier": "io.github.lampe332.lorelamp",
+  "build": {
+    "frontendDist": "../ui"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [{ "label": "main", "title": "Lorelamp" }],
+    "security": {
+      "csp": "default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src ipc: http://ipc.localhost"
+    }
+  },
+  "plugins": {
+    "deep-link": {
+      "mobile": [{ "scheme": ["lorelamp"], "host": "connect", "appLink": false }]
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": [],
+    "icon": ["../../desktop/src-tauri/icons/icon.ico", "../../desktop/src-tauri/icons/icon.png"],
+    "android": { "minSdkVersion": 24 }
+  }
+}

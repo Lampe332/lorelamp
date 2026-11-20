@@ -1,0 +1,130 @@
+/* The card builder (#/chars/new). Prefix cb-. Tokens only, so every theme works. */
+
+.cb-page { max-width: var(--page-narrow); display: grid; gap: 22px; padding-bottom: 0; }
+.cb-title h1 { min-width: 0; overflow-wrap: anywhere; }
+
+/* ---- the three steps: a real sequence, so they carry their numbers */
+.cb-steps ol { list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; flex-wrap: wrap; }
+.cb-steps button { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 16px 0 8px; border-radius: 999px; color: var(--muted); font-weight: 500; transition: background-color .15s, color .15s; }
+@media (hover: hover) { .cb-steps button:not([aria-current]):hover { color: var(--text); } }
+.cb-step-l { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cb-steps button[aria-current="step"] { background: var(--surface); color: var(--text); }
+.cb-step-n { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; background: var(--raised); color: var(--muted); }
+.cb-steps button[aria-current="step"] .cb-step-n { background: var(--primary-bg); color: var(--primary-ink); }
+
+/* ---- the body: the step, and on a wide desktop the live preview beside it */
+.cb-body { display: grid; gap: clamp(24px, 2.5vw, 40px); align-items: start; }
+.cb-main { container-type: inline-size; min-width: 0; }
+.cb-side { display: none; }
+@media (min-width: 1100px) {
+  .cb-body.with-side { grid-template-columns: minmax(0, 1fr) clamp(260px, 22vw, 320px); }
+  .cb-side { display: block; position: sticky; top: 16px; }
+}
+/* A narrow step column puts each label above its panel. */
+@container (max-width: 880px) {
+  .cb-main .set-row { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .cb-main .set-label { padding-top: 8px; position: static; }
+}
+
+.cb-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 18px; align-items: start; }
+.cb-two > .field { align-content: start; }
+@container (max-width: 520px) { .cb-two { grid-template-columns: minmax(0, 1fr); } }
+.cb-idea { font-size: 15px; }
+
+/* Suggestions under a field */
+.cb-picks { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.cb-pick { min-height: 32px; padding: 0 12px; border-radius: 999px; background: var(--raised); color: var(--muted); font-size: 13px; transition: background-color .15s, color .15s; }
+.cb-pick:hover { color: var(--text); }
+.cb-pick.on { background: var(--active); color: var(--text); font-weight: 500; }
+
+/* The outline: which part of the plan goes where */
+.cb-outline { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: none; }
+.cb-outline li { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 4px 16px; padding: 12px 0; border-top: 1px solid var(--border); }
+.cb-outline li:first-child { border-top: 0; padding-top: 0; }
+.cb-outline b { font-weight: 500; }
+.cb-outline span { color: var(--muted); line-height: 1.5; overflow-wrap: anywhere; }
+@container (max-width: 520px) { .cb-outline li { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---- build */
+.cb-macros p { color: var(--muted); font-size: 13.5px; line-height: 1.55; }
+.cb-macros code, .cb-assist code { color: var(--text); }
+.cb-assist { display: flex; gap: 14px 18px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.cb-assist > div { display: grid; gap: 4px; min-width: 0; flex: 1 1 320px; }
+.cb-assist p { color: var(--muted); font-size: 13.5px; line-height: 1.5; }
+.cb-assist .cb-note { color: var(--text); }
+.cb-link { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+.cb-under { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+.cb-write { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.cb-count { margin-left: auto; color: var(--faint); font-size: 12px; }
+.cb-busy { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; min-height: 32px; }
+.cb-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: cb-glow 1.2s ease-in-out infinite; }
+@keyframes cb-glow { 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .cb-dot { animation: none; } }
+
+.cb-lore { margin: 0; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-inner); display: grid; gap: 14px; min-width: 0; }
+.cb-lore-head { padding: 0 6px; font-weight: 500; }
+.cb-check { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: var(--muted); font-size: 13.5px; }
+.cb-check input { width: 18px; height: 18px; accent-color: var(--accent); }
+.cb-push { margin-left: auto; }
+
+.cb-ask { display: flex; gap: 12px 18px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+
+/* ---- preview */
+.cb-pv { display: grid; gap: 18px; align-content: start; }
+.cb-pv.full { grid-template-columns: minmax(200px, 240px) minmax(0, 1fr); gap: 18px clamp(24px, 3vw, 44px); align-items: start; }
+.cb-pv-rest { display: grid; gap: 18px; min-width: 0; }
+.cb-pv-card .cc { width: 100%; max-width: 240px; }
+.cb-side .cb-pv-card .cc { max-width: none; display: grid; grid-template-columns: 96px minmax(0, 1fr); }
+.cb-side .cb-pv-card .cc .art { aspect-ratio: 3 / 4; font-size: 40px; height: 100%; }
+.cb-pv-open { display: contents; }
+.cb-pv-chat { background: var(--surface); border-radius: var(--radius-card); padding: 18px 20px 4px; min-width: 0; }
+.cb-pv-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; min-height: 34px; }
+.cb-pv-label { color: var(--muted); font-size: 13px; }
+.cb-pv-turn { display: inline-flex; align-items: center; gap: 2px; color: var(--muted); font-size: 12.5px; }
+.cb-flip .ic { transform: scaleX(-1); }
+.cb-pv-msg { margin-bottom: 14px; content-visibility: visible; }
+.cb-side .cb-pv-msg .prose { font-size: 15px; line-height: 1.55;  max-height: 320px; overflow: hidden; mask-image: linear-gradient(to bottom, var(--text) 80%, transparent); }
+.cb-pv-none { padding-bottom: 14px; }
+.cb-pv-size { margin: 0; display: grid; gap: 0; background: var(--surface); border-radius: var(--radius-card); padding: 6px 18px; }
+.cb-pv-size > div { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid var(--border); font-size: 13px; }
+.cb-pv-size > div:first-child { border-top: 0; }
+.cb-pv-size dt { color: var(--muted); }
+.cb-pv-size dd { margin: 0; white-space: nowrap; }
+.cb-pv-miss { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+.cb-pv-miss li { height: 26px; display: inline-flex; align-items: center; padding: 0 11px; border-radius: 999px; background: var(--pill-warn-bg); color: var(--pill-warn-ink); font-size: 12.5px; font-weight: 500; }
+@container (max-width: 640px) {
+  .cb-pv.full { grid-template-columns: minmax(0, 1fr); }
+  .cb-pv.full .cb-pv-card .cc { max-width: none; display: grid; grid-template-columns: 112px minmax(0, 1fr); }
+  .cb-pv.full .cb-pv-card .cc .art { height: 100%; font-size: 44px; }
+}
+
+/* ---- the bar at the bottom */
+.cb-bar { flex-wrap: wrap; }
+.cb-bar > span { min-width: 0; flex: 1 1 auto; }
+
+/* ---- saved */
+.cb-done { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 28px clamp(24px, 3vw, 48px); align-items: center; padding: clamp(24px, 4vw, 56px) 0; }
+.cb-done-pic { width: 200px; aspect-ratio: 3 / 4; height: auto; border-radius: var(--radius-card); object-fit: cover; display: grid; place-items: center; background: var(--raised); font-size: 84px; }
+.cb-done-text { display: grid; gap: 12px; min-width: 0; }
+.cb-done-text h1 { overflow-wrap: anywhere; }
+.cb-done-text p { color: var(--muted); max-width: 60ch; line-height: 1.55; }
+.cb-done .btn-row { margin-top: 8px; }
+
+@media (max-width: 767px) {
+  .cb-page { gap: 16px; }
+  .cb-steps ol { flex-wrap: nowrap; gap: 2px; }
+  /* The current step keeps its whole name; the others give way (shortened with "…" if need be). */
+  .cb-steps li { flex: 1 1 auto; min-width: 0; }
+  .cb-steps li:has([aria-current]) { flex-shrink: 0; }
+  .cb-steps button { width: 100%; max-width: 100%; justify-content: center; padding: 0 10px 0 6px; gap: 6px; font-size: 13.5px; }
+  .cb-step-n { width: 24px; height: 24px; font-size: 12px; flex: none; }
+  .cb-done { grid-template-columns: minmax(0, 1fr); justify-items: start; }
+  .cb-done-pic { width: 140px; font-size: 56px; }
+  .cb-bar { flex-wrap: nowrap; }
+  /* The status line takes room only when it has something to say. */
+  .cb-bar > span.muted { display: none; }
+  .cb-bar:has(> span.bad, > span.cb-asking) { flex-wrap: wrap; }
+  .cb-bar > span.bad, .cb-bar > span.cb-asking { flex-basis: 100%; }
+  .cb-bar .btn { flex: 1 1 auto; justify-content: center; min-height: 44px; }
+  .cb-bar .cb-drop { flex: 0 0 44px; padding: 0; }
+}

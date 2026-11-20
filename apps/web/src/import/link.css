@@ -1,0 +1,39 @@
+/* The link part of the import page: the growing link field, the bar above several links and the
+   compact previews of the list. Tokens only; the single preview keeps the `imp-pv` styles. */
+
+.lnk-field { height: auto; min-height: 40px; padding-block: 9px; line-height: 1.4; resize: none; overflow-wrap: anywhere; font-family: inherit; }
+.imp-link-row { align-items: flex-start; }
+
+.lnk-bar { display: grid; gap: 10px; margin-top: 16px; padding: 14px 16px; border-radius: var(--radius-inner); background: var(--raised); }
+.lnk-count { display: flex; flex-wrap: wrap; gap: 2px 14px; align-items: baseline; margin: 0; color: var(--muted); font-size: 14px; }
+.lnk-count b { color: var(--text); font-weight: 600; font-size: 15px; }
+.lnk-list { display: grid; gap: 10px; margin: 12px 0 0; padding: 0; list-style: none; }
+.lnk-list > li { min-width: 0; }
+.lnk-list .imp-wait, .lnk-list .imp-link-msg { margin-top: 0; padding: 12px 16px; border-radius: var(--radius-inner); background: var(--surface); }
+.lnk-list .imp-link-msg > span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.lnk-idle::before { animation: none; opacity: .5; }
+.lnk-where { font-weight: 600; overflow-wrap: anywhere; }
+.lnk-x.btn { flex: none; width: 32px; padding: 0; margin: -4px -6px -4px 0; color: var(--muted); }
+.lnk-more { color: var(--muted); font-size: 14px; line-height: 1.5; }
+.imp-fileonly .btn-row { margin-top: 8px; }
+.imp-fileonly .btn-row .btn { margin-top: 0; }
+.lnk-fileonly { margin-top: 0; }
+
+/* One of several: the same parts as the single preview, smaller. */
+.imp-pv.lnk-compact { margin-top: 0; padding: 16px; gap: 2px 16px; border-radius: var(--radius-inner); }
+.lnk-compact .imp-pv-pic.pic { width: 72px; height: 96px; font-size: 30px; }
+.lnk-compact .imp-pv-name { font-size: 20px; }
+.lnk-compact .imp-pv-body { gap: 10px; margin-top: 6px; }
+.lnk-compact .imp-pv-desc { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; color: var(--muted); font-size: 14px; line-height: 1.5; white-space: normal; }
+.lnk-compact .imp-pv-actions .btn { height: 36px; }
+
+@media (max-width: 767px) {
+  .imp-link-row .lnk-field { height: auto; min-height: 44px; padding-block: 11px; font-size: 16px; }
+  .lnk-bar .btn, .lnk-compact .imp-pv-actions .btn { height: 44px; }
+  .lnk-bar .btn-row .btn { flex: 1 1 140px; }
+  .imp-pv.lnk-compact { padding: 14px; }
+  .lnk-compact .imp-pv-pic.pic { width: 60px; height: 80px; font-size: 26px; }
+  .lnk-x.btn { width: 44px; height: 44px; margin: -10px -10px -10px 0; }
+  .imp-fileonly .btn-row { width: 100%; }
+  .imp-fileonly .btn-row .btn { flex: 1 1 140px; }
+}

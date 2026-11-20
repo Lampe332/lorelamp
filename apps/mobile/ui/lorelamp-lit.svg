@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <title>Lorelamp – small sizes (16–32 px)</title>
+  <style>
+    .flick { transform-box: fill-box; transform-origin: 50% 100%; animation: flick 2.4s ease-in-out infinite; }
+    @keyframes flick {
+      0%, 100% { transform: scale(1, 1) skewX(0deg); }
+      17% { transform: scale(0.985, 1.035) skewX(-1.6deg); }
+      31% { transform: scale(1.01, 0.985) skewX(0.8deg); }
+      48% { transform: scale(0.99, 1.045) skewX(1.8deg); }
+      63% { transform: scale(1.012, 0.99) skewX(-0.6deg); }
+      81% { transform: scale(0.992, 1.025) skewX(-1.2deg); }
+    }
+    @media (prefers-reduced-motion: reduce) { .flick { animation: none; } }
+  </style>
+  <!-- Reduced cut of the app icon: bigger flame, bigger book, wide gutter, no cover, no glow. -->
+  <defs>
+    <linearGradient id="t" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2d2856"/>
+      <stop offset="1" stop-color="#151229"/>
+    </linearGradient>
+    <radialGradient id="f" gradientUnits="userSpaceOnUse" cx="128" cy="176" r="150">
+      <stop offset="0" stop-color="#ffe08a"/>
+      <stop offset="0.38" stop-color="#ffab42"/>
+      <stop offset="0.72" stop-color="#f4722e"/>
+      <stop offset="1" stop-color="#dc4a24"/>
+    </radialGradient>
+  </defs>
+  <rect width="256" height="256" rx="58" fill="url(#t)"/>
+  <g transform="translate(128 128) scale(1.14) translate(-128 -126)">
+    <path id="flame" class="flick" fill="url(#f)" d="M148 32C148 70 186 100 186 158A58 58 0 0 1 70 158C70 124 92 104 90 72C96 92 108 104 118 108C112 80 118 54 148 32Z"/>
+    <g fill="#fffaf0" transform="translate(128 172) scale(1.16) translate(-128 -172)">
+      <path d="M123.5 161C114 152 102 148 91.5 149.5Q89 150 89 152.5L90.4 181Q90.6 184 93.5 184C104 183.5 115 187 123.5 194Z"/>
+      <path d="M132.5 161C142 152 154 148 164.5 149.5Q167 150 167 152.5L165.6 181Q165.4 184 162.5 184C152 183.5 141 187 132.5 194Z"/>
+    </g>
+  </g>
+</svg>

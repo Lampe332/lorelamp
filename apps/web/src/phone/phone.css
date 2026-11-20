@@ -1,0 +1,153 @@
+/* Settings tab "Handy" (phone/Phone.tsx): the QR code with the pairing code beside it, the network
+   choice, and the note that stands in for PC-only settings on a phone. Prefix hv- ("Handy verbinden"). */
+
+.hv-panel { gap: 24px; }
+
+/* The QR code large on the left, the code and the words on the right; stacked on a phone. */
+.hv-pair { display: grid; grid-template-columns: minmax(220px, 300px) minmax(0, 1fr); gap: 28px; align-items: start; }
+.hv-qr { margin: 0; padding: 14px; border-radius: var(--radius-inner); background: var(--qr-paper); width: 100%; max-width: 300px; aspect-ratio: 1; }
+.hv-qr svg { display: block; width: 100%; height: 100%; }
+.hv-qr-paper { fill: var(--qr-paper); }
+.hv-qr-ink { fill: var(--qr-ink); }
+
+.hv-side { display: grid; gap: 18px; align-content: start; min-width: 0; }
+.hv-code { display: grid; gap: 8px; padding: 18px 20px; border-radius: var(--radius-inner); background: var(--raised); }
+.hv-code-label { color: var(--muted); font-size: 13px; }
+.hv-digits { font: 500 clamp(36px, 2.2vw + 14px, 48px)/1 var(--font); letter-spacing: .06em; color: var(--text); }
+.hv-locked { color: var(--warn); font-size: 14px; }
+.hv-code-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; }
+.hv-code-foot .btn { min-height: 44px; }
+.hv-left { color: var(--faint); font-size: 13px; }
+.hv-addr { color: var(--muted); font-size: 13.5px; }
+.hv-addr .num { color: var(--text); font-weight: 500; margin-left: 4px; }
+.hv-how { color: var(--muted); font-size: 13.5px; line-height: 1.55; max-width: 52ch; }
+.hv-none { color: var(--warn); font-size: 14px; line-height: 1.5; }
+
+/* Several networks: one choice per network, its Windows name over its address. */
+.hv-nets { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.hv-net { display: grid; gap: 2px; min-height: 44px; padding: 8px 14px; border-radius: var(--radius-inner); background: var(--raised); color: var(--muted); text-align: left; transition: background-color .15s, color .15s; }
+.hv-net b { font-weight: 500; font-size: 13.5px; color: var(--text); }
+.hv-net span { font-size: 12.5px; }
+.hv-net:hover { background: var(--active); }
+.hv-net[aria-pressed="true"] { background: var(--accent-tint); color: var(--text); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.hv-net:disabled { cursor: default; opacity: .6; }
+
+.hv-more summary { cursor: pointer; color: var(--muted); font-size: 13.5px; min-height: 32px; display: flex; align-items: center; }
+.hv-more summary:hover { color: var(--text); }
+.hv-more[open] { display: grid; gap: 10px; }
+.hv-url-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.hv-url { flex: 1 1 260px; min-width: 0; padding: 10px 12px; border-radius: var(--radius-inner); background: var(--raised); font-size: 13px; overflow-wrap: anywhere; user-select: all; }
+
+.hv-done { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; line-height: 1.5; }
+.hv-done .ic { flex: none; margin-top: 3px; color: var(--positive); }
+.hv-here { font-size: 15px; }
+.hv-here .num { font-weight: 500; margin-left: 4px; }
+
+/* A PC-only setting seen from a phone. */
+.hv-pc-only { display: grid; gap: 4px; padding: 16px 18px; border-radius: var(--radius-inner); background: var(--raised); }
+.hv-pc-only b { font-weight: 500; }
+.hv-pc-only span { color: var(--muted); font-size: 13.5px; }
+
+@media (max-width: 767px) {
+  .hv-pair { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .hv-qr { max-width: 260px; justify-self: center; }
+}
+
+/* ==========================================================================================
+   The interface on a phone (below 768 px): what makes it feel like an app there. Prefix ph-.
+   Everything in this part lives inside the phone's media query, so nothing reaches a tablet or a
+   desktop. This file loads before the screens' own style sheets, so every rule starts with :root
+   to outrank the rule it adjusts.
+   ========================================================================================== */
+
+/* Only ever shown on a phone (the tab bar itself is hidden from 768 px). */
+.ph-tab, .ph-sheet { display: none; }
+
+@media (max-width: 767px) {
+  /* ---------- The page behaves like an app: no rubber band, no pull-to-refresh, no text
+     selection or long-press menu on controls, taps without the double-tap wait ---------- */
+  :root, :root body { overscroll-behavior: none; }
+  :root :is(.view, .stream, .cmd-list, .xf-body) { overscroll-behavior: contain; }
+  :root :is(button, a, summary, label, select, .btn) { touch-action: manipulation; }
+  :root :is(button, summary, .btn, .tabbar a, .tabs a, .chip, .seg) { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+
+  /* ---------- Bottom bar: four places, the current one on a pill ---------- */
+  :root .with-bar .tabbar { grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 4px 6px calc(4px + env(safe-area-inset-bottom)); }
+  :root .tabbar :is(a, .ph-tab) { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; height: 58px; border-radius: 16px; font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: .01em; color: var(--muted); transition: color .18s; }
+  /* The pill behind the icon: grows out of the middle when its place becomes the current one. */
+  :root .tabbar :is(a, .ph-tab)::before { content: ""; position: absolute; top: 5px; left: 50%; width: 60px; height: 30px; margin-left: -30px; border-radius: 999px; background: var(--active); opacity: 0; transform: scaleX(.55); transition: opacity .18s, transform .28s var(--ease-out); }
+  :root .tabbar .ic { position: relative; width: 22px; height: 22px; margin-block: 4px; transition: transform .14s var(--ease-out); }
+  :root .tabbar :is(a[aria-current="page"], .ph-tab[data-current]) { color: var(--text); }
+  :root .tabbar :is(a[aria-current="page"], .ph-tab[data-current])::before { opacity: 1; transform: none; }
+  :root .tabbar :is(a[aria-current="page"], .ph-tab[data-current]) .ic { stroke-width: 1.8; }
+  :root .tabbar :is(a, .ph-tab):active .ic { transform: scale(.88); }
+  :root .tabbar :is(a, .ph-tab):active::before { opacity: 1; transform: scaleX(.85); }
+
+  /* ---------- "Mehr": a sheet out of the bottom bar ---------- */
+  :root .ph-sheet { display: block; position: fixed; inset: auto 0 0; width: 100%; max-width: none; max-height: min(86dvh, calc(var(--vvh, 100dvh) - 32px)); margin: 0; padding: 0; border: 0; border-radius: 26px 26px 0 0; background: var(--surface); color: var(--text); box-shadow: var(--float-shadow); overflow: hidden; animation: ph-sheet-in .32s var(--ease-out); transition: transform .26s var(--ease-out); }
+  :root .ph-sheet:not([open]) { display: none; }
+  :root .ph-sheet::backdrop { background: var(--scrim); animation: ph-fade .2s var(--ease-out); }
+  :root .ph-sheet[data-closing] { animation: ph-sheet-out .2s ease-in forwards; }
+  :root .ph-sheet[data-closing]::backdrop { animation: ph-fade-out .2s ease-in forwards; }
+  :root .ph-sheet-body { display: flex; flex-direction: column; max-height: inherit; overflow-y: auto; overscroll-behavior: contain; padding: 0 12px calc(14px + env(safe-area-inset-bottom)); }
+  /* The head is the handle: the whole strip can be dragged, not only the small bar. */
+  :root .ph-sheet-head { flex: none; padding: 10px 8px 6px; touch-action: none; cursor: grab; }
+  :root .ph-grab { display: block; width: 40px; height: 4px; margin: 0 auto 14px; border-radius: 2px; background: var(--control); }
+  :root .ph-sheet-head h2 { font: 500 22px/1.2 var(--display); }
+  :root .ph-model { display: flex; align-items: center; gap: 4px; min-height: 60px; margin: 8px 0 6px; padding-right: 12px; border-radius: 18px; background: var(--raised); color: var(--muted); transition: background-color .15s; }
+  :root .ph-model:active { background: var(--active); }
+  :root .ph-model .status-pill { flex: 1; padding: 12px 8px 12px 16px; background: none; font-size: 15px; }
+  :root .ph-model .status-pill > .hide-sm { display: block; font-size: 13px; }
+  :root .ph-model > .ic { transform: rotate(-90deg); color: var(--faint); }
+  :root .ph-rows { display: flex; flex-direction: column; }
+  :root .ph-row { display: flex; align-items: center; gap: 16px; width: 100%; min-height: 64px; padding: 8px; border-radius: 16px; text-align: left; transition: background-color .15s; }
+  :root .ph-row:active { background: var(--raised); }
+  :root .ph-row-ic { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 14px; background: var(--raised); color: var(--muted); transition: background-color .15s; }
+  :root .ph-row:active .ph-row-ic { background: var(--active); }
+  :root .ph-row-ic .ic { width: 22px; height: 22px; }
+  :root .ph-row-text { display: grid; gap: 1px; min-width: 0; }
+  :root .ph-row-text b { font-size: 16.5px; font-weight: 500; }
+  :root .ph-row-text small { color: var(--muted); font-size: 13.5px; line-height: 1.35; }
+
+  /* ---------- Changing screens: a place in the bar fades in, a screen inside one comes in from
+     the side it was opened to ---------- */
+  :root .app.with-bar > :is(.view, .chat-main) { animation: ph-fade .2s var(--ease-out); }
+  :root .app.detail > :is(.view, .chat-main) { animation: ph-push .26s var(--ease-out); }
+
+  /* A screen whose code is still on its way: its title and first block as quiet shapes, shown only
+     if the wait is long enough to notice. */
+  :root .app > .view[aria-busy="true"]:empty { display: grid; align-content: start; gap: 18px; padding: 26px var(--gutter); animation: none; }
+  :root .app > .view[aria-busy="true"]:empty::before, :root .app > .view[aria-busy="true"]:empty::after { content: ""; border-radius: 12px; background: var(--surface); opacity: 0; animation: ph-wait 1.5s .25s var(--ease-in-out) infinite; }
+  :root .app > .view[aria-busy="true"]:empty::before { width: 44%; height: 30px; }
+  :root .app > .view[aria-busy="true"]:empty::after { height: 152px; border-radius: var(--radius-card); }
+
+  /* ---------- Top bar: belongs to the page below it. No line, and the model's state as a plain
+     word beside its dot instead of a second pill next to the persona ---------- */
+  :root .top { border-bottom: 0; gap: 6px; }
+  :root .top .status-pill { padding: 0 10px 0 8px; background: none; font-size: 13.5px; }
+  :root .top .status-link:active .status-pill { background: var(--surface); }
+  :root .toast { bottom: calc(84px + env(safe-area-inset-bottom)); }
+
+  /* ---------- Card builder: the suggestion chips under genre and tone, big enough for a thumb ---------- */
+  :root .cb-pick { min-height: 44px; padding: 0 14px; }
+
+  /* ---------- Chat: the tools under older messages step back, the newest keeps them clear ---------- */
+  /* The bar's tools keep their full size to touch; the room for the name comes from the gaps. */
+  :root .chat-bar { gap: 2px; padding-right: 2px; }
+  :root .chat-bar > :is(.av, .cv-av) { margin-right: 8px; }
+  :root .msg:not(.last) .msg-actions { opacity: .5; transition: opacity .15s; }
+  :root .msg:not(.last):is(:focus-within, :active) .msg-actions { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root .app > :is(.view, .chat-main), :root .ph-sheet, :root .ph-sheet::backdrop { animation: none; }
+    :root .app > .view[aria-busy="true"]:empty::before, :root .app > .view[aria-busy="true"]:empty::after { animation: none; opacity: 1; }
+    :root .ph-sheet, :root .tabbar :is(a, .ph-tab)::before { transition: none; }
+  }
+}
+
+@keyframes ph-fade { from { opacity: 0; } }
+@keyframes ph-fade-out { to { opacity: 0; } }
+@keyframes ph-wait { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+@keyframes ph-push { from { opacity: 0; transform: translateX(16px); } }
+@keyframes ph-sheet-in { from { transform: translateY(100%); } }
+@keyframes ph-sheet-out { from { transform: translateY(var(--ph-from, 0px)); } to { transform: translateY(100%); } }

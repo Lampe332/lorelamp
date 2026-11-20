@@ -1,0 +1,119 @@
+/* X6: what to take over from a SillyTavern installation (StPicker.tsx). Tokens only; the layout of
+   the export dialog (.xf), wide enough for a grid of cards, a bottom sheet on the phone. */
+
+.x6-dlg { width: min(1040px, calc(100vw - 32px)); max-width: none; height: min(880px, calc(100dvh - 32px)); max-height: none; margin: auto; padding: 0; border: 0; border-radius: var(--radius-card); background: var(--surface); color: var(--text); box-shadow: var(--float-shadow), inset 0 0 0 1px var(--border); overflow: hidden; overscroll-behavior: contain; }
+.x6-dlg[open] { animation: pop .18s var(--ease-out); }
+.x6-dlg::backdrop { background: var(--scrim); animation: fade-in .16s var(--ease-out); }
+.x6-frame { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+
+.x6-head { display: grid; gap: 4px; padding: 22px 24px 16px; }
+.x6-head .x6-grab { display: none; }
+.x6-head h2 { font: 400 22px/1.2 var(--display); letter-spacing: -0.01em; }
+.x6-where { color: var(--faint); font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
+.x6-lead { max-width: 76ch; margin-top: 6px; color: var(--muted); font-size: 14px; line-height: 1.55; text-wrap: pretty; }
+
+.x6-body { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; display: grid; align-content: start; gap: 30px; padding: 6px 24px 28px; }
+.x6-body > .imp-wait { margin-top: 0; }
+.x6-picks { display: grid; align-content: start; gap: 30px; min-width: 0; }
+.x6-picks:empty { display: none; }
+.x6-foot { display: flex; align-items: center; gap: 8px; padding: 14px 24px; border-top: 1px solid var(--border); }
+.x6-total { flex: 1; min-width: 0; color: var(--muted); font-size: 14px; line-height: 1.4; }
+
+/* A section: its name, how many are ticked, all / none */
+.x6-sec { display: grid; gap: 12px; min-width: 0; }
+.x6-sec-head { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 12px; }
+.x6-sec-head h3 { font-size: 15px; font-weight: 600; }
+.x6-n { color: var(--faint); font-size: 13px; }
+.x6-bulk { display: flex; gap: 2px; margin-left: auto; margin-right: -10px; }
+
+/* Cards and personas: picture, name, one line of state */
+.x6-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(136px, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.x6-grid-persona { grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); }
+.x6-tile { min-width: 0; }
+.x6-tile-in { position: relative; display: grid; gap: 4px; align-content: start; height: 100%; padding: 6px 6px 10px; border-radius: var(--radius-inner); background: var(--raised); cursor: pointer; transition: box-shadow .15s, transform .12s var(--ease-out); }
+label.x6-tile-in:hover { box-shadow: inset 0 0 0 1px var(--control); }
+label.x6-tile-in:active { transform: scale(.985); }
+.x6-tile.on .x6-tile-in { box-shadow: inset 0 0 0 2px var(--text); }
+.x6-pic { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; border-radius: 8px; object-fit: cover; background: var(--surface); font-size: 40px; transition: opacity .15s; }
+.x6-grid-persona .x6-pic { aspect-ratio: 1; }
+.x6-pic.initial { display: grid; }
+.x6-check { position: absolute; top: 12px; right: 12px; background: var(--scrim); }
+.x6-tname { padding: 4px 4px 0; font-size: 14px; font-weight: 500; line-height: 1.3; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.x6-tsub { display: flex; align-items: center; gap: 5px; min-height: 18px; padding: 0 4px; color: var(--faint); font-size: 12.5px; line-height: 1.35; }
+.x6-tsub .ic { width: 13px; height: 13px; flex: none; }
+/* Already in the app and not ticked: faded, so the new ones stand out. */
+.x6-tile.is-dup:not(.on) .x6-pic { opacity: .5; }
+.x6-tile.is-error .x6-tile-in { cursor: default; }
+.x6-tile.is-error .x6-pic { opacity: .35; }
+.x6-tile.is-error .x6-tsub { align-items: flex-start; color: var(--muted); }
+.x6-tile.is-error .x6-tsub .ic { margin-top: 2px; color: var(--negative); }
+
+/* Chats under their card */
+.x6-group { display: grid; gap: 6px; min-width: 0; }
+.x6-group + .x6-group { margin-top: 10px; }
+.x6-gname { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; font-size: 14px; }
+.x6-gname b { font-weight: 500; }
+.x6-gname span { color: var(--faint); font-size: 13px; }
+.x6-chats { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.x6-chat-in { display: flex; align-items: center; gap: 14px; min-height: 56px; padding: 8px 14px; border-radius: var(--radius-inner); background: var(--raised); cursor: pointer; transition: box-shadow .15s; }
+.x6-chat:not(.is-off):not(.is-error) .x6-chat-in:hover { box-shadow: inset 0 0 0 1px var(--control); }
+.x6-chat.is-off .x6-chat-in, .x6-chat.is-error .x6-chat-in { cursor: default; }
+.x6-chat.is-off .x6-ctext, .x6-chat.is-off .check { opacity: .5; }
+.x6-chat .check input:disabled { cursor: default; }
+.x6-nocheck { display: grid; place-items: center; width: 22px; flex: none; color: var(--negative); }
+.x6-ctext { display: grid; gap: 1px; min-width: 0; }
+.x6-ctitle { font-size: 14px; font-weight: 500; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.x6-csub { color: var(--faint); font-size: 12.5px; line-height: 1.4; }
+.x6-chat.is-error .x6-csub { color: var(--muted); }
+
+/* Running and done */
+.x6-progress { max-width: none; padding-top: 8px; }
+.x6-prog-head { font: 400 22px/1.2 var(--display); letter-spacing: -0.01em; }
+.x6-result { display: grid; gap: 16px; min-width: 0; }
+.x6-result-h { font-size: 15px; font-weight: 600; outline-offset: 4px; border-radius: 4px; }
+.x6-sum.imp-sum { max-width: none; margin: 0; background: var(--raised); }
+.x6-sum.imp-sum > div + div { border-left-color: var(--surface); }
+.x6-out h4 { margin-bottom: 2px; color: var(--muted); font-size: 13px; font-weight: 500; }
+.x6-failed { display: grid; gap: 12px; justify-items: start; }
+.x6-failed .imp-link-msg { margin-top: 0; }
+.x6-empty { color: var(--muted); line-height: 1.55; }
+
+/* Wide screens: the chats stand beside the cards they belong to, so the whole choice is in view. */
+@media (min-width: 1100px) {
+  .x6-body.has-chats { grid-template-columns: minmax(0, 1fr) minmax(320px, 380px); column-gap: 28px; }
+  .x6-body.has-chats > .x6-sec-chats { align-self: start; padding-left: 28px; border-left: 1px solid var(--border); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .x6-dlg[open], .x6-dlg::backdrop { animation: none; }
+}
+
+@media (max-width: 767px) {
+  .x6-dlg { width: 100%; height: calc(100dvh - 40px); margin: auto 0 0; border-radius: var(--radius-card) var(--radius-card) 0 0; }
+  .x6-dlg[open] { animation: sheet-in .28s var(--ease-out); }
+  .x6-head { padding: 6px 16px 12px; }
+  .x6-head .x6-grab { display: block; }
+  .x6-head h2 { font-size: 20px; }
+  .x6-lead { font-size: 13.5px; }
+  .x6-body { gap: 26px; padding: 4px 16px 20px; }
+  .x6-foot { flex-wrap: wrap; padding: 10px 16px calc(12px + env(safe-area-inset-bottom)); }
+  .x6-total { flex-basis: 100%; font-size: 13px; }
+  .x6-foot .btn { flex: 1; height: 48px; }
+  .x6-bulk .btn { height: 44px; }
+  .x6-grid, .x6-grid-persona { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .x6-tile-in { padding: 4px 4px 8px; }
+  .x6-pic { font-size: 30px; border-radius: 7px; }
+  .x6-check { top: 8px; right: 8px; }
+  .x6-tname { font-size: 13px; padding: 4px 2px 0; }
+  .x6-tsub { padding: 0 2px; font-size: 12px; }
+  .x6-sum.imp-sum > div { padding: 12px 10px; }
+  .x6-sum.imp-sum dt { font-size: 12px; text-overflow: clip; }
+  .x6-sum.imp-sum dd { font-size: 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) and (max-width: 767px) {
+  .x6-dlg[open] { animation: none; }
+}
+
+/* X8: lines SillyTavern hid in a chat, left out: a quiet line of its own that wraps instead of being cut. */
+.x8-hidden { font-size: 13px; color: var(--faint); line-height: 1.4; }

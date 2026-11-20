@@ -1,0 +1,4455 @@
+{
+  "version": 3,
+  "generated": "2026-11-16",
+  "field_notes": {
+    "vram_class": "Approximate target VRAM in GB for the balanced quant at 8k context (file size + about 1.5 GB), an estimate.",
+    "reasoning": "true when the GGUF chat template exposes a thinking switch (enable_thinking).",
+    "params_total_b": "GGUF metadata parameter count in billions.",
+    "context_max": "GGUF metadata context length; nominal value, not a tested one.",
+    "german": "Only set when evidence exists (see german_source); unknown otherwise.",
+    "author_sampler": "Values from the base model card named in the source key; null when no card lists values.",
+    "license": "License tag on the HF GGUF repo; null when the repo has none.",
+    "base": "Base model line for filters: gemma / qwen / mistral (Mistral Small, Ministral) / nemo (Mistral Nemo and its upscales) / llama.",
+    "params_active_b": "Active parameters per token in billions for MoE models; null for dense ones (all parameters are active).",
+    "rp": "Roleplay quality 1-5 from public leaderboards (UGI writing score) and model cards; an estimate.",
+    "de": "German quality 1-5 (EuroEval German rank of the base model and community reports); an estimate.",
+    "uncensored": "0 refuses adult content, 1 mostly allows it, 2 refusal-removed (UGI willingness).",
+    "writing": "Short German note on the writing style, shown in the UI.",
+    "writing_tr": "The same note in English, Spanish and Russian (en / es / ru), shown in the UI in those languages.",
+    "confidence": "How well the ratings are backed: low / mid / high.",
+    "sources": "Public pages behind the ratings: label (German), label_en (shown in every other language) + URL.",
+    "shape": "Key into shapes: the attention layout read from the GGUF header of the balanced file (block_count, attention.head_count_kv, key/value_length, sliding window and its pattern, shared_kv_layers, full_attention_interval and ssm.* for hybrids, expert_count/used). Gives the KV cache per token at any context and KV type.",
+    "expert_share": "MoE only: share of the tensor bytes in expert tensors (*_exps*) of the balanced file; what --n-cpu-moe can move to system RAM.",
+    "shapes": "full_every: every Nth layer has full attention (sliding window: the others use the window; recurrent: the others keep state_bytes of f32 state each). shared_kv_layers: the last N layers reuse earlier caches. kv_heads_per_layer: KV heads of every layer where they differ (0: a layer without attention).",
+    "focus": "What the model is made for, from its model card: general (vendor instruct model or a refusal-reduced copy of one), roleplay (character chat fine-tune or merge), story (narration), adventure (text adventure with consequences)."
+  },
+  "shapes": {
+    "gemma4-e4b": {
+      "layers": 42,
+      "kv_heads": 2,
+      "key_length": 512,
+      "value_length": 512,
+      "swa": {
+        "full_every": 6,
+        "window": 512,
+        "kv_heads": 2,
+        "key_length": 256,
+        "value_length": 256
+      },
+      "shared_kv_layers": 18
+    },
+    "gemma4-12b": {
+      "layers": 48,
+      "kv_heads": 1,
+      "key_length": 512,
+      "value_length": 512,
+      "swa": {
+        "full_every": 6,
+        "window": 1024,
+        "kv_heads": 8,
+        "key_length": 256,
+        "value_length": 256
+      }
+    },
+    "gemma4-26b-a4b": {
+      "layers": 30,
+      "kv_heads": 2,
+      "key_length": 512,
+      "value_length": 512,
+      "swa": {
+        "full_every": 6,
+        "window": 1024,
+        "kv_heads": 8,
+        "key_length": 256,
+        "value_length": 256
+      },
+      "experts": {
+        "count": 128,
+        "used": 8
+      }
+    },
+    "gemma4-31b": {
+      "layers": 60,
+      "kv_heads": 4,
+      "key_length": 512,
+      "value_length": 512,
+      "swa": {
+        "full_every": 6,
+        "window": 1024,
+        "kv_heads": 16,
+        "key_length": 256,
+        "value_length": 256
+      }
+    },
+    "qwen35-4b": {
+      "layers": 32,
+      "kv_heads": 4,
+      "key_length": 256,
+      "value_length": 256,
+      "recurrent": {
+        "full_every": 4,
+        "state_bytes": 2195456
+      }
+    },
+    "qwen35-9b": {
+      "layers": 32,
+      "kv_heads": 4,
+      "key_length": 256,
+      "value_length": 256,
+      "recurrent": {
+        "full_every": 4,
+        "state_bytes": 2195456
+      }
+    },
+    "qwen35-27b": {
+      "layers": 64,
+      "kv_heads": 4,
+      "key_length": 256,
+      "value_length": 256,
+      "recurrent": {
+        "full_every": 4,
+        "state_bytes": 3268608
+      }
+    },
+    "qwen35moe-35b-a3b": {
+      "layers": 40,
+      "kv_heads": 2,
+      "key_length": 256,
+      "value_length": 256,
+      "recurrent": {
+        "full_every": 4,
+        "state_bytes": 2195456
+      },
+      "experts": {
+        "count": 256,
+        "used": 8
+      }
+    },
+    "nemo-12b": {
+      "layers": 40,
+      "kv_heads": 8,
+      "key_length": 128,
+      "value_length": 128
+    },
+    "mistral-small-24b": {
+      "layers": 40,
+      "kv_heads": 8,
+      "key_length": 128,
+      "value_length": 128
+    },
+    "skyfall-31b": {
+      "layers": 54,
+      "kv_heads": 8,
+      "key_length": 128,
+      "value_length": 128
+    },
+    "gemma4-e2b": {
+      "layers": 35,
+      "kv_heads": 1,
+      "key_length": 512,
+      "value_length": 512,
+      "swa": {
+        "full_every": 5,
+        "window": 512,
+        "kv_heads": 1,
+        "key_length": 256,
+        "value_length": 256
+      },
+      "shared_kv_layers": 20
+    },
+    "qwen35-2b": {
+      "layers": 24,
+      "kv_heads": 2,
+      "key_length": 256,
+      "value_length": 256,
+      "recurrent": {
+        "full_every": 4,
+        "state_bytes": 1122304
+      }
+    },
+    "gemma3-4b": {
+      "layers": 34,
+      "kv_heads": 4,
+      "key_length": 256,
+      "value_length": 256,
+      "swa": {
+        "full_every": 6,
+        "window": 1024,
+        "kv_heads": 4,
+        "key_length": 256,
+        "value_length": 256
+      }
+    },
+    "gemma3-27b": {
+      "layers": 62,
+      "kv_heads": 16,
+      "key_length": 128,
+      "value_length": 128,
+      "swa": {
+        "full_every": 6,
+        "window": 1024,
+        "kv_heads": 16,
+        "key_length": 128,
+        "value_length": 128
+      }
+    },
+    "ministral3-8b": {
+      "layers": 34,
+      "kv_heads": 8,
+      "key_length": 128,
+      "value_length": 128
+    },
+    "ministral3-14b": {
+      "layers": 40,
+      "kv_heads": 8,
+      "key_length": 128,
+      "value_length": 128
+    },
+    "nemo-15b": {
+      "layers": 50,
+      "kv_heads": 8,
+      "key_length": 128,
+      "value_length": 128
+    },
+    "nemo-16b": {
+      "layers": 54,
+      "kv_heads": 8,
+      "key_length": 128,
+      "value_length": 128
+    },
+    "qwen3-14b": {
+      "layers": 40,
+      "kv_heads": 8,
+      "key_length": 128,
+      "value_length": 128
+    },
+    "qwen3moe-30b-a3b": {
+      "layers": 48,
+      "kv_heads": 4,
+      "key_length": 128,
+      "value_length": 128,
+      "experts": {
+        "count": 128,
+        "used": 8
+      }
+    },
+    "nemotron-49b": {
+      "layers": 80,
+      "kv_heads": 8,
+      "key_length": 128,
+      "value_length": 128,
+      "kv_heads_per_layer": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        0,
+        0,
+        8,
+        8,
+        8,
+        0,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        8,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ]
+    },
+    "llama-70b": {
+      "layers": 80,
+      "kv_heads": 8,
+      "key_length": 128,
+      "value_length": 128
+    }
+  },
+  "models": [
+    {
+      "id": "qwen3-5-2b",
+      "shape": "qwen35-2b",
+      "name": "Qwen3.5-2B",
+      "family": "Qwen 3.5",
+      "base": "qwen",
+      "focus": [
+        "general"
+      ],
+      "repo": "unsloth/Qwen3.5-2B-GGUF",
+      "source_repo": "Qwen/Qwen3.5-2B",
+      "params_total_b": 1.9,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "qwen35",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "Qwen3.5-2B-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 1172996352,
+          "sha256": "3639f34b5ca22aa1c51f3616566eae8c355111554f6924ad97ee2652ed11c1cd"
+        },
+        "balanced": {
+          "file": "Qwen3.5-2B-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 1280835840,
+          "sha256": "aaf42c8b7c3cab2bf3d69c355048d4a0ee9973d48f16c731c0520ee914699223"
+        },
+        "large": {
+          "file": "Qwen3.5-2B-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 1435238656,
+          "sha256": "1885b3a9195f8cc09da9a7a7a75afdc1e8d5cbf9fc4a499c3961dddea37098ac"
+        }
+      },
+      "vram_class": "4-8",
+      "vram_est_gb": 2.7,
+      "german": "medium",
+      "german_source": "EuroEval DE (euroeval.com, 16.11.2026) Qwen3.5-2B 2,51",
+      "censorship": "light",
+      "rp": 2,
+      "de": 2,
+      "uncensored": 1,
+      "writing": "sehr klein, einfache Sätze, verliert schnell den Faden",
+      "writing_tr": {
+        "en": "very small, simple sentences, quickly loses the thread",
+        "es": "muy pequeño, frases simples, pierde el hilo enseguida",
+        "ru": "очень маленькая, простые фразы, быстро теряет нить"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI Qwen/Qwen3.5-2B (no thinking) (W 29, W/10 6)",
+          "label_en": "UGI Qwen/Qwen3.5-2B (no thinking) (W 29, W/10 6)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE (euroeval.com, 16.11.2026) Qwen3.5-2B 2,51",
+          "label_en": "EuroEval DE (euroeval.com, 2026-11-16) Qwen3.5-2B 2.51",
+          "url": "https://euroeval.com/leaderboards/Monolingual/german/"
+        }
+      ],
+      "reasoning": true,
+      "template": "chatml",
+      "author_sampler": null,
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Original Qwen3.5 2B from the vendor for very weak PCs; thinking is on by default in the chat template and can be switched off."
+    },
+    {
+      "id": "veiled-calla-4b",
+      "shape": "gemma3-4b",
+      "name": "Veiled Calla 4B",
+      "family": "Gemma 3",
+      "base": "gemma",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "mradermacher/Veiled-Calla-4B-i1-GGUF",
+      "source_repo": "soob3123/Veiled-Calla-4B",
+      "params_total_b": 3.9,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "gemma3",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "Veiled-Calla-4B.i1-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 2263242624,
+          "sha256": "7239fa1773985b14a110fa635a5124448db8fa442421a8c7e0aa5aef75ab28ee"
+        },
+        "balanced": {
+          "file": "Veiled-Calla-4B.i1-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 2489894784,
+          "sha256": "1c937d1be134bf95a933981730b87cd3f38375d9af6ef18da33b9d07b176644e"
+        },
+        "large": {
+          "file": "Veiled-Calla-4B.i1-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 2829698944,
+          "sha256": "7ade34e3a84ed6f58d19b4644fc0da29c6a1cf1b3ad450d45e3c3624aedeee9d"
+        }
+      },
+      "vram_class": "4-8",
+      "vram_est_gb": 3.8,
+      "german": "medium",
+      "german_source": "EuroEval DE (euroeval.com, 16.11.2026) Basis gemma-3-4b-it 2,49",
+      "censorship": "light",
+      "rp": 2,
+      "de": 2,
+      "uncensored": 1,
+      "writing": "stimmungsvoll und geheimnisvoll, für die Größe erzählfreudig",
+      "writing_tr": {
+        "en": "moody and mysterious, talkative for its size",
+        "es": "evocador y misterioso, muy narrativo para su tamaño",
+        "ru": "атмосферная и загадочная, для своего размера охотно рассказывает"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI soob3123/Veiled-Calla-4B (W 30,57, W/10 7,8)",
+          "label_en": "UGI soob3123/Veiled-Calla-4B (W 30.57, W/10 7.8)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE (euroeval.com, 16.11.2026) Basis gemma-3-4b-it 2,49",
+          "label_en": "EuroEval DE (euroeval.com, 2026-11-16) base gemma-3-4b-it 2.49",
+          "url": "https://euroeval.com/leaderboards/Monolingual/german/"
+        },
+        {
+          "label": "Modellkarte soob3123/Veiled-Calla-4B",
+          "label_en": "Model card soob3123/Veiled-Calla-4B",
+          "url": "https://huggingface.co/soob3123/Veiled-Calla-4B"
+        }
+      ],
+      "reasoning": false,
+      "template": "gemma-3",
+      "author_sampler": null,
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Roleplay model based on Gemma 3 4B with a focus on atmosphere; imatrix quants, German rating refers to the base model."
+    },
+    {
+      "id": "huihui-qwen3-5-4b-abliterated",
+      "shape": "qwen35-4b",
+      "name": "Huihui Qwen3.5-4B abliterated",
+      "family": "Qwen 3.5",
+      "base": "qwen",
+      "focus": [
+        "general"
+      ],
+      "repo": "mradermacher/Huihui-Qwen3.5-4B-abliterated-GGUF",
+      "source_repo": "huihui-ai/Huihui-Qwen3.5-4B-abliterated",
+      "params_total_b": 4.2,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "qwen35",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "Huihui-Qwen3.5-4B-abliterated.IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 2450388288,
+          "sha256": "31bb3a1ce37e03e861e4fdba3bf7eea94b1b33dd9eec9a83907fca8d71a338de"
+        },
+        "balanced": {
+          "file": "Huihui-Qwen3.5-4B-abliterated.Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 2707514688,
+          "sha256": "423f10b6ec2d99c3378143d7cd3b80eb4887b3ed92103103ac59173b404f4f7c"
+        },
+        "large": {
+          "file": "Huihui-Qwen3.5-4B-abliterated.Q6_K.gguf",
+          "quant": "Q6_K",
+          "size_bytes": 3464056128,
+          "sha256": "8deb9dcea61455b5c2ca5523e08c41c5c5d884c6180e4536dd85f6b51c37c7c6"
+        }
+      },
+      "vram_class": "4-8",
+      "vram_est_gb": 4.2,
+      "german": "unknown",
+      "german_source": null,
+      "censorship": "uncensored",
+      "rp": 1,
+      "de": 2,
+      "uncensored": 2,
+      "writing": "sehr knapp, verliert in langen Chats",
+      "writing_tr": {
+        "en": "very terse, gets lost in long chats",
+        "es": "muy escueto, se pierde en chats largos",
+        "ru": "очень сжато, теряется в длинных чатах"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI nur Qwen3.5-4B-Varianten (W 27-31) und huihui-Reihe (W/10 9,0)",
+          "label_en": "UGI only Qwen3.5-4B variants (W 27-31) and huihui series (W/10 9.0)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        }
+      ],
+      "reasoning": true,
+      "template": "chatml",
+      "author_sampler": null,
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Qwen3.5 4B with refusal direction removed (abliteration); smallest entry, no sampler values found on the checked cards."
+    },
+    {
+      "id": "qwen3-5-4b-minifantasy",
+      "shape": "qwen35-4b",
+      "name": "Qwen3.5-4B MiniFantasy",
+      "family": "Qwen 3.5",
+      "base": "qwen",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "mradermacher/Qwen3.5-4B-MiniFantasy-GGUF",
+      "source_repo": "Nubinu/Qwen3.5-4B-MiniFantasy",
+      "params_total_b": 4.2,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "qwen35",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "Qwen3.5-4B-MiniFantasy.IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 2529023616,
+          "sha256": "b4998b341c1a428e14a6fd2b1ffe6387a2d58b09b84a7019bc8e20d604ab5a3c"
+        },
+        "balanced": {
+          "file": "Qwen3.5-4B-MiniFantasy.Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 2708797056,
+          "sha256": "b7b1867e93dd6ca05c9bf5174d0999943a89e9594b646b48fb34cb8247290b2d"
+        },
+        "large": {
+          "file": "Qwen3.5-4B-MiniFantasy.Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 3074979456,
+          "sha256": "ba4445fc9620ad8a077aca106efc4d1d9c83365401bab99cd2ef805e6d9737ce"
+        }
+      },
+      "vram_class": "4-8",
+      "vram_est_gb": 4,
+      "german": "medium",
+      "german_source": "EuroEval DE Basis Qwen3.5-4B 2,7",
+      "censorship": "uncensored",
+      "rp": 2,
+      "de": 2,
+      "uncensored": 2,
+      "writing": "kleines Rollenspiel-Modell, erzählt in dritter Person",
+      "writing_tr": {
+        "en": "small roleplay model, narrates in third person",
+        "es": "modelo pequeño de rol, narra en tercera persona",
+        "ru": "небольшая ролевая модель, пишет от третьего лица"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI Nubinu/Qwen3.5-4B-MiniFantasy (no thinking) (W 30,24, W/10 8,8)",
+          "label_en": "UGI Nubinu/Qwen3.5-4B-MiniFantasy (no thinking) (W 30.24, W/10 8.8)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Basis Qwen3.5-4B 2,7",
+          "label_en": "EuroEval DE base Qwen3.5-4B 2.7",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        },
+        {
+          "label": "Modellkarte Nubinu/Qwen3.5-4B-MiniFantasy",
+          "label_en": "Model card Nubinu/Qwen3.5-4B-MiniFantasy",
+          "url": "https://huggingface.co/Nubinu/Qwen3.5-4B-MiniFantasy"
+        }
+      ],
+      "reasoning": false,
+      "template": "chatml",
+      "author_sampler": null,
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Roleplay fine-tune (LoRA) of a refusal-reduced Qwen3.5 4B; German rating refers to the base model."
+    },
+    {
+      "id": "qwen3-5-4b",
+      "shape": "qwen35-4b",
+      "name": "Qwen3.5-4B",
+      "family": "Qwen 3.5",
+      "base": "qwen",
+      "focus": [
+        "general"
+      ],
+      "repo": "bartowski/Qwen_Qwen3.5-4B-GGUF",
+      "source_repo": "Qwen/Qwen3.5-4B",
+      "params_total_b": 4.3,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "qwen35",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "Qwen_Qwen3.5-4B-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 2671339488,
+          "sha256": "628124c61a806897d3f28dcd416be6daff94f62f731eb900d4381875eac9e412"
+        },
+        "balanced": {
+          "file": "Qwen_Qwen3.5-4B-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 3013027808,
+          "sha256": "13c16f426047e2de38cd075bdade4a7bcbc8c774384876f677740cda65f8a983"
+        },
+        "large": {
+          "file": "Qwen_Qwen3.5-4B-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 3443763168,
+          "sha256": "21c4643259ce62ffd979848e5819ce03823fd9e9902279ab54cc0d572d83d33e"
+        }
+      },
+      "vram_class": "4-8",
+      "vram_est_gb": 4.3,
+      "german": "medium",
+      "german_source": "EuroEval DE Qwen3.5-4B 2,7",
+      "censorship": "standard",
+      "rp": 2,
+      "de": 2,
+      "uncensored": 0,
+      "writing": "klein, nüchtern, lehnt oft ab",
+      "writing_tr": {
+        "en": "small, plain, often refuses",
+        "es": "pequeño, sobrio, rechaza a menudo",
+        "ru": "маленькая, сухая, часто отказывает"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI Qwen/Qwen3.5-4B (no thinking) (W 29,68, W/10 2,2)",
+          "label_en": "UGI Qwen/Qwen3.5-4B (no thinking) (W 29.68, W/10 2.2)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Qwen3.5-4B 2,7",
+          "label_en": "EuroEval DE Qwen3.5-4B 2.7",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "chatml",
+      "author_sampler": null,
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Original Qwen3.5 4B from the vendor; the file has one extra next-token-prediction block that holds no chat context."
+    },
+    {
+      "id": "gemma-4-e2b-it",
+      "shape": "gemma4-e2b",
+      "name": "Gemma 4 E2B-it",
+      "family": "Gemma 4",
+      "base": "gemma",
+      "focus": [
+        "general"
+      ],
+      "repo": "unsloth/gemma-4-E2B-it-GGUF",
+      "source_repo": "google/gemma-4-E2B-it",
+      "params_total_b": 4.6,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "gemma4",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "gemma-4-E2B-it-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 2983944288,
+          "sha256": "c149620926221669c4941ae6dac259953cc729c48e4a4edb69e9807b782fd1e3"
+        },
+        "balanced": {
+          "file": "gemma-4-E2B-it-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 3106738272,
+          "sha256": "740185b21d22ceb83a11c3aa62ad5842ef32c70f6096d756bbee85a1e4ec34b8"
+        },
+        "large": {
+          "file": "gemma-4-E2B-it-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 3356037216,
+          "sha256": "90293b8cdaf9c973012bf4df8a1e92bde7d74ad66a4fe56cf905ccd563d660c5"
+        }
+      },
+      "vram_class": "4-8",
+      "vram_est_gb": 4.4,
+      "german": "medium",
+      "german_source": "EuroEval DE gemma-4-E2B-it 2,62",
+      "censorship": "standard",
+      "rp": 2,
+      "de": 2,
+      "uncensored": 0,
+      "writing": "sehr klein, knapp und brav, lehnt oft ab",
+      "writing_tr": {
+        "en": "very small, terse and tame, often refuses",
+        "es": "muy pequeño, escueto y comedido, rechaza a menudo",
+        "ru": "очень маленькая, краткая и скромная, часто отказывает"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI google/gemma-4-E2B-it (W 17,3, W/10 1)",
+          "label_en": "UGI google/gemma-4-E2B-it (W 17.3, W/10 1)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE gemma-4-E2B-it 2,62",
+          "label_en": "EuroEval DE gemma-4-E2B-it 2.62",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "gemma-4",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": null,
+        "rep_pen": null,
+        "source": "google/gemma-4-31B-it model card"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Original Gemma 4 E2B instruct from the vendor, the smallest entry for PCs without a graphics card; quants by unsloth."
+    },
+    {
+      "id": "gemma-4-e4b-it",
+      "shape": "gemma4-e4b",
+      "name": "Gemma 4 E4B-it",
+      "family": "Gemma 4",
+      "base": "gemma",
+      "focus": [
+        "general"
+      ],
+      "repo": "unsloth/gemma-4-E4B-it-GGUF",
+      "source_repo": "google/gemma-4-E4B-it",
+      "params_total_b": 7.5,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "gemma4",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "gemma-4-E4B-it-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 4715416704,
+          "sha256": "0847f7300471e9a61abaeb46b45b3d61e393af8fa6d6aa70c563623773670dd9"
+        },
+        "balanced": {
+          "file": "gemma-4-E4B-it-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 4977171584,
+          "sha256": "85a896a047553e842f25297ee5b031d64ff30147d9c4af17b1e4b394cd1fab87"
+        },
+        "large": {
+          "file": "gemma-4-E4B-it-Q6_K.gguf",
+          "quant": "Q6_K",
+          "size_bytes": 7074929792,
+          "sha256": "fd83f3ef44d22e00ff0f638753dde9a66a83e8ccf79c11024f47d383c489531b"
+        }
+      },
+      "vram_class": "4-8",
+      "vram_est_gb": 6.5,
+      "german": "unknown",
+      "german_source": null,
+      "censorship": "standard",
+      "rp": 2,
+      "de": 3,
+      "uncensored": 0,
+      "writing": "sauber aber zahm, lehnt oft ab",
+      "writing_tr": {
+        "en": "clean but tame, often refuses",
+        "es": "limpio pero comedido, rechaza a menudo",
+        "ru": "аккуратная, но сдержанная, часто отказывает"
+      },
+      "confidence": "high",
+      "sources": [
+        {
+          "label": "UGI google/gemma-4-E4B-it (W 20, U 12, W/10 2,2)",
+          "label_en": "UGI google/gemma-4-E4B-it (W 20, U 12, W/10 2.2)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE 2,38",
+          "label_en": "EuroEval DE 2.38",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "gemma-4",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": null,
+        "rep_pen": null,
+        "source": "google/gemma-4-31B-it model card"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Original Gemma 4 E4B instruct from the vendor; quants by unsloth."
+    },
+    {
+      "id": "ministral-3-8b-instruct",
+      "shape": "ministral3-8b",
+      "name": "Ministral 3 8B Instruct",
+      "family": "Ministral 3",
+      "base": "mistral",
+      "focus": [
+        "general"
+      ],
+      "repo": "bartowski/mistralai_Ministral-3-8B-Instruct-2512-GGUF",
+      "source_repo": "mistralai/Ministral-3-8B-Instruct-2512",
+      "params_total_b": 8.5,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "mistral3",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "mistralai_Ministral-3-8B-Instruct-2512-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 4696414464,
+          "sha256": "00e484724c9faee95c900515cce71f0747a30a954ff576233c38858771edf458"
+        },
+        "balanced": {
+          "file": "mistralai_Ministral-3-8B-Instruct-2512-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 5198387456,
+          "sha256": "7deb50ecb3afca928f0aa6dccdb87ed4ce4ab3991797e5fc0e0dedb92754802a"
+        },
+        "large": {
+          "file": "mistralai_Ministral-3-8B-Instruct-2512-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 6058744064,
+          "sha256": "05eb00de08513146f70a4969dce73dcdc465e4f6b9ee0eefb4fdf53fe8fa5efc"
+        }
+      },
+      "vram_class": "4-8",
+      "vram_est_gb": 6.3,
+      "german": "medium",
+      "german_source": "EuroEval DE Ministral-3-8B-Instruct-2512 2,34",
+      "censorship": "light",
+      "rp": 2,
+      "de": 3,
+      "uncensored": 1,
+      "writing": "sachlich, folgt Anweisungen, mehrsprachig",
+      "writing_tr": {
+        "en": "matter-of-fact, follows instructions, multilingual",
+        "es": "objetivo, sigue instrucciones, multilingüe",
+        "ru": "деловая, следует указаниям, многоязычная"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI mistralai/Ministral-3-8B-Instruct-2512 (W 28,79, W/10 5,5)",
+          "label_en": "UGI mistralai/Ministral-3-8B-Instruct-2512 (W 28.79, W/10 5.5)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Ministral-3-8B-Instruct-2512 2,34",
+          "label_en": "EuroEval DE Ministral-3-8B-Instruct-2512 2.34",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": false,
+      "template": "mistral-v7-tekken",
+      "author_sampler": null,
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Original Ministral 3 8B instruct from the vendor, German is one of its listed languages."
+    },
+    {
+      "id": "gemma-4-e4b-heretic",
+      "shape": "gemma4-e4b",
+      "name": "Gemma 4 E4B heretic",
+      "family": "Gemma 4",
+      "base": "gemma",
+      "focus": [
+        "general"
+      ],
+      "repo": "llmfan46/gemma-4-E4B-it-ultra-uncensored-heretic-GGUF",
+      "source_repo": "llmfan46/gemma-4-E4B-it-ultra-uncensored-heretic",
+      "params_total_b": 7.5,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "gemma4",
+      "context_max": 131072,
+      "quants": {
+        "small": null,
+        "balanced": {
+          "file": "gemma-4-E4B-it-ultra-uncensored-heretic-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 5335289696,
+          "sha256": "f9dbbe3bdf396f65aec4e801516a1b868a510d96225417a8aa06763e3c5b97dc"
+        },
+        "large": {
+          "file": "gemma-4-E4B-it-ultra-uncensored-heretic-Q6_K.gguf",
+          "quant": "Q6_K",
+          "size_bytes": 6217260896,
+          "sha256": "c06f73dc0a324f48e99d1ee79165ac573ae39ff659922f00548f9d3e5f4731e7"
+        }
+      },
+      "vram_class": "4-8",
+      "vram_est_gb": 6.8,
+      "german": "unknown",
+      "german_source": null,
+      "censorship": "uncensored",
+      "rp": 2,
+      "de": 3,
+      "uncensored": 2,
+      "writing": "kurze, flache Prosa, kleines Modell",
+      "writing_tr": {
+        "en": "short, flat prose, small model",
+        "es": "prosa corta y plana, modelo pequeño",
+        "ru": "короткая плоская проза, маленькая модель"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI-Leaderboard llmfan46/gemma-4-E4B-it-ultra-uncensored-heretic (W 19, W/10 9.2)",
+          "label_en": "UGI leaderboard llmfan46/gemma-4-E4B-it-ultra-uncensored-heretic (W 19, W/10 9.2)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE gemma-4-E4B-it 2,38",
+          "label_en": "EuroEval DE gemma-4-E4B-it 2.38",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "gemma-4",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": null,
+        "rep_pen": null,
+        "source": "google/gemma-4-31B-it model card"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Gemma 4 E4B instruct, refusal-reduced (heretic method); the repo has no quant below Q4_K_M, so the small tier is null."
+    },
+    {
+      "id": "gemma-4-e4b-minifantasy-v1",
+      "shape": "gemma4-e4b",
+      "name": "Gemma 4 E4B MiniFantasy V1",
+      "family": "Gemma 4",
+      "base": "gemma",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "mradermacher/Gemma4-E4B-MiniFantasy-V1-GGUF",
+      "source_repo": "Nubinu/Gemma4-E4B-MiniFantasy-V1",
+      "params_total_b": 7.5,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "gemma4",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "Gemma4-E4B-MiniFantasy-V1.IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 5091435776,
+          "sha256": "ce6d4a2fdc215576edd70b04dcc864e6ac86172680ee6f51b3348d230075a8c1"
+        },
+        "balanced": {
+          "file": "Gemma4-E4B-MiniFantasy-V1.Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 5335291136,
+          "sha256": "e29393bb9c5adbe59d65b869f4dae071057ba8e5ef58512c6092ec9547e7746f"
+        },
+        "large": {
+          "file": "Gemma4-E4B-MiniFantasy-V1.Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 5762913536,
+          "sha256": "e1e87c22272f7b4d0520cdcfc1ade21421874ad94a460899d96a43b6b851dd26"
+        }
+      },
+      "vram_class": "4-8",
+      "vram_est_gb": 6.5,
+      "german": "medium",
+      "german_source": "EuroEval DE Basis gemma-4-E4B-it 2,38",
+      "censorship": "uncensored",
+      "rp": 2,
+      "de": 3,
+      "uncensored": 2,
+      "writing": "kleines Rollenspiel-Modell, erzählt in dritter Person",
+      "writing_tr": {
+        "en": "small roleplay model, narrates in third person",
+        "es": "modelo pequeño de rol, narra en tercera persona",
+        "ru": "небольшая ролевая модель, пишет от третьего лица"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI Schwestermodell Nubinu/Qwen3.5-4B-MiniFantasy (W 30,2, W/10 8,8); dieses Repo steht nicht auf UGI",
+          "label_en": "UGI sister model Nubinu/Qwen3.5-4B-MiniFantasy (W 30.2, W/10 8.8); this repo is not on UGI",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Basis gemma-4-E4B-it 2,38",
+          "label_en": "EuroEval DE base gemma-4-E4B-it 2.38",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        },
+        {
+          "label": "Modellkarte Nubinu/Gemma4-E4B-MiniFantasy-V1",
+          "label_en": "Model card Nubinu/Gemma4-E4B-MiniFantasy-V1",
+          "url": "https://huggingface.co/Nubinu/Gemma4-E4B-MiniFantasy-V1"
+        }
+      ],
+      "reasoning": false,
+      "template": "gemma-4",
+      "author_sampler": null,
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Roleplay fine-tune (LoRA) of a refusal-reduced Gemma 4 E4B; not on the UGI leaderboard, so the ratings follow its base and its sister model."
+    },
+    {
+      "id": "qwen3-5-9b-heretic",
+      "shape": "qwen35-9b",
+      "name": "Qwen3.5-9B Ultra-Uncensored-Heretic",
+      "family": "Qwen 3.5",
+      "base": "qwen",
+      "focus": [
+        "general"
+      ],
+      "repo": "llmfan46/Qwen3.5-9B-Ultra-Uncensored-Heretic-GGUF",
+      "source_repo": "llmfan46/Qwen3.5-9B-ultra-uncensored-heretic",
+      "params_total_b": 9,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "qwen35",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "Qwen3.5-9B-Ultra-Uncensored-Heretic-Q3_K_M.gguf",
+          "quant": "Q3_K_M",
+          "size_bytes": 4509229600,
+          "sha256": "164802b0cc341b026fab4afdbd0e320274968f1f4ceb001153d8cba36915b7b9"
+        },
+        "balanced": {
+          "file": "Qwen3.5-9B-Ultra-Uncensored-Heretic-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 5527953952,
+          "sha256": "8d463c63e2c8759ad263cba59f1fa7a0be9a7cacb59b0fd0a787b7daa31597ad"
+        },
+        "large": {
+          "file": "Qwen3.5-9B-Ultra-Uncensored-Heretic-Q6_K.gguf",
+          "quant": "Q6_K",
+          "size_bytes": 7359259168,
+          "sha256": "19a6f0434fe184c879c7b4648c534cf6230480723705d9c8e64276d7dede7dfc"
+        }
+      },
+      "vram_class": "4-8",
+      "vram_est_gb": 7,
+      "german": "unknown",
+      "german_source": null,
+      "censorship": "uncensored",
+      "rp": 2,
+      "de": 3,
+      "uncensored": 2,
+      "writing": "brauchbar, nüchtern, braucht Denkschalter",
+      "writing_tr": {
+        "en": "usable, plain, needs the thinking switch",
+        "es": "aprovechable, sobrio, necesita el modo de razonamiento",
+        "ru": "годится, сухая, нужен режим размышления"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI nur Schwestermodell trohrbaugh/Qwen3.5-9B-heretic-v2 (W 32-36, W/10 9.2)",
+          "label_en": "UGI only sister model trohrbaugh/Qwen3.5-9B-heretic-v2 (W 32-36, W/10 9.2)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Qwen3.5-9B 2,30",
+          "label_en": "EuroEval DE Qwen3.5-9B 2.30",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "chatml",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "source": "Qwen/Qwen3.5-9B model card (thinking mode, general tasks)"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Qwen3.5 9B, refusal-reduced (heretic method); thinking is on by default in the chat template and can be switched off."
+    },
+    {
+      "id": "qwen3-5-9b",
+      "shape": "qwen35-9b",
+      "name": "Qwen3.5-9B",
+      "family": "Qwen 3.5",
+      "base": "qwen",
+      "focus": [
+        "general"
+      ],
+      "repo": "bartowski/Qwen_Qwen3.5-9B-GGUF",
+      "source_repo": "Qwen/Qwen3.5-9B",
+      "params_total_b": 9.2,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "qwen35",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "Qwen_Qwen3.5-9B-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 5501202464,
+          "sha256": "7d977cc96c2e08616016d967f232083e354691a8a16f345b26f7d782ee5c9601"
+        },
+        "balanced": {
+          "file": "Qwen_Qwen3.5-9B-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 6169341984,
+          "sha256": "d784ce9eda1a5a7b51e8f705a9e6310844bf4f173654d115823c775fdea56d43"
+        },
+        "large": {
+          "file": "Qwen_Qwen3.5-9B-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 7111487520,
+          "sha256": "a686d88ec1e6881f9bf161526826cd6d6874b7f0e80e0f79acf6144a132c5d7e"
+        }
+      },
+      "vram_class": "4-8",
+      "vram_est_gb": 7.2,
+      "german": "medium",
+      "german_source": "EuroEval DE Qwen3.5-9B 2,3",
+      "censorship": "standard",
+      "rp": 3,
+      "de": 3,
+      "uncensored": 0,
+      "writing": "ordentlich und nüchtern, lehnt Erwachsenes ab",
+      "writing_tr": {
+        "en": "tidy and plain, refuses adult content",
+        "es": "correcto y sobrio, rechaza contenido adulto",
+        "ru": "аккуратная и сухая, отказывает во взрослом"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI Qwen/Qwen3.5-9B (no thinking) (W 33,52, W/10 2,2)",
+          "label_en": "UGI Qwen/Qwen3.5-9B (no thinking) (W 33.52, W/10 2.2)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Qwen3.5-9B 2,3",
+          "label_en": "EuroEval DE Qwen3.5-9B 2.3",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "chatml",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "source": "Qwen/Qwen3.5-9B model card (thinking mode, general tasks)"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Original Qwen3.5 9B from the vendor; the file has one extra next-token-prediction block that holds no chat context."
+    },
+    {
+      "id": "gemma-4-12b-it",
+      "shape": "gemma4-12b",
+      "name": "Gemma 4 12B-it",
+      "family": "Gemma 4",
+      "base": "gemma",
+      "focus": [
+        "general"
+      ],
+      "repo": "unsloth/gemma-4-12b-it-GGUF",
+      "source_repo": "google/gemma-4-12B-it",
+      "params_total_b": 11.9,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "gemma4",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "gemma-4-12b-it-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 6375734080,
+          "sha256": "b0037d0e0de0290177045ca214b2a0fb1079d18bde57842b3ca32f5b0cd76774"
+        },
+        "balanced": {
+          "file": "gemma-4-12b-it-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 7121861440,
+          "sha256": "0a270ec9fe6b34f4a0d33992b6135117b484ebc4766ab76b51d4ae8c457e4c42"
+        },
+        "large": {
+          "file": "gemma-4-12b-it-Q6_K.gguf",
+          "quant": "Q6_K",
+          "size_bytes": 9786022720,
+          "sha256": "6f394336500bb5409bd68c31aa9d75097b5e6104f6cf30c82a09a7b64df41faf"
+        }
+      },
+      "vram_class": "8-12",
+      "vram_est_gb": 8.6,
+      "german": "good",
+      "german_source": "EuroEval rank of gemma-4-12B (via christophkind.de, 04.11.2026)",
+      "censorship": "standard",
+      "rp": 3,
+      "de": 4,
+      "uncensored": 0,
+      "writing": "sauber, gutes Deutsch, verweigert Erwachsenes",
+      "writing_tr": {
+        "en": "clean, good German, refuses adult content",
+        "es": "limpio, buen alemán, rechaza contenido adulto",
+        "ru": "аккуратная, хороший немецкий, отказывает во взрослом"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI google/gemma-4-12B-it (W 31,6, U 15,2, W/10 1,2)",
+          "label_en": "UGI google/gemma-4-12B-it (W 31.6, U 15.2, W/10 1.2)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE 2,02",
+          "label_en": "EuroEval DE 2.02",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "gemma-4",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": null,
+        "rep_pen": null,
+        "source": "google/gemma-4-31B-it model card"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Original Gemma 4 12B instruct from the vendor; quants by unsloth."
+    },
+    {
+      "id": "gemma-4-12b-heretic",
+      "shape": "gemma4-12b",
+      "name": "Gemma 4 12B heretic",
+      "family": "Gemma 4",
+      "base": "gemma",
+      "focus": [
+        "general"
+      ],
+      "repo": "mradermacher/gemma-4-12B-it-uncensored-heretic-GGUF",
+      "source_repo": "llmfan46/gemma-4-12B-it-uncensored-heretic",
+      "params_total_b": 11.9,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "gemma4",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "gemma-4-12B-it-uncensored-heretic.IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 6690555008,
+          "sha256": "d78eac4d44c26c57ac97c118d35f5fd5fee5c54d34691b9d4cd114aa9a867b6e"
+        },
+        "balanced": {
+          "file": "gemma-4-12B-it-uncensored-heretic.Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 7381386368,
+          "sha256": "cbbb9f1feecc8a3d25db1bb4e85ead5500fb588e1d478a3739a6f63401a123e9"
+        },
+        "large": {
+          "file": "gemma-4-12B-it-uncensored-heretic.Q6_K.gguf",
+          "quant": "Q6_K",
+          "size_bytes": 9786025088,
+          "sha256": "946527db954e8b9f152d1bfa96072022b6a0da491288772c57de749d2a4e041b"
+        }
+      },
+      "vram_class": "8-12",
+      "vram_est_gb": 8.9,
+      "german": "good",
+      "german_source": "EuroEval rank of base model gemma-4-12B (via christophkind.de, 04.11.2026)",
+      "censorship": "uncensored",
+      "rp": 3,
+      "de": 4,
+      "uncensored": 2,
+      "writing": "sauber, gutes Deutsch, etwas brav",
+      "writing_tr": {
+        "en": "clean, good German, a little tame",
+        "es": "limpio, buen alemán, algo comedido",
+        "ru": "аккуратная, хороший немецкий, немного скромная"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI nur Basis google/gemma-4-12B-it (W 31,6, mit Denken 36,3)",
+          "label_en": "UGI only base google/gemma-4-12B-it (W 31.6, with thinking 36.3)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE gemma-4-12B-it 2,02",
+          "label_en": "EuroEval DE gemma-4-12B-it 2.02",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "gemma-4",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": null,
+        "rep_pen": null,
+        "source": "google/gemma-4-31B-it model card"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Gemma 4 12B instruct, refusal-reduced (heretic method); German rating refers to the base model."
+    },
+    {
+      "id": "nemomix-unleashed-12b",
+      "shape": "nemo-12b",
+      "name": "NemoMix Unleashed 12B",
+      "family": "Mistral Nemo",
+      "base": "nemo",
+      "focus": [
+        "roleplay",
+        "story"
+      ],
+      "repo": "bartowski/NemoMix-Unleashed-12B-GGUF",
+      "source_repo": "MarinaraSpaghetti/NemoMix-Unleashed-12B",
+      "params_total_b": 12.2,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "NemoMix-Unleashed-12B-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 6742709056,
+          "sha256": "40ab4c350faab312971c4eecdc2e8ce6e7aeb451eda5d1c633599cbe8fef8852"
+        },
+        "balanced": {
+          "file": "NemoMix-Unleashed-12B-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 7477203776,
+          "sha256": "327afee83a36cd76814e3dd36fc62cb306ffcff164b4f55f1dbe7317d690fb82"
+        },
+        "large": {
+          "file": "NemoMix-Unleashed-12B-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 8727630656,
+          "sha256": "036c94d6b6624a99d9065162b2d77e67c443a3c7b4a754e9f646249b64050d52"
+        }
+      },
+      "vram_class": "8-12",
+      "vram_est_gb": 8.5,
+      "german": "unknown",
+      "german_source": null,
+      "censorship": "light",
+      "rp": 3,
+      "de": 3,
+      "uncensored": 1,
+      "writing": "lebendig, für Rollenspiel und Geschichten gemacht",
+      "writing_tr": {
+        "en": "lively, made for roleplay and stories",
+        "es": "vivo, hecho para rol e historias",
+        "ru": "живая, создана для ролевых игр и историй"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI MarinaraSpaghetti/NemoMix-Unleashed-12B (W 34,58, W/10 5,2)",
+          "label_en": "UGI MarinaraSpaghetti/NemoMix-Unleashed-12B (W 34.58, W/10 5.2)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "Modellkarte MarinaraSpaghetti/NemoMix-Unleashed-12B",
+          "label_en": "Model card MarinaraSpaghetti/NemoMix-Unleashed-12B",
+          "url": "https://huggingface.co/MarinaraSpaghetti/NemoMix-Unleashed-12B"
+        }
+      ],
+      "reasoning": false,
+      "template": "mistral-inst",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": null,
+        "top_k": null,
+        "min_p": 0.1,
+        "rep_pen": null,
+        "dry_multiplier": 0.8,
+        "dry_base": 1.75,
+        "dry_allowed_length": 2,
+        "source": "MarinaraSpaghetti/NemoMix-Unleashed-12B model card (temperature 1.0-1.25, min_p 0.01-0.1, DRY 0.8/1.75/2/0)"
+      },
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Merge of Mistral Nemo 12B roleplay models; German is an estimate without a test."
+    },
+    {
+      "id": "famino-12b",
+      "shape": "nemo-12b",
+      "name": "Famino-12B Model_Stock",
+      "family": "Mistral Nemo",
+      "base": "nemo",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "mradermacher/Famino-12B-Model_Stock-i1-GGUF",
+      "source_repo": "DreadPoor/Famino-12B-Model_Stock",
+      "params_total_b": 12.2,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "Famino-12B-Model_Stock.i1-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 6742710944,
+          "sha256": "dc4bb7e475cfa3d63340155568088ce772dfe110003da200086a3567ac451c8a"
+        },
+        "balanced": {
+          "file": "Famino-12B-Model_Stock.i1-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 7477205664,
+          "sha256": "2275565b27442e98461f52647f34c86ec30f1af417ca3a6255f1a3f06114e847"
+        },
+        "large": {
+          "file": "Famino-12B-Model_Stock.i1-Q6_K.gguf",
+          "quant": "Q6_K",
+          "size_bytes": 10056211104,
+          "sha256": "b70efc753fe86cd3a9311ded71e3580936d3783c010d20c10ad447e38cb79164"
+        }
+      },
+      "vram_class": "8-12",
+      "vram_est_gb": 9,
+      "german": "unknown",
+      "german_source": null,
+      "censorship": "light",
+      "rp": 3,
+      "de": 3,
+      "uncensored": 1,
+      "writing": "lebhaft, klischeehaft, englisch gedacht",
+      "writing_tr": {
+        "en": "lively, clichéd, thinks in English",
+        "es": "vivo, con tópicos, piensa en inglés",
+        "ru": "живая, шаблонная, думает по-английски"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI DreadPoor/Famino-12B-Model_Stock (W 41,5, U 33,4, W/10 6,5)",
+          "label_en": "UGI DreadPoor/Famino-12B-Model_Stock (W 41.5, U 33.4, W/10 6.5)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        }
+      ],
+      "reasoning": false,
+      "template": "chatml",
+      "author_sampler": null,
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Mistral Nemo based 12B merge (Model Stock); imatrix quants, GGUF metadata reports a nominal 1,024,000 token context."
+    },
+    {
+      "id": "mn-12b-mag-mell-r1",
+      "shape": "nemo-12b",
+      "name": "MN-12B Mag-Mell R1",
+      "family": "Mistral Nemo",
+      "base": "nemo",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "bartowski/MN-12B-Mag-Mell-R1-GGUF",
+      "source_repo": "inflatebot/MN-12B-Mag-Mell-R1",
+      "params_total_b": 12.2,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "MN-12B-Mag-Mell-R1-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 6742711264,
+          "sha256": "cc1790b2d90b83031440bf9435ad6b1da0c0b4a951d1c107671942fe3633d273"
+        },
+        "balanced": {
+          "file": "MN-12B-Mag-Mell-R1-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 7477205984,
+          "sha256": "4e1588065eff8c310c8f2d7292da9ceef1d7fc58ecb6c455f994cf2e1b160e9d"
+        },
+        "large": {
+          "file": "MN-12B-Mag-Mell-R1-Q6_K.gguf",
+          "quant": "Q6_K",
+          "size_bytes": 10056211424,
+          "sha256": "ddd772c2da8a4867d93448d5091b39e7f3fa0b9b094148e80d3e7f86726c5ef4"
+        }
+      },
+      "vram_class": "8-12",
+      "vram_est_gb": 9,
+      "german": "unknown",
+      "german_source": null,
+      "censorship": "light",
+      "rp": 3,
+      "de": 3,
+      "uncensored": 1,
+      "writing": "warme, bildhafte Nemo-Prosa, englisch",
+      "writing_tr": {
+        "en": "warm, vivid Nemo prose, English",
+        "es": "prosa Nemo cálida y plástica, en inglés",
+        "ru": "тёплая образная проза Nemo, на английском"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI inflatebot/MN-12B-Mag-Mell-R1 (W 35,8, U 31,1, W/10 6,0)",
+          "label_en": "UGI inflatebot/MN-12B-Mag-Mell-R1 (W 35.8, U 31.1, W/10 6.0)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "huggingface.co/inflatebot/MN-12B-Mag-Mell-R1",
+          "label_en": "huggingface.co/inflatebot/MN-12B-Mag-Mell-R1",
+          "url": "https://huggingface.co/inflatebot/MN-12B-Mag-Mell-R1"
+        }
+      ],
+      "reasoning": false,
+      "template": "chatml",
+      "author_sampler": null,
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Merge of several Mistral Nemo 12B models; no license field on HF, no sampler values found, GGUF metadata reports a nominal 1,024,000 token context."
+    },
+    {
+      "id": "irix-12b-model-stock",
+      "shape": "nemo-12b",
+      "name": "Irix 12B Model_Stock",
+      "family": "Mistral Nemo",
+      "base": "nemo",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "mradermacher/Irix-12B-Model_Stock-i1-GGUF",
+      "source_repo": "DreadPoor/Irix-12B-Model_Stock",
+      "params_total_b": 12.2,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "Irix-12B-Model_Stock.i1-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 6742711296,
+          "sha256": "189137109c60b03ea8fa1b4f884809e39a93db8f3e35ef720f1d0fcb625fe69b"
+        },
+        "balanced": {
+          "file": "Irix-12B-Model_Stock.i1-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 7477206016,
+          "sha256": "fcba11531e300a8ab5f0a709d0c2cb092f59e7f984a8d74221af3d10b29978f1"
+        },
+        "large": {
+          "file": "Irix-12B-Model_Stock.i1-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 8727632896,
+          "sha256": "b5cee2e62237f016992e981a82866f43f9c79ccd9d52a421e59cd7d0bc4a5edb"
+        }
+      },
+      "vram_class": "8-12",
+      "vram_est_gb": 8.5,
+      "german": "unknown",
+      "german_source": null,
+      "censorship": "light",
+      "rp": 3,
+      "de": 3,
+      "uncensored": 1,
+      "writing": "lebhafte Nemo-Prosa, Merge aus Rollenspiel-Modellen",
+      "writing_tr": {
+        "en": "lively Nemo prose, merge of roleplay models",
+        "es": "prosa Nemo viva, fusión de modelos de rol",
+        "ru": "живая проза Nemo, слияние ролевых моделей"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI DreadPoor/Irix-12B-Model_Stock (W 40,28, W/10 5,5)",
+          "label_en": "UGI DreadPoor/Irix-12B-Model_Stock (W 40.28, W/10 5.5)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "Modellkarte DreadPoor/Irix-12B-Model_Stock",
+          "label_en": "Model card DreadPoor/Irix-12B-Model_Stock",
+          "url": "https://huggingface.co/DreadPoor/Irix-12B-Model_Stock"
+        }
+      ],
+      "reasoning": false,
+      "template": "chatml",
+      "author_sampler": null,
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Mistral Nemo based 12B merge (Model Stock) of roleplay models; imatrix quants, no license field on HF, German is an estimate without a test."
+    },
+    {
+      "id": "rocinante-x-12b-v1",
+      "shape": "nemo-12b",
+      "name": "Rocinante-X 12B v1",
+      "family": "Mistral Nemo",
+      "base": "nemo",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "bartowski/TheDrummer_Rocinante-X-12B-v1-GGUF",
+      "source_repo": "TheDrummer/Rocinante-X-12B-v1",
+      "params_total_b": 12.2,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "TheDrummer_Rocinante-X-12B-v1-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 6742712992,
+          "sha256": "43298ff2dced905224734a28ab0dbbc4801c1f66dbb72a170226142507804d29"
+        },
+        "balanced": {
+          "file": "TheDrummer_Rocinante-X-12B-v1-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 7477207712,
+          "sha256": "1ca25853a19d6b15f9a94f7e5bc86f4cc88bd0c9dea12a00ea55452b4208ade6"
+        },
+        "large": {
+          "file": "TheDrummer_Rocinante-X-12B-v1-Q6_K.gguf",
+          "quant": "Q6_K",
+          "size_bytes": 10056213152,
+          "sha256": "5c9ad1c2cd856c6c8ed424a3929afab91a5ac2b4f8e3e60d5761f8e1b6835215"
+        }
+      },
+      "vram_class": "8-12",
+      "vram_est_gb": 9,
+      "german": "unknown",
+      "german_source": null,
+      "censorship": "light",
+      "rp": 3,
+      "de": 3,
+      "uncensored": 1,
+      "writing": "lebendig, Drummer-Stil, wenig belegt",
+      "writing_tr": {
+        "en": "lively, Drummer style, little evidence",
+        "es": "vivo, estilo Drummer, pocos datos",
+        "ru": "живая, стиль Drummer, мало данных"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI TheDrummer/Rocinante-X-12B-v1 (W 27,6, U 22,9, W/10 3,5)",
+          "label_en": "UGI TheDrummer/Rocinante-X-12B-v1 (W 27.6, U 22.9, W/10 3.5)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "huggingface.co/TheDrummer/Rocinante-X-12B-v1",
+          "label_en": "huggingface.co/TheDrummer/Rocinante-X-12B-v1",
+          "url": "https://huggingface.co/TheDrummer/Rocinante-X-12B-v1"
+        }
+      ],
+      "reasoning": false,
+      "template": "mistral-inst",
+      "author_sampler": null,
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Fine-tune of Mistral Nemo Instruct 12B; no license field on HF, no sampler values on the card."
+    },
+    {
+      "id": "mistral-nemo-instruct-2407",
+      "shape": "nemo-12b",
+      "name": "Mistral Nemo Instruct 2407",
+      "family": "Mistral Nemo",
+      "base": "nemo",
+      "focus": [
+        "general"
+      ],
+      "repo": "bartowski/Mistral-Nemo-Instruct-2407-GGUF",
+      "source_repo": "mistralai/Mistral-Nemo-Instruct-2407",
+      "params_total_b": 12.2,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "Mistral-Nemo-Instruct-2407-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 6742713472,
+          "sha256": "4635276546fba351d9567641e55dc35ab9bce7fdc04a6f513ebb522326d3f41d"
+        },
+        "balanced": {
+          "file": "Mistral-Nemo-Instruct-2407-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 7477208192,
+          "sha256": "7c1a10d202d8788dbe5628dc962254d10654c853cae6aaeca0618f05490d4a46"
+        },
+        "large": {
+          "file": "Mistral-Nemo-Instruct-2407-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 8727635072,
+          "sha256": "f2118506b57d31403cba021b476ceb95600cc278fbc2feeaaf884b6e64fa6ee5"
+        }
+      },
+      "vram_class": "8-12",
+      "vram_est_gb": 8.5,
+      "german": "unknown",
+      "german_source": "Modellkarte mistralai/Mistral-Nemo-Instruct-2407",
+      "censorship": "light",
+      "rp": 3,
+      "de": 3,
+      "uncensored": 1,
+      "writing": "solides Grundmodell, mehrsprachig, wenig eigener Stil",
+      "writing_tr": {
+        "en": "solid base model, multilingual, little style of its own",
+        "es": "modelo base sólido, multilingüe, poco estilo propio",
+        "ru": "надёжная базовая модель, многоязычная, мало своего стиля"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI mistralai/Mistral-Nemo-Instruct-2407 (W 33,07, W/10 5,5)",
+          "label_en": "UGI mistralai/Mistral-Nemo-Instruct-2407 (W 33.07, W/10 5.5)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "Modellkarte mistralai/Mistral-Nemo-Instruct-2407",
+          "label_en": "Model card mistralai/Mistral-Nemo-Instruct-2407",
+          "url": "https://huggingface.co/mistralai/Mistral-Nemo-Instruct-2407"
+        }
+      ],
+      "reasoning": false,
+      "template": "mistral-inst",
+      "author_sampler": null,
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Original Mistral Nemo 12B instruct, the base of most 12B roleplay models; German is listed on its card but has no EuroEval value."
+    },
+    {
+      "id": "wayfarer-2-12b",
+      "shape": "nemo-12b",
+      "name": "Wayfarer 2 12B",
+      "family": "Mistral Nemo",
+      "base": "nemo",
+      "focus": [
+        "adventure",
+        "story"
+      ],
+      "repo": "bartowski/LatitudeGames_Wayfarer-2-12B-GGUF",
+      "source_repo": "LatitudeGames/Wayfarer-2-12B",
+      "params_total_b": 12.2,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "LatitudeGames_Wayfarer-2-12B-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 6742723680,
+          "sha256": "2227af939b938774b267e9677c898a60c33224e7ba6f85236dc386878c9e548b"
+        },
+        "balanced": {
+          "file": "LatitudeGames_Wayfarer-2-12B-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 7477218720,
+          "sha256": "ddec1e6fa3b98afcbd44caa479f1a2afb26bee88381f89b5b4b8e7ed6f60db03"
+        },
+        "large": {
+          "file": "LatitudeGames_Wayfarer-2-12B-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 8727646880,
+          "sha256": "689ce5f5e2f0449e68441614b64da0c7bbe19c9c4cb26c0927765a27766df03c"
+        }
+      },
+      "vram_class": "8-12",
+      "vram_est_gb": 8.5,
+      "german": "unknown",
+      "german_source": null,
+      "censorship": "light",
+      "rp": 3,
+      "de": 3,
+      "uncensored": 1,
+      "writing": "Abenteuer-Erzähler, lässt Figuren scheitern, zweite Person",
+      "writing_tr": {
+        "en": "adventure narrator, lets characters fail, second person",
+        "es": "narrador de aventuras, deja fracasar a los personajes, segunda persona",
+        "ru": "рассказчик приключений, позволяет персонажам ошибаться, второе лицо"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI LatitudeGames/Wayfarer-2-12B (W 33,45, W/10 6,2)",
+          "label_en": "UGI LatitudeGames/Wayfarer-2-12B (W 33.45, W/10 6.2)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "Modellkarte LatitudeGames/Wayfarer-2-12B",
+          "label_en": "Model card LatitudeGames/Wayfarer-2-12B",
+          "url": "https://huggingface.co/LatitudeGames/Wayfarer-2-12B"
+        }
+      ],
+      "reasoning": false,
+      "template": "chatml",
+      "author_sampler": {
+        "temperature": 0.8,
+        "top_p": null,
+        "top_k": null,
+        "min_p": 0.025,
+        "rep_pen": 1.05,
+        "source": "LatitudeGames/Wayfarer-2-12B model card"
+      },
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Fine-tune of Mistral Nemo for text adventures where failure is possible, trained in second person; German is an estimate without a test."
+    },
+    {
+      "id": "muse-12b",
+      "shape": "nemo-12b",
+      "name": "Muse 12B",
+      "family": "Mistral Nemo",
+      "base": "nemo",
+      "focus": [
+        "story"
+      ],
+      "repo": "mradermacher/Muse-12B-GGUF",
+      "source_repo": "LatitudeGames/Muse-12B",
+      "params_total_b": 12.2,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "Muse-12B.IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 6800067776,
+          "sha256": "8a8efeae8e302e52bcd409bf872652e9a12f2de22491ce11cc9028e38aa9ce8f"
+        },
+        "balanced": {
+          "file": "Muse-12B.Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 7477218816,
+          "sha256": "cc1119d2eb0cf237fdb7c49785fe4b87d1b1c9436670712b6c091de53f85606a"
+        },
+        "large": {
+          "file": "Muse-12B.Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 8727646976,
+          "sha256": "97b0175d7481b2858020eac06bfb559df5efb3efa310218e73c14a3f23616c61"
+        }
+      },
+      "vram_class": "8-12",
+      "vram_est_gb": 8.5,
+      "german": "unknown",
+      "german_source": null,
+      "censorship": "light",
+      "rp": 2,
+      "de": 3,
+      "uncensored": 1,
+      "writing": "gefühlvolle Geschichten, Beziehungen im Mittelpunkt, zweite Person",
+      "writing_tr": {
+        "en": "heartfelt stories, relationships at the centre, second person",
+        "es": "historias emotivas, las relaciones en el centro, segunda persona",
+        "ru": "душевные истории, в центре отношения, второе лицо"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI LatitudeGames/Muse-12B (W 25,19, W/10 6,8)",
+          "label_en": "UGI LatitudeGames/Muse-12B (W 25.19, W/10 6.8)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "Modellkarte LatitudeGames/Muse-12B",
+          "label_en": "Model card LatitudeGames/Muse-12B",
+          "url": "https://huggingface.co/LatitudeGames/Muse-12B"
+        }
+      ],
+      "reasoning": false,
+      "template": "chatml",
+      "author_sampler": {
+        "temperature": 0.8,
+        "top_p": null,
+        "top_k": null,
+        "min_p": 0.025,
+        "rep_pen": 1.05,
+        "source": "LatitudeGames/Muse-12B model card"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Fine-tune of Mistral Nemo for stories about relationships and emotions, trained in second person; German is an estimate without a test."
+    },
+    {
+      "id": "ministral-3-14b-instruct",
+      "shape": "ministral3-14b",
+      "name": "Ministral 3 14B Instruct",
+      "family": "Ministral 3",
+      "base": "mistral",
+      "focus": [
+        "general"
+      ],
+      "repo": "bartowski/mistralai_Ministral-3-14B-Instruct-2512-GGUF",
+      "source_repo": "mistralai/Ministral-3-14B-Instruct-2512",
+      "params_total_b": 13.5,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "mistral3",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "mistralai_Ministral-3-14B-Instruct-2512-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 7411185056,
+          "sha256": "2895179103887c0af8ae306d5c27d09d2ff4af7da1bda4866f06113d2b669668"
+        },
+        "balanced": {
+          "file": "mistralai_Ministral-3-14B-Instruct-2512-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 8239068576,
+          "sha256": "a95aea79c3043039306f9c3957aa091baf24d428507eb7596c59ddc54ff75b80"
+        },
+        "large": {
+          "file": "mistralai_Ministral-3-14B-Instruct-2512-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 9620567456,
+          "sha256": "d6ab2abd228ed45c7d85b4896d6d6d86a40421e741aaf8add9da61c4a0563a0f"
+        }
+      },
+      "vram_class": "8-12",
+      "vram_est_gb": 9.2,
+      "german": "medium",
+      "german_source": "EuroEval DE Ministral-3-14B-Instruct-2512 2,22",
+      "censorship": "light",
+      "rp": 3,
+      "de": 3,
+      "uncensored": 1,
+      "writing": "sachlich, folgt Regeln gut, mehrsprachig",
+      "writing_tr": {
+        "en": "matter-of-fact, follows rules well, multilingual",
+        "es": "objetivo, sigue bien las reglas, multilingüe",
+        "ru": "деловая, хорошо следует правилам, многоязычная"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI mistralai/Ministral-3-14B-Instruct-2512 (W 31,44, W/10 6,2)",
+          "label_en": "UGI mistralai/Ministral-3-14B-Instruct-2512 (W 31.44, W/10 6.2)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Ministral-3-14B-Instruct-2512 2,22",
+          "label_en": "EuroEval DE Ministral-3-14B-Instruct-2512 2.22",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": false,
+      "template": "mistral-v7-tekken",
+      "author_sampler": null,
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Original Ministral 3 14B instruct from the vendor, German is one of its listed languages."
+    },
+    {
+      "id": "qwen3-14b",
+      "shape": "qwen3-14b",
+      "name": "Qwen3-14B",
+      "family": "Qwen 3",
+      "base": "qwen",
+      "focus": [
+        "general"
+      ],
+      "repo": "bartowski/Qwen_Qwen3-14B-GGUF",
+      "source_repo": "Qwen/Qwen3-14B",
+      "params_total_b": 14.8,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "qwen3",
+      "context_max": 32768,
+      "quants": {
+        "small": {
+          "file": "Qwen_Qwen3-14B-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 8110730272,
+          "sha256": "448afbe2d83a40aa38e03019c37fec002d0e42da1f6a0a8d250876915b84a00d"
+        },
+        "balanced": {
+          "file": "Qwen_Qwen3-14B-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 9001753632,
+          "sha256": "915913e22399475dbe6c968ac014d9f1fbe08975e489279aede9d5c7b2c98eb6"
+        },
+        "large": {
+          "file": "Qwen_Qwen3-14B-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 10514570272,
+          "sha256": "bf19bf5c77c530762012f71215b62aa8f0bae08111ee0d537b8496479e17cfa3"
+        }
+      },
+      "vram_class": "8-12",
+      "vram_est_gb": 9.9,
+      "german": "medium",
+      "german_source": "EuroEval DE (euroeval.com, 16.11.2026) Qwen3-14B ohne Denken 1,84",
+      "censorship": "light",
+      "rp": 3,
+      "de": 3,
+      "uncensored": 1,
+      "writing": "sachlich und klar, wenig erzählerisch",
+      "writing_tr": {
+        "en": "matter-of-fact and clear, not much of a storyteller",
+        "es": "objetivo y claro, poco narrativo",
+        "ru": "деловая и ясная, рассказчик слабый"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI Qwen/Qwen3-14B (thinking=False) (W 34,76, W/10 5,5)",
+          "label_en": "UGI Qwen/Qwen3-14B (thinking=False) (W 34.76, W/10 5.5)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE (euroeval.com, 16.11.2026) Qwen3-14B ohne Denken 1,84",
+          "label_en": "EuroEval DE (euroeval.com, 2026-11-16) Qwen3-14B no thinking 1.84",
+          "url": "https://euroeval.com/leaderboards/Monolingual/german/"
+        }
+      ],
+      "reasoning": true,
+      "template": "chatml",
+      "author_sampler": null,
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Original Qwen3 14B from the vendor with a trained context of 32k; thinking can be switched in the chat template."
+    },
+    {
+      "id": "snowpiercer-15b-v4",
+      "shape": "nemo-15b",
+      "name": "Snowpiercer 15B v4",
+      "family": "Mistral Nemo",
+      "base": "nemo",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "bartowski/TheDrummer_Snowpiercer-15B-v4-GGUF",
+      "source_repo": "TheDrummer/Snowpiercer-15B-v4",
+      "params_total_b": 15,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 65536,
+      "quants": {
+        "small": {
+          "file": "TheDrummer_Snowpiercer-15B-v4-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 8199662720,
+          "sha256": "ebe090beb03d7aa15b186775cbd1cfae79ad46fb6fe4e84a666e22a6705a333b"
+        },
+        "balanced": {
+          "file": "TheDrummer_Snowpiercer-15B-v4-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 9112538240,
+          "sha256": "39798ed5a401e786e8c8fbc8d5865d8030a814de819ee829839f22c5060a0188"
+        },
+        "large": {
+          "file": "TheDrummer_Snowpiercer-15B-v4-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 10654600320,
+          "sha256": "0c9e5a14fff646c03a2dd897677014f60a60aee5025516c426f2eb22061ad9bd"
+        }
+      },
+      "vram_class": "8-12",
+      "vram_est_gb": 10,
+      "german": "unknown",
+      "german_source": null,
+      "censorship": "light",
+      "rp": 3,
+      "de": 3,
+      "uncensored": 1,
+      "writing": "lebendige Dialoge, Drummer-Stil, Denkmodus möglich",
+      "writing_tr": {
+        "en": "lively dialogue, Drummer style, thinking mode possible",
+        "es": "diálogos vivos, estilo Drummer, modo de razonamiento posible",
+        "ru": "живые диалоги, стиль Drummer, есть режим размышления"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI TheDrummer/Snowpiercer-15B-v4 (chatml) (W 36,39, W/10 6)",
+          "label_en": "UGI TheDrummer/Snowpiercer-15B-v4 (chatml) (W 36.39, W/10 6)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "Modellkarte TheDrummer/Snowpiercer-15B-v4",
+          "label_en": "Model card TheDrummer/Snowpiercer-15B-v4",
+          "url": "https://huggingface.co/TheDrummer/Snowpiercer-15B-v4"
+        }
+      ],
+      "reasoning": false,
+      "template": "chatml",
+      "author_sampler": null,
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Roleplay fine-tune of a 15B Nemo-style model (Apriel Nemotron 15B); no license field on HF, German is an estimate without a test."
+    },
+    {
+      "id": "rocinante-xl-16b-v1",
+      "shape": "nemo-16b",
+      "name": "Rocinante-XL 16B v1",
+      "family": "Mistral Nemo",
+      "base": "nemo",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "bartowski/TheDrummer_Rocinante-XL-16B-v1-GGUF",
+      "source_repo": "TheDrummer/Rocinante-XL-16B-v1",
+      "params_total_b": 16.1,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "TheDrummer_Rocinante-XL-16B-v1-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 8977662016,
+          "sha256": "f9a291eb499773db2b80e67ac5479898de056bcd1b63e44a8c5dd6c9b43d2596"
+        },
+        "balanced": {
+          "file": "TheDrummer_Rocinante-XL-16B-v1-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 10063921216,
+          "sha256": "cdfb5b1d393fef22fddd9a015599a0a42aecf79b5d4be4b79c8f6580dc46154b"
+        },
+        "large": {
+          "file": "TheDrummer_Rocinante-XL-16B-v1-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 11675369536,
+          "sha256": "fdbddaac5cb27c1a037f62f3e1fcb14435cb7208e64a6e1e4cab14e26773653a"
+        }
+      },
+      "vram_class": "8-12",
+      "vram_est_gb": 10.9,
+      "german": "unknown",
+      "german_source": null,
+      "censorship": "standard",
+      "rp": 3,
+      "de": 3,
+      "uncensored": 0,
+      "writing": "verspielte Dialoge, Drummer-Stil, lehnt aber oft ab",
+      "writing_tr": {
+        "en": "playful dialogue, Drummer style, but often refuses",
+        "es": "diálogos juguetones, estilo Drummer, pero rechaza a menudo",
+        "ru": "игривые диалоги, стиль Drummer, но часто отказывает"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI TheDrummer/Rocinante-XL-16B-v1 (W 32,66, W/10 2,8)",
+          "label_en": "UGI TheDrummer/Rocinante-XL-16B-v1 (W 32.66, W/10 2.8)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "Modellkarte TheDrummer/Rocinante-XL-16B-v1",
+          "label_en": "Model card TheDrummer/Rocinante-XL-16B-v1",
+          "url": "https://huggingface.co/TheDrummer/Rocinante-XL-16B-v1"
+        }
+      ],
+      "reasoning": false,
+      "template": "mistral-inst",
+      "author_sampler": null,
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Roleplay fine-tune of an upscaled Mistral Nemo (16B); no license field on HF, German is an estimate without a test."
+    },
+    {
+      "id": "harbinger-24b",
+      "shape": "mistral-small-24b",
+      "name": "Harbinger 24B",
+      "family": "Mistral Small",
+      "base": "mistral",
+      "focus": [
+        "adventure",
+        "story"
+      ],
+      "repo": "mradermacher/Harbinger-24B-i1-GGUF",
+      "source_repo": "LatitudeGames/Harbinger-24B",
+      "params_total_b": 23.6,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "Harbinger-24B.i1-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 12758914944,
+          "sha256": "dfd23a83cdfa37bd069d7370de7ed0d216f50dd304db5ca09cbd1fdf75923d46"
+        },
+        "balanced": {
+          "file": "Harbinger-24B.i1-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 14333908864,
+          "sha256": "376b6759706f18939969f8758a5f7b63ee67d3d8935c0a93eb0afd7abd234750"
+        },
+        "large": {
+          "file": "Harbinger-24B.i1-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 16763983744,
+          "sha256": "378492f081ad4b51e180246db10cc6aeba27f2b406fb0cff6c8592ede887540b"
+        }
+      },
+      "vram_class": "12-16",
+      "vram_est_gb": 14.8,
+      "german": "good",
+      "german_source": "EuroEval DE (euroeval.com, 16.11.2026) Basis Mistral-Small-3.1-24B-Instruct-2503 1,57",
+      "censorship": "light",
+      "rp": 3,
+      "de": 4,
+      "uncensored": 1,
+      "writing": "Abenteuer mit Folgen, bleibt über lange Strecken stimmig",
+      "writing_tr": {
+        "en": "adventures with consequences, stays consistent over long stretches",
+        "es": "aventuras con consecuencias, coherente durante mucho tiempo",
+        "ru": "приключения с последствиями, долго остаётся последовательной"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI LatitudeGames/Harbinger-24B (W 36,68, W/10 6,8)",
+          "label_en": "UGI LatitudeGames/Harbinger-24B (W 36.68, W/10 6.8)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE (euroeval.com, 16.11.2026) Basis Mistral-Small-3.1-24B-Instruct-2503 1,57",
+          "label_en": "EuroEval DE (euroeval.com, 2026-11-16) base Mistral-Small-3.1-24B-Instruct-2503 1.57",
+          "url": "https://euroeval.com/leaderboards/Monolingual/german/"
+        },
+        {
+          "label": "Modellkarte LatitudeGames/Harbinger-24B",
+          "label_en": "Model card LatitudeGames/Harbinger-24B",
+          "url": "https://huggingface.co/LatitudeGames/Harbinger-24B"
+        }
+      ],
+      "reasoning": false,
+      "template": "chatml",
+      "author_sampler": {
+        "temperature": 0.8,
+        "top_p": null,
+        "top_k": null,
+        "min_p": 0.025,
+        "rep_pen": 1.05,
+        "source": "LatitudeGames/Harbinger-24B model card"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Fine-tune of Mistral Small 3.1 24B for adventures and stories with real consequences, trained in second person; imatrix quants, German rating refers to the base model."
+    },
+    {
+      "id": "ms3-2-24b-penumbra-aether",
+      "shape": "mistral-small-24b",
+      "name": "MS3.2 24B Penumbra Aether",
+      "family": "Mistral Small",
+      "base": "mistral",
+      "focus": [
+        "roleplay",
+        "story"
+      ],
+      "repo": "mradermacher/MS3.2-24B-Penumbra-Aether-i1-GGUF",
+      "source_repo": "Vortex5/MS3.2-24B-Penumbra-Aether",
+      "params_total_b": 23.6,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "MS3.2-24B-Penumbra-Aether.i1-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 12758915328,
+          "sha256": "784b556a268925581f8f824fd483d3e16d2010ecb1af2f194277eedfc5cca481"
+        },
+        "balanced": {
+          "file": "MS3.2-24B-Penumbra-Aether.i1-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 14333909248,
+          "sha256": "785c58e234707812d882bafbfb3e28bdc5a682399298d5ca8a1245fc0b8f40da"
+        },
+        "large": {
+          "file": "MS3.2-24B-Penumbra-Aether.i1-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 16763984128,
+          "sha256": "a25e3e3f871383b43178d70260f4344833624fde13175ffbb44349631d1b81e9"
+        }
+      },
+      "vram_class": "12-16",
+      "vram_est_gb": 14.8,
+      "german": "medium",
+      "german_source": "EuroEval DE Basis Mistral-Small-3.2-24B 1,89",
+      "censorship": "light",
+      "rp": 4,
+      "de": 3,
+      "uncensored": 1,
+      "writing": "atmosphärische, lange Prosa, Merge",
+      "writing_tr": {
+        "en": "atmospheric, long prose, merge",
+        "es": "prosa larga y atmosférica, fusión",
+        "ru": "атмосферная длинная проза, слияние"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI Vortex5/MS3.2-24B-Penumbra-Aether (mistral V7-Tekken) (W 41,69, W/10 7,2)",
+          "label_en": "UGI Vortex5/MS3.2-24B-Penumbra-Aether (mistral V7-Tekken) (W 41.69, W/10 7.2)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Basis Mistral-Small-3.2-24B 1,89",
+          "label_en": "EuroEval DE base Mistral-Small-3.2-24B 1.89",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        },
+        {
+          "label": "Modellkarte Vortex5/MS3.2-24B-Penumbra-Aether",
+          "label_en": "Model card Vortex5/MS3.2-24B-Penumbra-Aether",
+          "url": "https://huggingface.co/Vortex5/MS3.2-24B-Penumbra-Aether"
+        }
+      ],
+      "reasoning": false,
+      "template": "mistral-v7-tekken",
+      "author_sampler": null,
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Merge of Mistral Small 3.2 24B roleplay and long-form models; imatrix quants."
+    },
+    {
+      "id": "cydonia-24b-v4-3",
+      "shape": "mistral-small-24b",
+      "name": "Cydonia 24B v4.3",
+      "family": "Mistral Small",
+      "base": "mistral",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "bartowski/TheDrummer_Cydonia-24B-v4.3-GGUF",
+      "source_repo": "TheDrummer/Cydonia-24B-v4.3",
+      "params_total_b": 23.6,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "TheDrummer_Cydonia-24B-v4.3-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 12758916512,
+          "sha256": "542866973c39e97d5b7f9fb000c7323543f429a535017f44450b771883f74741"
+        },
+        "balanced": {
+          "file": "TheDrummer_Cydonia-24B-v4.3-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 14333910432,
+          "sha256": "a5e359c30c4eca57995ce7327aa9b2ee2badabe3e0cd59bca57ef9a42307ee4a"
+        },
+        "large": {
+          "file": "TheDrummer_Cydonia-24B-v4.3-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 16763985312,
+          "sha256": "dc7015bf551de7e9196340a2e80dfe0f170d2fbb34264532d1786100b7985038"
+        }
+      },
+      "vram_class": "12-16",
+      "vram_est_gb": 15.8,
+      "german": "good",
+      "german_source": "EuroEval rank of base model Mistral-Small-3.2-24B (via christophkind.de, 04.11.2026)",
+      "censorship": "light",
+      "rp": 4,
+      "de": 4,
+      "uncensored": 2,
+      "writing": "knackige Dialoge, direkt, eher kurz",
+      "writing_tr": {
+        "en": "snappy dialogue, direct, rather short",
+        "es": "diálogos ágiles, directo, más bien breve",
+        "ru": "хлёсткие диалоги, прямая, скорее кратко"
+      },
+      "confidence": "high",
+      "sources": [
+        {
+          "label": "UGI TheDrummer/Cydonia-24B-v4.3 (W 41,4, U 44,5, W/10 7,0)",
+          "label_en": "UGI TheDrummer/Cydonia-24B-v4.3 (W 41.4, U 44.5, W/10 7.0)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Basis 1,89",
+          "label_en": "EuroEval DE base 1.89",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": false,
+      "template": "mistral-v7-tekken",
+      "author_sampler": null,
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Fine-tune of Mistral Small 3.2 24B; no license field on HF, German rating refers to the base model."
+    },
+    {
+      "id": "weirdcompound-v1-7-24b",
+      "shape": "mistral-small-24b",
+      "name": "WeirdCompound v1.7 24B",
+      "family": "Mistral Small",
+      "base": "mistral",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "mradermacher/WeirdCompound-v1.7-24b-i1-GGUF",
+      "source_repo": "FlareRebellion/WeirdCompound-v1.7-24b",
+      "params_total_b": 23.6,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "WeirdCompound-v1.7-24b.i1-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 12758917024,
+          "sha256": "1116b20c642a5cca67c9c5d265ffed30775972f1fe7277fd53fb2974cdb37ee5"
+        },
+        "balanced": {
+          "file": "WeirdCompound-v1.7-24b.i1-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 14333910944,
+          "sha256": "461454baedf2c0bb56380e61701a8ed63a297a73517360ef54899cd5dc888a4f"
+        },
+        "large": {
+          "file": "WeirdCompound-v1.7-24b.i1-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 16763985824,
+          "sha256": "034d14e76609b21ddb4cc4f682efa62d6b220f9e9e1bd5c819487f5e76aca5df"
+        }
+      },
+      "vram_class": "12-16",
+      "vram_est_gb": 15.8,
+      "german": "unknown",
+      "german_source": null,
+      "censorship": "light",
+      "rp": 4,
+      "de": 3,
+      "uncensored": 2,
+      "writing": "kreative, abwechslungsreiche Prosa",
+      "writing_tr": {
+        "en": "creative, varied prose",
+        "es": "prosa creativa y variada",
+        "ru": "творческая, разнообразная проза"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI FlareRebellion/WeirdCompound-v1.7-24b (W 47,0 Bestwert der Mistral-Gruppe, U 48,0, W/10 8,0)",
+          "label_en": "UGI FlareRebellion/WeirdCompound-v1.7-24b (W 47.0 best of the Mistral group, U 48.0, W/10 8.0)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        }
+      ],
+      "reasoning": false,
+      "template": "mistral-v7-tekken",
+      "author_sampler": null,
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Merge based on Mistral Small 24B; imatrix quants, no license field on HF and no base_model entry."
+    },
+    {
+      "id": "bereavedcompound-v1-0-24b",
+      "shape": "mistral-small-24b",
+      "name": "BereavedCompound v1.0 24B",
+      "family": "Mistral Small",
+      "base": "mistral",
+      "focus": [
+        "roleplay",
+        "story"
+      ],
+      "repo": "mradermacher/BereavedCompound-v1.0-24b-i1-GGUF",
+      "source_repo": "FlareRebellion/BereavedCompound-v1.0-24b",
+      "params_total_b": 23.6,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "BereavedCompound-v1.0-24b.i1-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 12758917056,
+          "sha256": "11338a6c1f08df2b013a5b0a53980127a1bea873552a3612ad18b9f162b607d5"
+        },
+        "balanced": {
+          "file": "BereavedCompound-v1.0-24b.i1-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 14333910976,
+          "sha256": "0450a70f1664735c41f25efb80e256db5d750c2933e906582cd6dada6cd00273"
+        },
+        "large": {
+          "file": "BereavedCompound-v1.0-24b.i1-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 16763985856,
+          "sha256": "2a5e4af63f4c14baf46c48391756d84c71b4c1500841886280acf1bf922936ef"
+        }
+      },
+      "vram_class": "12-16",
+      "vram_est_gb": 14.8,
+      "german": "medium",
+      "german_source": "EuroEval DE Basis Mistral-Small-3.2-24B 1,89",
+      "censorship": "light",
+      "rp": 4,
+      "de": 3,
+      "uncensored": 1,
+      "writing": "kreative, abwechslungsreiche Prosa, Merge",
+      "writing_tr": {
+        "en": "creative, varied prose, merge",
+        "es": "prosa creativa y variada, fusión",
+        "ru": "творческая, разнообразная проза, слияние"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI FlareRebellion/BereavedCompound-v1.0-24b (W 45,66, W/10 8)",
+          "label_en": "UGI FlareRebellion/BereavedCompound-v1.0-24b (W 45.66, W/10 8)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Basis Mistral-Small-3.2-24B 1,89",
+          "label_en": "EuroEval DE base Mistral-Small-3.2-24B 1.89",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        },
+        {
+          "label": "Modellkarte FlareRebellion/BereavedCompound-v1.0-24b",
+          "label_en": "Model card FlareRebellion/BereavedCompound-v1.0-24b",
+          "url": "https://huggingface.co/FlareRebellion/BereavedCompound-v1.0-24b"
+        }
+      ],
+      "reasoning": false,
+      "template": "mistral-v7-tekken",
+      "author_sampler": null,
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Multi-stage merge of Mistral Small 24B roleplay models, successor of WeirdCompound; imatrix quants, no license field on HF."
+    },
+    {
+      "id": "magidonia-24b-v4-3",
+      "shape": "mistral-small-24b",
+      "name": "Magidonia 24B v4.3",
+      "family": "Mistral Small",
+      "base": "mistral",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "bartowski/TheDrummer_Magidonia-24B-v4.3-GGUF",
+      "source_repo": "TheDrummer/Magidonia-24B-v4.3",
+      "params_total_b": 23.6,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "TheDrummer_Magidonia-24B-v4.3-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 12758918560,
+          "sha256": "b25071c3ef24574924201cbae422bf20415129db85efb025e9d73cb22e5ad873"
+        },
+        "balanced": {
+          "file": "TheDrummer_Magidonia-24B-v4.3-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 14333912480,
+          "sha256": "50fb55038172e5b2f4cd1f7a4d3acd01b9e076ab92f0aa3febba1336f870b3e9"
+        },
+        "large": {
+          "file": "TheDrummer_Magidonia-24B-v4.3-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 16763987360,
+          "sha256": "5bc6ae29e2c33d09963436d1924c8e3ed258bbb55ff956fdf309fc167f23f3f0"
+        }
+      },
+      "vram_class": "12-16",
+      "vram_est_gb": 15.8,
+      "german": "unknown",
+      "german_source": null,
+      "censorship": "light",
+      "rp": 4,
+      "de": 4,
+      "uncensored": 1,
+      "writing": "ausführliche, saubere Prosa, Denkmodus möglich",
+      "writing_tr": {
+        "en": "detailed, clean prose, thinking mode possible",
+        "es": "prosa detallada y limpia, modo de razonamiento posible",
+        "ru": "подробная аккуратная проза, есть режим размышления"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI TheDrummer/Magidonia-24B-v4.3 (W 42,7, U 37,8, W/10 6,8)",
+          "label_en": "UGI TheDrummer/Magidonia-24B-v4.3 (W 42.7, U 37.8, W/10 6.8)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Mistral-Small-3.2 Basis 1,89",
+          "label_en": "EuroEval DE Mistral-Small-3.2 base 1.89",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": false,
+      "template": "mistral-v7-tekken",
+      "author_sampler": null,
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Fine-tune of Magistral Small 2509; no license field on HF, template Mistral V7-Tekken."
+    },
+    {
+      "id": "dans-personalityengine-v1-3-0-24b",
+      "shape": "mistral-small-24b",
+      "name": "Dans PersonalityEngine V1.3.0 24B",
+      "family": "Mistral Small",
+      "base": "mistral",
+      "focus": [
+        "roleplay",
+        "story",
+        "general"
+      ],
+      "repo": "bartowski/PocketDoc_Dans-PersonalityEngine-V1.3.0-24b-GGUF",
+      "source_repo": "PocketDoc/Dans-PersonalityEngine-V1.3.0-24b",
+      "params_total_b": 23.6,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "PocketDoc_Dans-PersonalityEngine-V1.3.0-24b-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 12758928000,
+          "sha256": "7a25b77aa876d0761b8d813a633f599fb1da1e6d46ca9032440ba52af9d3518c"
+        },
+        "balanced": {
+          "file": "PocketDoc_Dans-PersonalityEngine-V1.3.0-24b-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 14333921920,
+          "sha256": "ec796b1f4c3e5b52267d1cb5c7077f27da278b6f7e9d41b1257c668891000d46"
+        },
+        "large": {
+          "file": "PocketDoc_Dans-PersonalityEngine-V1.3.0-24b-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 16763996800,
+          "sha256": "ac14a6b7a0aa865c22337e0f56d56ac87d7ba564e88cc62804653bdc2a0115a6"
+        }
+      },
+      "vram_class": "12-16",
+      "vram_est_gb": 14.8,
+      "german": "good",
+      "german_source": "EuroEval DE (euroeval.com, 16.11.2026) Basis Mistral-Small-3.1-24B 1,53",
+      "censorship": "light",
+      "rp": 3,
+      "de": 4,
+      "uncensored": 1,
+      "writing": "vielseitig: Rollenspiel, Erzählen und Aufgaben",
+      "writing_tr": {
+        "en": "versatile: roleplay, storytelling and tasks",
+        "es": "versátil: rol, narración y tareas",
+        "ru": "универсальная: ролевые игры, рассказы и задачи"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI PocketDoc/Dans-PersonalityEngine-V1.3.0-24b (W 36,56, W/10 6,5)",
+          "label_en": "UGI PocketDoc/Dans-PersonalityEngine-V1.3.0-24b (W 36.56, W/10 6.5)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE (euroeval.com, 16.11.2026) Basis Mistral-Small-3.1-24B 1,53",
+          "label_en": "EuroEval DE (euroeval.com, 2026-11-16) base Mistral-Small-3.1-24B 1.53",
+          "url": "https://euroeval.com/leaderboards/Monolingual/german/"
+        },
+        {
+          "label": "Modellkarte PocketDoc/Dans-PersonalityEngine-V1.3.0-24b",
+          "label_en": "Model card PocketDoc/Dans-PersonalityEngine-V1.3.0-24b",
+          "url": "https://huggingface.co/PocketDoc/Dans-PersonalityEngine-V1.3.0-24b"
+        }
+      ],
+      "reasoning": false,
+      "template": "danchat-2",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": 0.9,
+        "top_k": null,
+        "min_p": null,
+        "rep_pen": null,
+        "source": "PocketDoc/Dans-PersonalityEngine-V1.3.0-24b model card"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Fine-tune of Mistral Small 3.1 24B for roleplay, storywriting and general tasks with its own prompt format (DanChat-2, in the GGUF template); German is one of its listed languages."
+    },
+    {
+      "id": "mistral-small-3-2-24b-heretic",
+      "shape": "mistral-small-24b",
+      "name": "Mistral Small 3.2 24B ultra-uncensored-heretic",
+      "family": "Mistral Small",
+      "base": "mistral",
+      "focus": [
+        "general"
+      ],
+      "repo": "llmfan46/Mistral-Small-3.2-24B-Instruct-2506-ultra-uncensored-heretic-GGUF",
+      "source_repo": "llmfan46/Mistral-Small-3.2-24B-Instruct-2506-ultra-uncensored-heretic",
+      "params_total_b": 23.6,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "mistral3",
+      "context_max": 131072,
+      "quants": {
+        "small": null,
+        "balanced": {
+          "file": "Mistral-Small-3.2-24B-Instruct-2506-ultra-uncensored-heretic-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 14333922464,
+          "sha256": "5b0e27f5e3c2e5ef1809115c26efe247d72b46c218025acf1673ccd0e6045c20"
+        },
+        "large": {
+          "file": "Mistral-Small-3.2-24B-Instruct-2506-ultra-uncensored-heretic-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 16763997344,
+          "sha256": "5a5823bf87907d10c6af847a9562d7bde2a1838e8d8cfbb6cb1448fc2dbd8e91"
+        }
+      },
+      "vram_class": "12-16",
+      "vram_est_gb": 15.8,
+      "german": "good",
+      "german_source": "EuroEval rank of base model Mistral-Small-3.2-24B (via christophkind.de, 04.11.2026)",
+      "censorship": "uncensored",
+      "rp": 2,
+      "de": 3,
+      "uncensored": 2,
+      "writing": "unklar, UGI-Lauf auffällig defekt",
+      "writing_tr": {
+        "en": "unclear, the UGI run looks broken",
+        "es": "poco claro, la prueba de UGI parece defectuosa",
+        "ru": "неясно, прогон UGI явно сломан"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI llmfan46/Mistral-Small-3.2-24B-...-ultra-uncensored-heretic (W NA, U 4,38, W/10 0,5 - vermutlich defekter Lauf, nicht als echte Zensur lesbar)",
+          "label_en": "UGI llmfan46/Mistral-Small-3.2-24B-...-ultra-uncensored-heretic (W NA, U 4.38, W/10 0.5 - probably a broken run, not real censorship)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Basis 1,89",
+          "label_en": "EuroEval DE base 1.89",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": false,
+      "template": "mistral-v7-tekken",
+      "author_sampler": null,
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Mistral Small 3.2 24B, refusal-reduced (heretic method); the repo has no quant below Q4_K_M, so the small tier is null."
+    },
+    {
+      "id": "mistral-small-3-2-24b-it",
+      "shape": "mistral-small-24b",
+      "name": "Mistral Small 3.2 24B Instruct",
+      "family": "Mistral Small",
+      "base": "mistral",
+      "focus": [
+        "general"
+      ],
+      "repo": "unsloth/Mistral-Small-3.2-24B-Instruct-2506-GGUF",
+      "source_repo": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+      "params_total_b": 23.6,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "Mistral-Small-3.2-24B-Instruct-2506-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 12779900448,
+          "sha256": "d138036a144c55a39275429fb7a37c204fa2291814972768a400d810d6c4c5aa"
+        },
+        "balanced": {
+          "file": "Mistral-Small-3.2-24B-Instruct-2506-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 14333922848,
+          "sha256": "a3cc56310807ed0d145eaf9f018ccda9ae7ad8edb41ec870aa2454b0d4700b3c"
+        },
+        "large": {
+          "file": "Mistral-Small-3.2-24B-Instruct-2506-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 16763997728,
+          "sha256": "423446013d1d9a63eb09d84f9d4fe0a1a81b57b6530260afd07a070b4e74845a"
+        }
+      },
+      "vram_class": "12-16",
+      "vram_est_gb": 15.8,
+      "german": "good",
+      "german_source": "EuroEval rank of Mistral-Small-3.2-24B (via christophkind.de, 04.11.2026)",
+      "censorship": "standard",
+      "rp": 3,
+      "de": 4,
+      "uncensored": 1,
+      "writing": "solide, nüchtern, folgt Regeln gut",
+      "writing_tr": {
+        "en": "solid, plain, follows rules well",
+        "es": "sólido, sobrio, sigue bien las reglas",
+        "ru": "надёжная, сухая, хорошо следует правилам"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI mistralai/Mistral-Small-3.2-24B-Instruct-2506 (W 36,3, U 40,4, W/10 6,5)",
+          "label_en": "UGI mistralai/Mistral-Small-3.2-24B-Instruct-2506 (W 36.3, U 40.4, W/10 6.5)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE 1,89 (Test, nicht val)",
+          "label_en": "EuroEval DE 1.89 (test, not val)",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": false,
+      "template": "mistral-v7-tekken",
+      "author_sampler": {
+        "temperature": 0.15,
+        "top_p": null,
+        "top_k": null,
+        "min_p": null,
+        "rep_pen": null,
+        "source": "mistralai/Mistral-Small-3.2-24B-Instruct-2506 model card"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Original Mistral Small 3.2 instruct from the vendor; quants by unsloth."
+    },
+    {
+      "id": "maginum-cydoms-24b",
+      "shape": "mistral-small-24b",
+      "name": "Maginum-Cydoms 24B",
+      "family": "Mistral Small",
+      "base": "mistral",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "mradermacher/Maginum-Cydoms-24B-i1-GGUF",
+      "source_repo": "Casual-Autopsy/Maginum-Cydoms-24B",
+      "params_total_b": 23.6,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "Maginum-Cydoms-24B.i1-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 12758944160,
+          "sha256": "bc6b991b4889e879b4f5b0af9c1939f16e4fcab02c35e171848496e2d3e8d1e1"
+        },
+        "balanced": {
+          "file": "Maginum-Cydoms-24B.i1-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 14333938720,
+          "sha256": "53816656a288b62c8cfe3348e18b9f3821a5b140e52780f7d6a99baeed1b44ec"
+        },
+        "large": {
+          "file": "Maginum-Cydoms-24B.i1-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 16764016160,
+          "sha256": "cd39e982c751d0286f0cd46cc0d32551de381207952d243caf6b8ae6f4036fa5"
+        }
+      },
+      "vram_class": "12-16",
+      "vram_est_gb": 14.8,
+      "german": "medium",
+      "german_source": "EuroEval DE Basis Mistral-Small-3.2-24B 1,89",
+      "censorship": "light",
+      "rp": 4,
+      "de": 3,
+      "uncensored": 1,
+      "writing": "ausdrucksstarke Prosa, Merge aus Cydonia und Magidonia",
+      "writing_tr": {
+        "en": "expressive prose, merge of Cydonia and Magidonia",
+        "es": "prosa expresiva, fusión de Cydonia y Magidonia",
+        "ru": "выразительная проза, слияние Cydonia и Magidonia"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI Casual-Autopsy/Maginum-Cydoms-24B (W 42,65, W/10 6,8)",
+          "label_en": "UGI Casual-Autopsy/Maginum-Cydoms-24B (W 42.65, W/10 6.8)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Basis Mistral-Small-3.2-24B 1,89",
+          "label_en": "EuroEval DE base Mistral-Small-3.2-24B 1.89",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        },
+        {
+          "label": "Modellkarte Casual-Autopsy/Maginum-Cydoms-24B",
+          "label_en": "Model card Casual-Autopsy/Maginum-Cydoms-24B",
+          "url": "https://huggingface.co/Casual-Autopsy/Maginum-Cydoms-24B"
+        }
+      ],
+      "reasoning": false,
+      "template": "mistral-v7-tekken",
+      "author_sampler": null,
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Merge of Mistral Small 3.2 24B roleplay models (Cydonia, Magidonia and others); imatrix quants, no license field on HF."
+    },
+    {
+      "id": "gemma-3-27b-it",
+      "shape": "gemma3-27b",
+      "name": "Gemma 3 27B-it",
+      "family": "Gemma 3",
+      "base": "gemma",
+      "focus": [
+        "general"
+      ],
+      "repo": "bartowski/google_gemma-3-27b-it-GGUF",
+      "source_repo": "google/gemma-3-27b-it",
+      "params_total_b": 27,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "gemma3",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "google_gemma-3-27b-it-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 14767164032,
+          "sha256": "bd2f188c66d8ccb0bffcb0c91e4dbbb72754bb1732e0bca323a2f266a35e01c8"
+        },
+        "balanced": {
+          "file": "google_gemma-3-27b-it-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 16546404992,
+          "sha256": "4e83142e3ad3719ac61334f70a956dcc60bbba8adb29de5114161310bb9f7170"
+        },
+        "large": {
+          "file": "google_gemma-3-27b-it-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 19271391872,
+          "sha256": "7babc9bc281f07edae1cbfe519f61b12daa760b36be8ba53e72ddfdc9eceb846"
+        }
+      },
+      "vram_class": "16-24",
+      "vram_est_gb": 16.9,
+      "german": "medium",
+      "german_source": "EuroEval DE gemma-3-27b-it 2,17",
+      "censorship": "standard",
+      "rp": 3,
+      "de": 3,
+      "uncensored": 0,
+      "writing": "gepflegte, bildhafte Prosa, lehnt Erwachsenes ab",
+      "writing_tr": {
+        "en": "polished, vivid prose, refuses adult content",
+        "es": "prosa cuidada y plástica, rechaza contenido adulto",
+        "ru": "отточенная образная проза, отказывает во взрослом"
+      },
+      "confidence": "high",
+      "sources": [
+        {
+          "label": "UGI google/gemma-3-27b-it (W 44,99, W/10 2)",
+          "label_en": "UGI google/gemma-3-27b-it (W 44.99, W/10 2)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE gemma-3-27b-it 2,17",
+          "label_en": "EuroEval DE gemma-3-27b-it 2.17",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": false,
+      "template": "gemma-3",
+      "author_sampler": null,
+      "license": "gemma",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Original Gemma 3 27B instruct from the vendor (Gemma license)."
+    },
+    {
+      "id": "gemma-3-27b-it-abliterated-normpreserve",
+      "shape": "gemma3-27b",
+      "name": "Gemma 3 27B-it abliterated (norm-preserved)",
+      "family": "Gemma 3",
+      "base": "gemma",
+      "focus": [
+        "general"
+      ],
+      "repo": "mradermacher/gemma-3-27b-it-abliterated-normpreserve-i1-GGUF",
+      "source_repo": "YanLabs/gemma-3-27b-it-abliterated-normpreserve",
+      "params_total_b": 27,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "gemma3",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "gemma-3-27b-it-abliterated-normpreserve.i1-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 14767448704,
+          "sha256": "6a40331ea25b3f630500ae2b0526fbac864f5582cab907f5c4aac8b23701a96b"
+        },
+        "balanced": {
+          "file": "gemma-3-27b-it-abliterated-normpreserve.i1-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 16546689664,
+          "sha256": "c974d9f0e99f0743da2485670c2fdfcc678933dae4a424ba5342f3076172d7b0"
+        },
+        "large": {
+          "file": "gemma-3-27b-it-abliterated-normpreserve.i1-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 19271676544,
+          "sha256": "9cf040b6b847b93a8a27b65a50e09df82005c981cd3af38561c7bdf339be21ae"
+        }
+      },
+      "vram_class": "16-24",
+      "vram_est_gb": 16.9,
+      "german": "medium",
+      "german_source": "EuroEval DE Basis gemma-3-27b-it 2,17",
+      "censorship": "uncensored",
+      "rp": 4,
+      "de": 3,
+      "uncensored": 2,
+      "writing": "gepflegte, bildhafte Prosa, ohne Ablehnungen",
+      "writing_tr": {
+        "en": "polished, vivid prose, no refusals",
+        "es": "prosa cuidada y plástica, sin rechazos",
+        "ru": "отточенная образная проза, без отказов"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI YanLabs/gemma-3-27b-it-abliterated-normpreserve (W 42,54, W/10 9,5)",
+          "label_en": "UGI YanLabs/gemma-3-27b-it-abliterated-normpreserve (W 42.54, W/10 9.5)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Basis gemma-3-27b-it 2,17",
+          "label_en": "EuroEval DE base gemma-3-27b-it 2.17",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": false,
+      "template": "gemma-3",
+      "author_sampler": null,
+      "license": "gemma",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Gemma 3 27B instruct with the refusal direction removed (norm-preserving abliteration); imatrix quants, Gemma license."
+    },
+    {
+      "id": "qwen3-6-27b-heretic-v2",
+      "shape": "qwen35-27b",
+      "name": "Qwen3.6-27B uncensored-heretic v2",
+      "family": "Qwen 3.6",
+      "base": "qwen",
+      "focus": [
+        "general"
+      ],
+      "repo": "llmfan46/Qwen3.6-27B-uncensored-heretic-v2-GGUF",
+      "source_repo": "llmfan46/Qwen3.6-27B-uncensored-heretic-v2",
+      "params_total_b": 26.9,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "qwen35",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "Qwen3.6-27B-uncensored-heretic-v2-Q3_K_M.gguf",
+          "quant": "Q3_K_M",
+          "size_bytes": 13301446272,
+          "sha256": "0819abee96c430d156f35c10f667f8020b9b706f1102886985b94b411492f168"
+        },
+        "balanced": {
+          "file": "Qwen3.6-27B-uncensored-heretic-v2-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 16547403392,
+          "sha256": "74f7c89608331994bd43f0956b59366308e781281d18fc9eccb1f18af6e93951"
+        },
+        "large": {
+          "file": "Qwen3.6-27B-uncensored-heretic-v2-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 19231102592,
+          "sha256": "427042c7e80aeed0137e5f39d79f0203099337ad92fd3f689c3bb4d513e02ce0"
+        }
+      },
+      "vram_class": "16-24",
+      "vram_est_gb": 18,
+      "german": "good",
+      "german_source": "EuroEval rank of base model Qwen3.6-27B (via christophkind.de, 04.11.2026)",
+      "censorship": "uncensored",
+      "rp": 3,
+      "de": 4,
+      "uncensored": 2,
+      "writing": "nüchtern, besser mit Denkmodus",
+      "writing_tr": {
+        "en": "plain, better with thinking mode",
+        "es": "sobrio, mejor con modo de razonamiento",
+        "ru": "сухая, лучше с режимом размышления"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI llmfan46/Qwen3.6-27B-uncensored-heretic-v2 (W 32,1, mit Denken 39,4, U 43,9, W/10 9,5)",
+          "label_en": "UGI llmfan46/Qwen3.6-27B-uncensored-heretic-v2 (W 32.1, with thinking 39.4, U 43.9, W/10 9.5)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Qwen3.6-27B 1,74 (misst Verständnis/Grammatik, nicht Prosa)",
+          "label_en": "EuroEval DE Qwen3.6-27B 1.74 (measures understanding/grammar, not prose)",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "chatml",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "source": "Qwen/Qwen3.6-27B model card (thinking mode, general tasks)"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Qwen3.6 27B dense, refusal-reduced (heretic method); thinking is on by default in the chat template and can be switched off."
+    },
+    {
+      "id": "gemma-4-26b-a4b-heretic",
+      "shape": "gemma4-26b-a4b",
+      "expert_share": 0.902,
+      "name": "Gemma 4 26B-A4B heretic",
+      "family": "Gemma 4",
+      "base": "gemma",
+      "focus": [
+        "general"
+      ],
+      "repo": "llmfan46/gemma-4-26B-A4B-it-ultra-uncensored-heretic-GGUF",
+      "source_repo": "llmfan46/gemma-4-26B-A4B-it-ultra-uncensored-heretic",
+      "params_total_b": 25.2,
+      "params_active_b": 4,
+      "moe": true,
+      "arch": "gemma4",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "gemma-4-26B-A4B-it-ultra-uncensored-heretic-Q3_K_M.gguf",
+          "quant": "Q3_K_M",
+          "size_bytes": 13286732832,
+          "sha256": "b50de27ea0c22d05479b79a33250e8f896b51a7d205c52714103b51c5ef94eb4"
+        },
+        "balanced": {
+          "file": "gemma-4-26B-A4B-it-ultra-uncensored-heretic-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 16796015136,
+          "sha256": "acae52237b2abba49223a346ff8154fa15489f103676e6d10107cfa099720e38"
+        },
+        "large": {
+          "file": "gemma-4-26B-A4B-it-ultra-uncensored-heretic-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 19132889632,
+          "sha256": "ba7770ef0f90d3422edb249dcc17d5044cac580c5406cea5c90d8438a2d2266e"
+        }
+      },
+      "vram_class": "16-24",
+      "vram_est_gb": 18.3,
+      "german": "good",
+      "german_source": "EuroEval rank of base model gemma-4-26B (via christophkind.de, 04.11.2026)",
+      "censorship": "uncensored",
+      "rp": 4,
+      "de": 4,
+      "uncensored": 2,
+      "writing": "flüssige, detailreiche Prosa, schnell",
+      "writing_tr": {
+        "en": "fluent, detailed prose, fast",
+        "es": "prosa fluida y detallada, rápido",
+        "ru": "плавная подробная проза, быстрая"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI llmfan46/gemma-4-26B-A4B-it-ultra-uncensored-heretic (W 42,1, mit Denken 45,9, U 45,0, W/10 8,8)",
+          "label_en": "UGI llmfan46/gemma-4-26B-A4B-it-ultra-uncensored-heretic (W 42.1, with thinking 45.9, U 45.0, W/10 8.8)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Basis gemma-4-26B-A4B 2,08",
+          "label_en": "EuroEval DE base gemma-4-26B-A4B 2.08",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "gemma-4",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": null,
+        "rep_pen": null,
+        "source": "google/gemma-4-31B-it model card"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Gemma 4 mixture-of-experts (about 4B active per name), refusal-reduced (heretic method); experts can be moved to system RAM."
+    },
+    {
+      "id": "gemma-4-26b-a4b-sompoa-heresy",
+      "shape": "gemma4-26b-a4b",
+      "expert_share": 0.902,
+      "name": "Gemma 4 26B-A4B SOMPOA-heresy",
+      "family": "Gemma 4",
+      "base": "gemma",
+      "focus": [
+        "general"
+      ],
+      "repo": "mradermacher/gemma-4-26B-A4B-it-SOMPOA-heresy-i1-GGUF",
+      "source_repo": "MuXodious/gemma-4-26B-A4B-it-SOMPOA-heresy",
+      "params_total_b": 25.2,
+      "params_active_b": 4,
+      "moe": true,
+      "arch": "gemma4",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "gemma-4-26B-A4B-it-SOMPOA-heresy.i1-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 13917726464,
+          "sha256": "c28a7016d934f8f0efc4ef54e7ac244b30ad872f685a76acf375e7690eafab20"
+        },
+        "balanced": {
+          "file": "gemma-4-26B-A4B-it-SOMPOA-heresy.i1-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 16796016384,
+          "sha256": "7f1f13211d121795f940b6b519d87cffd868ebad20280ad297ddd666b3a25e2e"
+        },
+        "large": {
+          "file": "gemma-4-26B-A4B-it-SOMPOA-heresy.i1-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 19132890880,
+          "sha256": "e683e9a7e986b32e8d8b9a6e85952fc184aa6b186ff9d04e403b4a70f396cbf1"
+        }
+      },
+      "vram_class": "16-24",
+      "vram_est_gb": 18.3,
+      "german": "good",
+      "german_source": "EuroEval rank of base model gemma-4-26B (via christophkind.de, 04.11.2026)",
+      "censorship": "uncensored",
+      "rp": 4,
+      "de": 4,
+      "uncensored": 2,
+      "writing": "bildreich, mit Denken besonders stark",
+      "writing_tr": {
+        "en": "rich in imagery, especially strong with thinking",
+        "es": "rico en imágenes, especialmente fuerte con razonamiento",
+        "ru": "богатая образами, особенно сильна с размышлением"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI MuXodious/gemma-4-26B-A4B-it-SOMPOA-heresy (W 43,5, mit Denken 46,3, U 40,4/54,0, W/10 8,0/9,5)",
+          "label_en": "UGI MuXodious/gemma-4-26B-A4B-it-SOMPOA-heresy (W 43.5, with thinking 46.3, U 40.4/54.0, W/10 8.0/9.5)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Basis 2,08",
+          "label_en": "EuroEval DE base 2.08",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "gemma-4",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": null,
+        "rep_pen": null,
+        "source": "google/gemma-4-31B-it model card"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Gemma 4 26B-A4B with refusals reduced (SOMPOA / heresy method); imatrix quants."
+    },
+    {
+      "id": "gemma-4-26b-a4b-it",
+      "shape": "gemma4-26b-a4b",
+      "expert_share": 0.902,
+      "name": "Gemma 4 26B-A4B-it",
+      "family": "Gemma 4",
+      "base": "gemma",
+      "focus": [
+        "general"
+      ],
+      "repo": "bartowski/google_gemma-4-26B-A4B-it-GGUF",
+      "source_repo": "google/gemma-4-26B-A4B-it",
+      "params_total_b": 25.2,
+      "params_active_b": 4,
+      "moe": true,
+      "arch": "gemma4",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "google_gemma-4-26B-A4B-it-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 14205004928,
+          "sha256": "86f0f6ca5f622bca4506f7849eee3459d0cac867b919630132145efd452ee8b9"
+        },
+        "balanced": {
+          "file": "google_gemma-4-26B-A4B-it-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 17035039872,
+          "sha256": "a07f72221e8e3f77455ab0d7f7652d01a9f63c262b954aa6932a53275a0e895a"
+        },
+        "large": {
+          "file": "google_gemma-4-26B-A4B-it-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 19319198848,
+          "sha256": "6b4f8074239f72543997a950ff6ae4509553c599f5b432748309ff3438416493"
+        }
+      },
+      "vram_class": "16-24",
+      "vram_est_gb": 17.4,
+      "german": "good",
+      "german_source": "EuroEval DE gemma-4-26B-A4B-it 2,08",
+      "censorship": "standard",
+      "rp": 3,
+      "de": 4,
+      "uncensored": 0,
+      "writing": "flüssig und schnell, lehnt Erwachsenes ab",
+      "writing_tr": {
+        "en": "fluent and fast, refuses adult content",
+        "es": "fluido y rápido, rechaza contenido adulto",
+        "ru": "плавная и быстрая, отказывает во взрослом"
+      },
+      "confidence": "high",
+      "sources": [
+        {
+          "label": "UGI google/gemma-4-26B-A4B-it (W 41,62, W/10 1,8)",
+          "label_en": "UGI google/gemma-4-26B-A4B-it (W 41.62, W/10 1.8)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE gemma-4-26B-A4B-it 2,08",
+          "label_en": "EuroEval DE gemma-4-26B-A4B-it 2.08",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "gemma-4",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": null,
+        "rep_pen": null,
+        "source": "google/gemma-4-31B-it model card"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Original Gemma 4 mixture-of-experts instruct from the vendor (about 4B active); experts can be moved to system RAM."
+    },
+    {
+      "id": "orion-26b-a4b-v1-1",
+      "shape": "gemma4-26b-a4b",
+      "expert_share": 0.868,
+      "name": "Orion 26B-A4B v1.1",
+      "family": "Gemma 4",
+      "base": "gemma",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "bartowski/TheDrummer_Orion-26B-A4B-v1.1-GGUF",
+      "source_repo": "TheDrummer/Orion-26B-A4B-v1.1",
+      "params_total_b": 25.2,
+      "params_active_b": 4,
+      "moe": true,
+      "arch": "gemma4",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "TheDrummer_Orion-26B-A4B-v1.1-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 14278610784,
+          "sha256": "e9c430af9d842f1411efedaab7959d7686b41370bb4a8afbbac2f38d8c46166b"
+        },
+        "balanced": {
+          "file": "TheDrummer_Orion-26B-A4B-v1.1-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 17966167008,
+          "sha256": "b0374debf3034de2c149ef4e3c3d3f30b67d27df0158ef620a445c2598754813"
+        },
+        "large": {
+          "file": "TheDrummer_Orion-26B-A4B-v1.1-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 20010087392,
+          "sha256": "75f8fbead7f71abcdbcf8e301e4b582086a319604065d1e855e91d745fd73612"
+        }
+      },
+      "vram_class": "16-24",
+      "vram_est_gb": 19.5,
+      "german": "good",
+      "german_source": "EuroEval rank of base model gemma-4-26B (via christophkind.de, 04.11.2026)",
+      "censorship": "light",
+      "rp": 5,
+      "de": 4,
+      "uncensored": 1,
+      "writing": "lange, literarische Prosa, hält Regeln",
+      "writing_tr": {
+        "en": "long, literary prose, keeps to the rules",
+        "es": "prosa larga y literaria, respeta las reglas",
+        "ru": "длинная литературная проза, соблюдает правила"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "Modellkarte (nicht auf UGI gelistet)",
+          "label_en": "Model card (not listed on UGI)",
+          "url": "https://huggingface.co/TheDrummer/Orion-26B-A4B-v1.1"
+        },
+        {
+          "label": "EuroEval DE Basis 2,08",
+          "label_en": "EuroEval DE base 2.08",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "gemma-4",
+      "author_sampler": null,
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Fine-tune of Gemma 4 26B-A4B; no license field on HF, thinking can be switched in the chat template."
+    },
+    {
+      "id": "qwen3-6-27b",
+      "shape": "qwen35-27b",
+      "name": "Qwen3.6-27B",
+      "family": "Qwen 3.6",
+      "base": "qwen",
+      "focus": [
+        "general"
+      ],
+      "repo": "bartowski/Qwen_Qwen3.6-27B-GGUF",
+      "source_repo": "Qwen/Qwen3.6-27B",
+      "params_total_b": 27.3,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "qwen35",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "Qwen_Qwen3.6-27B-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 15780160000,
+          "sha256": "c699518dca347fe11d24dd7906d19d4ecb2935553a3bea1b887761434daa3505"
+        },
+        "balanced": {
+          "file": "Qwen_Qwen3.6-27B-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 17984872960,
+          "sha256": "8739a0cbb80036e5dbdced2085f142b8ba86e3235db8b8039b3769fe5fc70843"
+        },
+        "large": {
+          "file": "Qwen_Qwen3.6-27B-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 20965122560,
+          "sha256": "31199d23814b9c9cf3b25c5ddde98cb4f2af6ac5e97dcc5d7f228cc95ee13939"
+        }
+      },
+      "vram_class": "16-24",
+      "vram_est_gb": 18.2,
+      "german": "good",
+      "german_source": "EuroEval DE Qwen3.6-27B 1,74",
+      "censorship": "standard",
+      "rp": 3,
+      "de": 4,
+      "uncensored": 0,
+      "writing": "klar und kohärent, besser mit Denkmodus, lehnt ab",
+      "writing_tr": {
+        "en": "clear and coherent, better with thinking mode, refuses",
+        "es": "claro y coherente, mejor con modo de razonamiento, rechaza",
+        "ru": "ясная и связная, лучше с режимом размышления, отказывает"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI Qwen/Qwen3.6-27B (no think) (W 38,83, W/10 2,2)",
+          "label_en": "UGI Qwen/Qwen3.6-27B (no think) (W 38.83, W/10 2.2)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Qwen3.6-27B 1,74",
+          "label_en": "EuroEval DE Qwen3.6-27B 1.74",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "chatml",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 0,
+        "source": "Qwen/Qwen3.6-27B model card (thinking mode, general tasks)"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Original Qwen3.6 27B from the vendor; the file has one extra next-token-prediction block that holds no chat context."
+    },
+    {
+      "id": "gemma-4-31b-it",
+      "shape": "gemma4-31b",
+      "name": "Gemma 4 31B-it",
+      "family": "Gemma 4",
+      "base": "gemma",
+      "focus": [
+        "general"
+      ],
+      "repo": "unsloth/gemma-4-31B-it-GGUF",
+      "source_repo": "google/gemma-4-31B-it",
+      "params_total_b": 30.7,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "gemma4",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "gemma-4-31B-it-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 16372460480,
+          "sha256": "e3d40b6e363954c993a6e28b160d881dfe5a243b62746bd4092b393d4f1d54e5"
+        },
+        "balanced": {
+          "file": "gemma-4-31B-it-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 18323733440,
+          "sha256": "38bd64c852c4b460434cc7162fa9bdcf242faf86502581a754cb72956bb17f84"
+        },
+        "large": {
+          "file": "gemma-4-31B-it-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 21658401728,
+          "sha256": "95192e41190ef5eb72db92b669cea0ed733049c2265a03a64ac5a080d8605958"
+        }
+      },
+      "vram_class": "16-24",
+      "vram_est_gb": 19.8,
+      "german": "good",
+      "german_source": "EuroEval rank of gemma-4-31B (via christophkind.de, 04.11.2026)",
+      "censorship": "standard",
+      "rp": 3,
+      "de": 5,
+      "uncensored": 0,
+      "writing": "gepflegt, sehr gutes Deutsch, lehnt ab",
+      "writing_tr": {
+        "en": "polished, very good German, refuses",
+        "es": "cuidado, muy buen alemán, rechaza",
+        "ru": "отточенная, очень хороший немецкий, отказывает"
+      },
+      "confidence": "high",
+      "sources": [
+        {
+          "label": "UGI google/gemma-4-31B-it (W 38,6, mit Denken 43,1, U 21,5, W/10 2,5)",
+          "label_en": "UGI google/gemma-4-31B-it (W 38.6, with thinking 43.1, U 21.5, W/10 2.5)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE 1,82",
+          "label_en": "EuroEval DE 1.82",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "gemma-4",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": null,
+        "rep_pen": null,
+        "source": "google/gemma-4-31B-it model card"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Original Gemma 4 31B instruct from the vendor; quants by unsloth, included as the unmodified reference."
+    },
+    {
+      "id": "pantheon-proto-rp-1-8-30b-a3b",
+      "shape": "qwen3moe-30b-a3b",
+      "expert_share": 0.942,
+      "name": "Pantheon Proto RP 1.8 30B-A3B",
+      "family": "Qwen 3",
+      "base": "qwen",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "bartowski/Gryphe_Pantheon-Proto-RP-1.8-30B-A3B-GGUF",
+      "source_repo": "Gryphe/Pantheon-Proto-RP-1.8-30B-A3B",
+      "params_total_b": 30.5,
+      "params_active_b": 3,
+      "moe": true,
+      "arch": "qwen3moe",
+      "context_max": 32768,
+      "quants": {
+        "small": {
+          "file": "Gryphe_Pantheon-Proto-RP-1.8-30B-A3B-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 16457998816,
+          "sha256": "6751808f36dbe834cb9071254555206ef8b01a4460753a7644b2cb267bd10bc9"
+        },
+        "balanced": {
+          "file": "Gryphe_Pantheon-Proto-RP-1.8-30B-A3B-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 18632180192,
+          "sha256": "b72fe703a992fba9595c24b96737a2b5199da89a1a3870b8bd57746dc3c123ae"
+        },
+        "large": {
+          "file": "Gryphe_Pantheon-Proto-RP-1.8-30B-A3B-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 21744452064,
+          "sha256": "7301b528b581a0cc17126d193922fd2038a958a5f3362e76bb04cada3fd30c63"
+        }
+      },
+      "vram_class": "16-24",
+      "vram_est_gb": 18.9,
+      "german": "medium",
+      "german_source": "EuroEval DE (euroeval.com, 16.11.2026) Basis Qwen3-30B-A3B-Instruct-2507 1,86",
+      "censorship": "light",
+      "rp": 3,
+      "de": 3,
+      "uncensored": 1,
+      "writing": "Rollenspiel-Tune mit eigenen Persönlichkeiten, schnell",
+      "writing_tr": {
+        "en": "roleplay tune with its own personalities, fast",
+        "es": "ajuste para rol con personalidades propias, rápido",
+        "ru": "ролевая доводка со своими персонажами, быстрая"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI Gryphe/Pantheon-Proto-RP-1.8-30B-A3B (W 31,13, W/10 7)",
+          "label_en": "UGI Gryphe/Pantheon-Proto-RP-1.8-30B-A3B (W 31.13, W/10 7)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE (euroeval.com, 16.11.2026) Basis Qwen3-30B-A3B-Instruct-2507 1,86",
+          "label_en": "EuroEval DE (euroeval.com, 2026-11-16) base Qwen3-30B-A3B-Instruct-2507 1.86",
+          "url": "https://euroeval.com/leaderboards/Monolingual/german/"
+        },
+        {
+          "label": "Modellkarte Gryphe/Pantheon-Proto-RP-1.8-30B-A3B",
+          "label_en": "Model card Gryphe/Pantheon-Proto-RP-1.8-30B-A3B",
+          "url": "https://huggingface.co/Gryphe/Pantheon-Proto-RP-1.8-30B-A3B"
+        }
+      ],
+      "reasoning": false,
+      "template": "chatml",
+      "author_sampler": {
+        "temperature": 0.8,
+        "top_p": null,
+        "top_k": null,
+        "min_p": 0.05,
+        "rep_pen": 1.05,
+        "source": "Gryphe/Pantheon-Proto-RP-1.8-30B-A3B model card"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Roleplay fine-tune of the Qwen3 30B-A3B mixture-of-experts (about 3B active) with a trained context of 32k, called a prototype by its author."
+    },
+    {
+      "id": "qwen3-30b-a3b-instruct-2507",
+      "shape": "qwen3moe-30b-a3b",
+      "expert_share": 0.942,
+      "name": "Qwen3-30B-A3B Instruct 2507",
+      "family": "Qwen 3",
+      "base": "qwen",
+      "focus": [
+        "general"
+      ],
+      "repo": "bartowski/Qwen_Qwen3-30B-A3B-Instruct-2507-GGUF",
+      "source_repo": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "params_total_b": 30.5,
+      "params_active_b": 3,
+      "moe": true,
+      "arch": "qwen3moe",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "Qwen_Qwen3-30B-A3B-Instruct-2507-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 16458002432,
+          "sha256": "9338f2172f1c5451962bb159591792919410abb6ad4702f5edcee72d050e8964"
+        },
+        "balanced": {
+          "file": "Qwen_Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 18632183808,
+          "sha256": "382b4f5a164d200f93790ee0e339fae12852896d23485cfb203ce868fea33a95"
+        },
+        "large": {
+          "file": "Qwen_Qwen3-30B-A3B-Instruct-2507-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 21744455680,
+          "sha256": "3233326af36eddfa675de49ba0d6098cd043f86ddc6de40cdef2b3ac64992581"
+        }
+      },
+      "vram_class": "16-24",
+      "vram_est_gb": 18.9,
+      "german": "medium",
+      "german_source": "EuroEval DE (euroeval.com, 16.11.2026) Qwen3-30B-A3B-Instruct-2507 1,86",
+      "censorship": "standard",
+      "rp": 2,
+      "de": 3,
+      "uncensored": 0,
+      "writing": "schnell und sachlich, wenig erzählerisch",
+      "writing_tr": {
+        "en": "fast and matter-of-fact, not much of a storyteller",
+        "es": "rápido y objetivo, poco narrativo",
+        "ru": "быстрая и деловая, рассказчик слабый"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI Qwen/Qwen3-30B-A3B-Instruct-2507 (W 27,89, W/10 4)",
+          "label_en": "UGI Qwen/Qwen3-30B-A3B-Instruct-2507 (W 27.89, W/10 4)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE (euroeval.com, 16.11.2026) Qwen3-30B-A3B-Instruct-2507 1,86",
+          "label_en": "EuroEval DE (euroeval.com, 2026-11-16) Qwen3-30B-A3B-Instruct-2507 1.86",
+          "url": "https://euroeval.com/leaderboards/Monolingual/german/"
+        }
+      ],
+      "reasoning": false,
+      "template": "chatml",
+      "author_sampler": null,
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Original Qwen3 mixture-of-experts instruct (about 3B active, no thinking mode); experts can be moved to system RAM."
+    },
+    {
+      "id": "gemma-4-31b-heretic-ara",
+      "shape": "gemma4-31b",
+      "name": "Gemma 4 31B heretic (ARA)",
+      "family": "Gemma 4",
+      "base": "gemma",
+      "focus": [
+        "general"
+      ],
+      "repo": "mradermacher/gemma-4-31B-it-heretic-i1-GGUF",
+      "source_repo": "coder3101/gemma-4-31B-it-heretic",
+      "params_total_b": 30.7,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "gemma4",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "gemma-4-31B-it-heretic.i1-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 16735790016,
+          "sha256": "8a1306ce8f821bb7aa98817fec6d8addfea5eb438769166e2e397708aaebf8a5"
+        },
+        "balanced": {
+          "file": "gemma-4-31B-it-heretic.i1-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 18687062976,
+          "sha256": "18fbc29cbf22b2b985d506d10b7f923201d91ecd457c692161776dbb5d1175b4"
+        },
+        "large": {
+          "file": "gemma-4-31B-it-heretic.i1-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 21845570496,
+          "sha256": "8f8c0c39d9e55f27d4e0bd04838de074fd405ef6190cb720614d2773d928b1b8"
+        }
+      },
+      "vram_class": "16-24",
+      "vram_est_gb": 20.2,
+      "german": "good",
+      "german_source": "EuroEval rank of base model gemma-4-31B (via christophkind.de, 04.11.2026)",
+      "censorship": "uncensored",
+      "rp": 4,
+      "de": 5,
+      "uncensored": 2,
+      "writing": "kohärent, natürliches Deutsch, etwas brav",
+      "writing_tr": {
+        "en": "coherent, natural German, a little tame",
+        "es": "coherente, alemán natural, algo comedido",
+        "ru": "связная, естественный немецкий, немного скромная"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI coder3101/gemma-4-31B-it-heretic (W 39,6, U 56,4, W/10 10)",
+          "label_en": "UGI coder3101/gemma-4-31B-it-heretic (W 39.6, U 56.4, W/10 10)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE gemma-4-31B-it 1,82",
+          "label_en": "EuroEval DE gemma-4-31B-it 1.82",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "gemma-4",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": null,
+        "rep_pen": null,
+        "source": "google/gemma-4-31B-it model card"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Gemma 4 31B instruct, refusal-reduced (heretic ARA); imatrix quants, refusal and KL figures are on the source model card."
+    },
+    {
+      "id": "gemma-4-31b-uncensored-heretic",
+      "shape": "gemma4-31b",
+      "name": "Gemma 4 31B uncensored-heretic",
+      "family": "Gemma 4",
+      "base": "gemma",
+      "focus": [
+        "general"
+      ],
+      "repo": "llmfan46/gemma-4-31B-it-uncensored-heretic-GGUF",
+      "source_repo": "llmfan46/gemma-4-31B-it-uncensored-heretic",
+      "params_total_b": 30.7,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "gemma4",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "gemma-4-31B-it-uncensored-heretic-Q3_K_M.gguf",
+          "quant": "Q3_K_M",
+          "size_bytes": 15287108736,
+          "sha256": "c0e2810df3603c8bcd103f9b7bbe0fa76c1422df8724c2989d6091641f5a4a10"
+        },
+        "balanced": {
+          "file": "gemma-4-31B-it-uncensored-heretic-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 18687063168,
+          "sha256": "7c65a35e7c4e53cba6c5e02cc9eeb850eb4251f4d9ad120c2caa6de23c5a6395"
+        },
+        "large": {
+          "file": "gemma-4-31B-it-uncensored-heretic-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 21845570688,
+          "sha256": "c46aa8fe6a55e0d86fd50b1ec13d8412bcd8990468505f0c3e1b4c2c188430f8"
+        }
+      },
+      "vram_class": "16-24",
+      "vram_est_gb": 20.2,
+      "german": "good",
+      "german_source": "EuroEval rank of base model gemma-4-31B (via christophkind.de, 04.11.2026)",
+      "censorship": "uncensored",
+      "rp": 4,
+      "de": 5,
+      "uncensored": 2,
+      "writing": "kohärent, natürliches Deutsch, etwas brav",
+      "writing_tr": {
+        "en": "coherent, natural German, a little tame",
+        "es": "coherente, alemán natural, algo comedido",
+        "ru": "связная, естественный немецкий, немного скромная"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI llmfan46/gemma-4-31B-it-uncensored-heretic (W 38,3, U 53,8, W/10 9,5)",
+          "label_en": "UGI llmfan46/gemma-4-31B-it-uncensored-heretic (W 38.3, U 53.8, W/10 9.5)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE 1,82",
+          "label_en": "EuroEval DE 1.82",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "gemma-4",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 64,
+        "min_p": null,
+        "rep_pen": null,
+        "source": "google/gemma-4-31B-it model card"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Gemma 4 31B instruct, refusal-reduced (heretic method)."
+    },
+    {
+      "id": "goetia-26b-a4b-v1-7",
+      "shape": "gemma4-26b-a4b",
+      "expert_share": 0.832,
+      "name": "Goetia 26B-A4B v1.7",
+      "family": "Gemma 4",
+      "base": "gemma",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "bartowski/Naphula_Goetia-26B-A4B-v1.7-GGUF",
+      "source_repo": "Naphula/Goetia-26B-A4B-v1.7",
+      "params_total_b": 26,
+      "params_active_b": 4,
+      "moe": true,
+      "arch": "gemma4",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "Naphula_Goetia-26B-A4B-v1.7-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 15062949984,
+          "sha256": "43b315a14d456e69e080de04a8c60e738752861892b90ca92b28712419c1461b"
+        },
+        "balanced": {
+          "file": "Naphula_Goetia-26B-A4B-v1.7-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 18750506208,
+          "sha256": "c150081ee233f65d60674692ed4c2ea8b18a1b653f340a9902a7b7bdaf764c2b"
+        },
+        "large": {
+          "file": "Naphula_Goetia-26B-A4B-v1.7-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 20794426592,
+          "sha256": "e7c6da6729eaa5d83c99ef74182848ac05759af765b86e1e410f9eb684778609"
+        }
+      },
+      "vram_class": "16-24",
+      "vram_est_gb": 20.3,
+      "german": "good",
+      "german_source": "EuroEval rank of base model gemma-4-26B (via christophkind.de, 04.11.2026)",
+      "censorship": "light",
+      "rp": 4,
+      "de": 4,
+      "uncensored": 1,
+      "writing": "Merge aus Fiction-Tunes, ausdrucksstark",
+      "writing_tr": {
+        "en": "merge of fiction tunes, expressive",
+        "es": "fusión de ajustes de ficción, expresivo",
+        "ru": "слияние литературных доводок, выразительная"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI nur Vorgänger Goetia-26B-A4B-v1.3-Absolute-Heretic-ARA (W 40,9, mit Denken 47,9 Bestwert aller Gemma-Tunes, U 43,8)",
+          "label_en": "UGI only predecessor Goetia-26B-A4B-v1.3-Absolute-Heretic-ARA (W 40.9, with thinking 47.9 best of all Gemma tunes, U 43.8)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "Modellkarte (nicht ablatiert, Refusals nur per NoThink-Template senkbar)",
+          "label_en": "Model card (not abliterated, refusals can only be lowered with the NoThink template)",
+          "url": "https://huggingface.co/Naphula/Goetia-26B-A4B-v1.7"
+        }
+      ],
+      "reasoning": true,
+      "template": "gemma-4",
+      "author_sampler": null,
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Merge of several Gemma 4 26B-A4B fine-tunes; thinking can be switched in the chat template."
+    },
+    {
+      "id": "skyfall-31b-v4-1",
+      "shape": "skyfall-31b",
+      "name": "Skyfall 31B v4.1",
+      "family": "Mistral Small",
+      "base": "mistral",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "bartowski/TheDrummer_Skyfall-31B-v4.1-GGUF",
+      "source_repo": "TheDrummer/Skyfall-31B-v4.1",
+      "params_total_b": 31.4,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "TheDrummer_Skyfall-31B-v4.1-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 16904323840,
+          "sha256": "a75d9b74e4880b9ca83838ba1bdbb325ef7194f6dc864d3bfa8ca44cbb0d8384"
+        },
+        "balanced": {
+          "file": "TheDrummer_Skyfall-31B-v4.1-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 18978620160,
+          "sha256": "64c4f23765a2823a1b7062f246212c3ca6b0b84169872107ee8a2a5f80db064a"
+        },
+        "large": {
+          "file": "TheDrummer_Skyfall-31B-v4.1-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 22251488000,
+          "sha256": "2a503efd5d7f217392d824994dc1ae1edcb031cacdf199594dbc0617d8144c33"
+        }
+      },
+      "vram_class": "16-24",
+      "vram_est_gb": 20.5,
+      "german": "unknown",
+      "german_source": null,
+      "censorship": "light",
+      "rp": 4,
+      "de": 4,
+      "uncensored": 1,
+      "writing": "ausführliche, dichte Drummer-Prosa",
+      "writing_tr": {
+        "en": "detailed, dense Drummer prose",
+        "es": "prosa Drummer detallada y densa",
+        "ru": "подробная плотная проза Drummer"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI TheDrummer/Skyfall-31B-v4.1 (W 40,7, U 40,3, W/10 6,0)",
+          "label_en": "UGI TheDrummer/Skyfall-31B-v4.1 (W 40.7, U 40.3, W/10 6.0)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "Basis Magistral/Mistral Small, EuroEval DE 1,89",
+          "label_en": "base Magistral/Mistral Small, EuroEval DE 1.89",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": false,
+      "template": "mistral-v7-tekken",
+      "author_sampler": null,
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Fine-tune based on Magistral Small 2509 (upscaled to 31B); no license field on HF, template Mistral V7-Tekken."
+    },
+    {
+      "id": "qwen3-6-35b-a3b-heretic",
+      "shape": "qwen35moe-35b-a3b",
+      "expert_share": 0.919,
+      "name": "Qwen3.6-35B-A3B uncensored-heretic",
+      "family": "Qwen 3.6",
+      "base": "qwen",
+      "focus": [
+        "general"
+      ],
+      "repo": "llmfan46/Qwen3.6-35B-A3B-uncensored-heretic-GGUF",
+      "source_repo": "llmfan46/Qwen3.6-35B-A3B-uncensored-heretic",
+      "params_total_b": 34.7,
+      "params_active_b": 3,
+      "moe": true,
+      "arch": "qwen35moe",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "Qwen3.6-35B-A3B-uncensored-heretic-Q3_K_M.gguf",
+          "quant": "Q3_K_M",
+          "size_bytes": 16865560384,
+          "sha256": "053c680cff7773ade5116924ec68b58ba0aa2cbf6062f156e1a7417e8a65dc8a"
+        },
+        "balanced": {
+          "file": "Qwen3.6-35B-A3B-uncensored-heretic-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 21233608512,
+          "sha256": "b82f9f2155eb9c07139d48cc3a37880cf9d0edcca345ef6ad829b62941ccbb82"
+        },
+        "large": {
+          "file": "Qwen3.6-35B-A3B-uncensored-heretic-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 24764032832,
+          "sha256": "8319132896dd144e48afc643838b3643af63b4149f4fcdc6b768c4cfa1417d16"
+        }
+      },
+      "vram_class": "16-24",
+      "vram_est_gb": 22.7,
+      "german": "unknown",
+      "german_source": null,
+      "censorship": "uncensored",
+      "rp": 3,
+      "de": 4,
+      "uncensored": 2,
+      "writing": "ordentlich, mit Denken deutlich besser",
+      "writing_tr": {
+        "en": "tidy, much better with thinking",
+        "es": "correcto, mucho mejor con razonamiento",
+        "ru": "аккуратная, с размышлением заметно лучше"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI llmfan46/Qwen3.6-35B-A3B-uncensored-heretic (W 37,6, mit Denken 46,2, U 44,3/50,9, W/10 9,5/10)",
+          "label_en": "UGI llmfan46/Qwen3.6-35B-A3B-uncensored-heretic (W 37.6, with thinking 46.2, U 44.3/50.9, W/10 9.5/10)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE nur Schwester Qwen3.5-35B-A3B 1,83",
+          "label_en": "EuroEval DE only sister Qwen3.5-35B-A3B 1.83",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "chatml",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "source": "Qwen/Qwen3.6-35B-A3B model card (thinking mode, general tasks)"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Qwen3.6 mixture-of-experts (about 3B active per name), refusal-reduced (heretic method); the large tier exceeds 24 GB and needs expert offload to RAM."
+    },
+    {
+      "id": "qwen3-6-35b-a3b",
+      "shape": "qwen35moe-35b-a3b",
+      "expert_share": 0.919,
+      "name": "Qwen3.6-35B-A3B",
+      "family": "Qwen 3.6",
+      "base": "qwen",
+      "focus": [
+        "general"
+      ],
+      "repo": "bartowski/Qwen_Qwen3.6-35B-A3B-GGUF",
+      "source_repo": "Qwen/Qwen3.6-35B-A3B",
+      "params_total_b": 35.5,
+      "params_active_b": 3,
+      "moe": true,
+      "arch": "qwen35moe",
+      "context_max": 262144,
+      "quants": {
+        "small": {
+          "file": "Qwen_Qwen3.6-35B-A3B-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 19699553920,
+          "sha256": "afc7238af403ed454b7846454091b5e38b07575bdbb64c3e86777414dde4193c"
+        },
+        "balanced": {
+          "file": "Qwen_Qwen3.6-35B-A3B-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 22285080192,
+          "sha256": "b46fedd33e0bfb0cae308aa3c158d0a4b2c4a1d2185a1ed6f093cdaf39064772"
+        },
+        "large": {
+          "file": "Qwen_Qwen3.6-35B-A3B-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 25913185920,
+          "sha256": "ec438d1326eb11d8bb94785c54739cd4b60b01ae32bd8532e232a046b19d296d"
+        }
+      },
+      "vram_class": "16-24",
+      "vram_est_gb": 22.3,
+      "german": "good",
+      "german_source": "EuroEval DE Qwen3.5-35B-A3B 1,83",
+      "censorship": "standard",
+      "rp": 3,
+      "de": 4,
+      "uncensored": 0,
+      "writing": "ordentlich, mit Denken deutlich besser, lehnt ab",
+      "writing_tr": {
+        "en": "tidy, much better with thinking, refuses",
+        "es": "correcto, mucho mejor con razonamiento, rechaza",
+        "ru": "аккуратная, с размышлением заметно лучше, отказывает"
+      },
+      "confidence": "mid",
+      "sources": [
+        {
+          "label": "UGI Qwen/Qwen3.6-35B-A3B (no think) (W 35,83, W/10 2)",
+          "label_en": "UGI Qwen/Qwen3.6-35B-A3B (no think) (W 35.83, W/10 2)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "EuroEval DE Qwen3.5-35B-A3B 1,83",
+          "label_en": "EuroEval DE Qwen3.5-35B-A3B 1.83",
+          "url": "https://christophkind.de/blog/ollama-deutsch-beste-modelle"
+        }
+      ],
+      "reasoning": true,
+      "template": "chatml",
+      "author_sampler": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "presence_penalty": 1.5,
+        "source": "Qwen/Qwen3.6-35B-A3B model card (thinking mode, general tasks)"
+      },
+      "license": "apache-2.0",
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Original Qwen3.6 mixture-of-experts from the vendor (about 3B active); the file has one extra next-token-prediction block that holds no chat context."
+    },
+    {
+      "id": "valkyrie-49b-v2-1",
+      "shape": "nemotron-49b",
+      "name": "Valkyrie 49B v2.1",
+      "family": "Llama 3.3",
+      "base": "llama",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "bartowski/TheDrummer_Valkyrie-49B-v2.1-GGUF",
+      "source_repo": "TheDrummer/Valkyrie-49B-v2.1",
+      "params_total_b": 49.9,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "deci",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "TheDrummer_Valkyrie-49B-v2.1-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 26871407680,
+          "sha256": "b6d7c37de142b9205be117e6b9b6eb3ebaade07acc04d9595c74607f3eef921c"
+        },
+        "balanced": {
+          "file": "TheDrummer_Valkyrie-49B-v2.1-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 30215578688,
+          "sha256": "b2075f69be9fc470c47f4e19d83379c7af0f4b6576139dfb697ab2a1190f3a4e"
+        },
+        "large": {
+          "file": "TheDrummer_Valkyrie-49B-v2.1-Q5_K_M.gguf",
+          "quant": "Q5_K_M",
+          "size_bytes": 35391611968,
+          "sha256": "cdba93e04a8d628bb8618f0f0b85c7cfa09b8d94671b4fe1b0a0fa3f70c52cc9"
+        }
+      },
+      "vram_class": "24+",
+      "vram_est_gb": 29.6,
+      "german": "unknown",
+      "german_source": "Modellkarte meta-llama/Llama-3.3-70B-Instruct",
+      "censorship": "light",
+      "rp": 4,
+      "de": 3,
+      "uncensored": 1,
+      "writing": "ausführliche, dichte Prosa, großes Modell",
+      "writing_tr": {
+        "en": "detailed, dense prose, large model",
+        "es": "prosa detallada y densa, modelo grande",
+        "ru": "подробная плотная проза, большая модель"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI TheDrummer/Valkyrie-49B-v2.1 (W 40,43, W/10 6)",
+          "label_en": "UGI TheDrummer/Valkyrie-49B-v2.1 (W 40.43, W/10 6)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "Modellkarte meta-llama/Llama-3.3-70B-Instruct",
+          "label_en": "Model card meta-llama/Llama-3.3-70B-Instruct",
+          "url": "https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct"
+        },
+        {
+          "label": "Modellkarte TheDrummer/Valkyrie-49B-v2.1",
+          "label_en": "Model card TheDrummer/Valkyrie-49B-v2.1",
+          "url": "https://huggingface.co/TheDrummer/Valkyrie-49B-v2.1"
+        }
+      ],
+      "reasoning": false,
+      "template": "llama-3",
+      "author_sampler": null,
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Roleplay fine-tune of Nemotron Super 49B (a pruned Llama 3.3 70B) for cards with 32 GB or more; no license field on HF, German is listed for the Llama 3.3 base but has no EuroEval value."
+    },
+    {
+      "id": "anubis-70b-v1-1",
+      "shape": "llama-70b",
+      "name": "Anubis 70B v1.1",
+      "family": "Llama 3.3",
+      "base": "llama",
+      "focus": [
+        "roleplay"
+      ],
+      "repo": "bartowski/TheDrummer_Anubis-70B-v1.1-GGUF",
+      "source_repo": "TheDrummer/Anubis-70B-v1.1",
+      "params_total_b": 70.6,
+      "params_active_b": null,
+      "moe": false,
+      "arch": "llama",
+      "context_max": 131072,
+      "quants": {
+        "small": {
+          "file": "TheDrummer_Anubis-70B-v1.1-IQ4_XS.gguf",
+          "quant": "IQ4_XS",
+          "size_bytes": 37902666528,
+          "sha256": "e30ad3e17ce2c9f27f34491dab392d9f0dacf6550f70f13768659922110113eb"
+        },
+        "balanced": {
+          "file": "TheDrummer_Anubis-70B-v1.1-Q4_K_M.gguf",
+          "quant": "Q4_K_M",
+          "size_bytes": 42520398624,
+          "sha256": "a73bed551c64703737f598f1120aac28d1a62c08b5dbe2208da810936bb2522d"
+        },
+        "large": {
+          "file": "TheDrummer_Anubis-70B-v1.1-Q5_K_S.gguf",
+          "quant": "Q5_K_S",
+          "size_bytes": 48657451808,
+          "sha256": "c465a4bdfd7eb8b94cc8eececd31a9f9202c7f0f7aa9a08b1d7937acc5ed6088"
+        }
+      },
+      "vram_class": "24+",
+      "vram_est_gb": 41.1,
+      "german": "unknown",
+      "german_source": "Modellkarte meta-llama/Llama-3.3-70B-Instruct",
+      "censorship": "uncensored",
+      "rp": 4,
+      "de": 3,
+      "uncensored": 2,
+      "writing": "sehr kohärent, reiche Prosa, braucht viel Speicher",
+      "writing_tr": {
+        "en": "very coherent, rich prose, needs a lot of memory",
+        "es": "muy coherente, prosa rica, necesita mucha memoria",
+        "ru": "очень связная, богатая проза, нужно много памяти"
+      },
+      "confidence": "low",
+      "sources": [
+        {
+          "label": "UGI TheDrummer/Anubis-70B-v1.1 (W 46,26, W/10 8,5)",
+          "label_en": "UGI TheDrummer/Anubis-70B-v1.1 (W 46.26, W/10 8.5)",
+          "url": "https://huggingface.co/spaces/DontPlanToEnd/UGI-Leaderboard"
+        },
+        {
+          "label": "Modellkarte meta-llama/Llama-3.3-70B-Instruct",
+          "label_en": "Model card meta-llama/Llama-3.3-70B-Instruct",
+          "url": "https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct"
+        },
+        {
+          "label": "Modellkarte TheDrummer/Anubis-70B-v1.1",
+          "label_en": "Model card TheDrummer/Anubis-70B-v1.1",
+          "url": "https://huggingface.co/TheDrummer/Anubis-70B-v1.1"
+        }
+      ],
+      "reasoning": false,
+      "template": "llama-3",
+      "author_sampler": null,
+      "license": null,
+      "gated": false,
+      "last_checked": "2026-11-16",
+      "notes": "Roleplay fine-tune of Llama 3.3 70B for 48 GB of graphics memory or more; no license field on HF, German is listed for the Llama 3.3 base but has no EuroEval value."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+[package]
+name = "hw"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "PC detection and VRAM watch (Windows) for the model package"
+
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.62.2", features = [
+    "Win32_Foundation",
+    "Win32_Graphics_Dxgi",
+    "Win32_NetworkManagement_IpHelper",
+    "Win32_NetworkManagement_Ndis",
+    "Win32_Networking_WinSock",
+    "Win32_System_Performance",
+    "Win32_System_ProcessStatus",
+    "Win32_System_SystemInformation",
+] }
+
+# examples/vram_probe.rs: the kernel's segment statistics, to cross-check the counters.
+[target.'cfg(windows)'.dev-dependencies]
+windows = { version = "0.62.2", features = ["Wdk_Graphics_Direct3D", "Win32_Foundation", "Win32_System_Threading"] }

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#09090b" />
+    <title>Lorelamp</title>
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- "Zum Startbildschirm": the server adds the token to the start address (main.tsx points this at it). -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Lorelamp" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <script>
+      // The colour theme before the first paint (kept by theme.ts), so no other theme flashes at start.
+      try {
+        var grounds = { graphit: "#09090b", glut: "#0f0d0c", mitternacht: "#0b0e14", smaragd: "#0a100e", bordeaux: "#120c10", papier: "#f6f2ea" };
+        var t = localStorage.getItem("rp-theme");
+        if (grounds[t]) {
+          document.documentElement.dataset.theme = t;
+          document.querySelector('meta[name="theme-color"]').content = grounds[t];
+          if (t === "papier") document.querySelector('meta[name="color-scheme"]').content = "light";
+        }
+      } catch (e) {}
+      // The app's language before the first paint (kept by i18n/lang.ts): <html lang> for fonts,
+      // hyphenation and screen readers. German is what the tag says until another one was chosen.
+      try {
+        var l = localStorage.getItem("rp-lang");
+        if (l === "en" || l === "es" || l === "ru") document.documentElement.lang = l;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

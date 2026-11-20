@@ -1,0 +1,80 @@
+name: Bug report
+description: Something in Lorelamp does not work as it should.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please leave out anything private: no chat text, no character cards, no paths with your user name.
+        The log export already replaces your home folder with `~` and never contains message or card text.
+        Found a security problem? Don't post it here, use the private report link on the issue chooser.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open …
+        2. Click …
+        3. See …
+  - type: input
+    id: version
+    attributes:
+      label: Lorelamp version
+      description: The number of the release you downloaded (or the commit, if you built it yourself).
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: input
+    id: gpu
+    attributes:
+      label: Graphics card and its memory (VRAM)
+      description: Or "none" if the model runs on the CPU.
+      placeholder: "NVIDIA RTX 4070, 12 GB"
+    validations:
+      required: true
+  - type: input
+    id: system
+    attributes:
+      label: Windows version and RAM
+      placeholder: "Windows 11 24H2, 32 GB"
+  - type: input
+    id: model
+    attributes:
+      label: Model and engine
+      description: The model file name and the llama.cpp build shown under Settings → Model (or Expert), if the bug has to do with the model.
+      placeholder: "gemma-4-E2B-it-Q4_K_M.gguf, llama.cpp b12387 CUDA"
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where did it happen?
+      multiple: true
+      options:
+        - Desktop window
+        - Android app
+        - Phone browser
+        - Tablet
+  - type: dropdown
+    id: language
+    attributes:
+      label: Interface language
+      options:
+        - English
+        - Deutsch
+        - Español
+        - Русский
+  - type: textarea
+    id: logs
+    attributes:
+      label: Activity log
+      description: |
+        In the app: Settings → Logs → Export. Attach the `lorelamp-logs-….txt` file here (drag it into this field).
+        It holds clicks, screens and errors, never message or card text.
+    validations:
+      required: false

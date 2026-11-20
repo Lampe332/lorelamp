@@ -1,0 +1,6 @@
+{"user_name":"Jonas","character_name":"Theo Lindqvist","create_date":"2026-03-01@18h30m00s","chat_metadata":{"integrity":"test"}}
+{"name":"Theo Lindqvist","is_user":false,"is_system":false,"send_date":"March 1, 2026 6:30pm","mes":"Willkommen an Bord.","extra":{},"swipe_id":0,"swipes":["Willkommen an Bord.","Leinen los!"]}
+{"name":"Jonas","is_user":true,"is_system":false,"send_date":"2026-03-01T17:31:00.000Z","mes":"Wohin fahren wir heute?","extra":{}}
+{"name":"Theo Lindqvist","is_user":false,"is_system":false,"send_date":1772386320000,"mes":"Rüber nach Amrum, wenn der Wind mitspielt.","extra":{},"swipe_id":1,"swipes":["Nach Föhr.","Rüber nach Amrum, wenn der Wind mitspielt.","Erst mal Kaffee."]}
+{"name":"Jonas","is_user":true,"is_system":false,"send_date":"2026-03-01T17:33:00.000Z","mes":"Klingt gut.","extra":{}}
+{"name":"Theo Lindqvist","is_user":false,"is_system":false,"send_date":"2026-03-01T17:34:00.000Z","mes":"Dann halt dich fest.","extra":{},"swipe_id":0,"swipes":["Dann halt dich fest."]}

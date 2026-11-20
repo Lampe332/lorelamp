@@ -1,0 +1,289 @@
+/* The tablet layout (prefix tb-). Every rule here sits under html[data-form="tablet"], which
+   app/formfactor.ts sets for a window 768–1366 px wide that is used with a finger (or runs in the
+   Android app). A desktop window and a phone never match a line of this file. Tokens only. Held
+   upright or sideways is told apart by the window's width and by `data-turn` on <html> (also from
+   formfactor.ts), so turning the tablet moves boxes and never rebuilds a screen. */
+
+/* ---------- Frame: a rail instead of the sidebar, larger controls ---------- */
+html[data-form="tablet"] {
+  --side: 88px;
+  --ctl: 48px;
+  --gutter: 28px;
+  --tb-touch: 48px;
+}
+@media (min-width: 1000px) {
+  html[data-form="tablet"] { --gutter: 36px; }
+}
+/* A swipe that runs out of something to move must not turn the browser's page (back, reload). */
+html[data-form="tablet"], html[data-form="tablet"] body { overscroll-behavior: none; }
+
+html[data-form="tablet"] .tb-rail { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 0 10px; border-right: 1px solid var(--border); min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
+html[data-form="tablet"] .tb-rail::-webkit-scrollbar { display: none; }
+html[data-form="tablet"] .tb-rail > * { flex: none; }
+html[data-form="tablet"] .tb-brand { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 16px; margin-bottom: 2px; transition: transform .12s var(--ease-out); }
+html[data-form="tablet"] .tb-brand:active { transform: scale(.94); }
+html[data-form="tablet"] .tb-brand-mark { width: 32px; height: 32px; display: block; }
+
+html[data-form="tablet"] .tb-nav { display: grid; gap: 2px; justify-items: center; }
+html[data-form="tablet"] .tb-item { display: grid; justify-items: center; align-content: center; gap: 4px; width: 80px; min-height: 60px; padding: 5px 0 4px; border-radius: 16px; color: var(--muted); font: 500 11.5px/1.2 var(--font); text-align: center; }
+html[data-form="tablet"] .tb-item-ic { position: relative; display: grid; place-items: center; width: 56px; height: 32px; border-radius: 999px; transition: background-color .18s var(--ease-out), transform .12s var(--ease-out); }
+html[data-form="tablet"] .tb-item-ic .ic { width: 22px; height: 22px; }
+html[data-form="tablet"] .tb-item-name { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color .15s; }
+html[data-form="tablet"] .tb-item:active .tb-item-ic { background: var(--raised); transform: scale(.94); }
+html[data-form="tablet"] .tb-item[aria-current="page"] { color: var(--text); }
+html[data-form="tablet"] .tb-item[aria-current="page"] .tb-item-ic { background: var(--active); }
+html[data-form="tablet"] .tb-item-badge { position: absolute; top: -4px; right: 4px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; display: grid; place-items: center; background: var(--primary-bg); color: var(--primary-ink); font-size: 11px; font-weight: 600; line-height: 1; }
+
+/* The last chats: the figures themselves. The one that is open wears a ring in its own colour. */
+html[data-form="tablet"] .tb-recent { display: grid; justify-items: center; gap: 2px; margin-top: 8px; padding-top: 10px; position: relative; }
+html[data-form="tablet"] .tb-recent::before { content: ""; position: absolute; top: 0; left: 50%; width: 24px; height: 1px; translate: -50% 0; background: var(--field-line); }
+html[data-form="tablet"] .tb-recent-link { display: grid; place-items: center; width: 64px; height: 52px; border-radius: 16px; transition: transform .12s var(--ease-out); }
+html[data-form="tablet"] .tb-recent-link:active { transform: scale(.92); }
+html[data-form="tablet"] .tb-recent-link .av { width: 40px; height: 40px; border-radius: 13px; font-size: 18px; transition: box-shadow .18s var(--ease-out); }
+html[data-form="tablet"] .tb-recent-link[aria-current="page"] .av { box-shadow: 0 0 0 2px var(--ground), 0 0 0 4px hsl(var(--h, 30) var(--hue-caret)); }
+
+html[data-form="tablet"] .tb-foot { margin-top: auto; padding-top: 10px; display: grid; justify-items: center; gap: 2px; }
+/* The model's state is its dot; what it says in words stays for screen readers. */
+html[data-form="tablet"] .tb-status .tb-item-ic { background: var(--surface); }
+html[data-form="tablet"] .tb-status .status-pill { padding: 0; background: none; display: grid; place-items: center; }
+html[data-form="tablet"] .tb-status .status-pill > :not(.dot) { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+html[data-form="tablet"] .tb-status .dot { width: 10px; height: 10px; }
+html[data-form="tablet"] .tb-rail .persona-btn { width: 64px; height: 56px; padding: 0; justify-content: center; border-radius: 16px; }
+html[data-form="tablet"] .tb-rail .persona-btn .av { width: 40px; height: 40px; font-size: 18px; }
+html[data-form="tablet"] .tb-rail .persona-btn .pb-text, html[data-form="tablet"] .tb-rail .persona-btn > .ic { display: none; }
+/* Little height (sideways with the keyboard open): the destinations come first. */
+@media (max-height: 740px) {
+  html[data-form="tablet"] .tb-recent { display: none; }
+}
+
+/* Everything a finger presses is at least 48 px in both directions. */
+html[data-form="tablet"] .icon-btn { width: var(--tb-touch); height: var(--tb-touch); }
+html[data-form="tablet"] .btn { min-height: var(--tb-touch); }
+html[data-form="tablet"] .btn.sm { height: var(--tb-touch); padding: 0 18px; font-size: 14px; }
+html[data-form="tablet"] :is(.hx-round, .tag-chip, .tag-x, .chip, .fchip, .chat-persona, .hx-strip-open) { height: var(--tb-touch); min-height: var(--tb-touch); }
+html[data-form="tablet"] .hx-round, html[data-form="tablet"] .tag-x { width: var(--tb-touch); }
+html[data-form="tablet"] :is(.chip, .fchip, .tag-chip) { padding-inline: 18px; font-size: 14px; }
+html[data-form="tablet"] :is(.tile-action, .tile-model, .chat-open, .switch-row, .pm-item) { min-height: var(--tb-touch); align-content: center; }
+html[data-form="tablet"] .chat-open { min-height: 56px; }
+html[data-form="tablet"] .seg { padding: 4px; }
+html[data-form="tablet"] .seg button { height: var(--tb-touch); padding: 0 18px; font-size: 14px; }
+html[data-form="tablet"] .lib-seg { padding: 4px; }
+html[data-form="tablet"] .lib-seg button { width: var(--tb-touch); height: var(--tb-touch); }
+/* A text link at the end of a heading keeps its place; the room around it takes the finger. */
+html[data-form="tablet"] .sec-link { display: inline-flex; align-items: center; min-height: var(--tb-touch); padding: 0 10px; margin: -14px -10px -14px auto; border-radius: 12px; }
+/* Fields: tall enough to aim at, and 16 px type so no browser zooms into them. */
+html[data-form="tablet"] :is(.input, select.input, .search input) { min-height: var(--tb-touch); font-size: 16px; }
+html[data-form="tablet"] .textarea { font-size: 16px; }
+html[data-form="tablet"] :is(.cv-range, .mx-range, .sug-slider) { height: var(--tb-touch); }
+html[data-form="tablet"] :is(.tag-input, .uf-chip, .log-main, .uf-proof summary) { min-height: var(--tb-touch); }
+html[data-form="tablet"] .uf-proof summary { display: flex; align-items: center; }
+html[data-form="tablet"] :is(.fchip, .sec-link) { min-width: var(--tb-touch); justify-content: center; }
+html[data-form="tablet"] .btn.sm.hx-switch.hx-chip { height: var(--tb-touch); }
+/* Links that stand as a row of their own (the sources of a model). */
+html[data-form="tablet"] :is(.sg-src, li) > a.link { padding-block: 15px; }
+/* Keys named on a control belong to a keyboard on a desk, and so does dragging files into the window. */
+@media (pointer: coarse) {
+  html[data-form="tablet"] :is(.search-widget, .tile-action, .cmd-field, .cmd-go) kbd, html[data-form="tablet"] .cmd-foot > span:not(.cmd-count) { display: none; }
+  html[data-form="tablet"] .drop-hint { display: none; }
+  html[data-form="tablet"] .cmd-clear { width: var(--tb-touch); height: var(--tb-touch); }
+  html[data-form="tablet"] .cmd-example { height: var(--tb-touch); padding: 0 18px; font-size: 14px; }
+  html[data-form="tablet"] .cmd-item { min-height: 56px; }
+  html[data-form="tablet"] .cmd-input { font-size: 17px; }
+}
+html[data-form="tablet"] .tabs { gap: 8px; }
+html[data-form="tablet"] .tabs a { min-height: var(--tb-touch); padding: 12px 10px 12px; flex: none; }
+html[data-form="tablet"] .tabs a:first-child { margin-left: -10px; }
+html[data-form="tablet"] .chat-head .back, html[data-form="tablet"] .chat-bar .back { margin-left: -8px; }
+html[data-form="tablet"] .page { padding-top: 28px; }
+/* A narrow tablet: the name of a figure keeps its line, what can be done with it goes under it. */
+@media (max-width: 999px) {
+  html[data-form="tablet"] .char-head:not(.settings-head) .chat-head { flex-wrap: wrap; row-gap: 14px; }
+  html[data-form="tablet"] .char-head .head-tools { flex: 1 0 100%; flex-wrap: wrap; }
+}
+/* A finger has no hover: pressing is the feedback. */
+html[data-form="tablet"] .btn:active:not(:disabled) { transform: scale(.97); }
+html[data-form="tablet"] .toast { bottom: calc(20px + env(safe-area-inset-bottom)); left: calc(50% + var(--side) / 2); }
+
+/* ---------- Chat: the figure beside the story (sideways) or above it (upright) ---------- */
+html[data-form="tablet"] .chat-main.chat { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto minmax(0, 1fr); }
+html[data-form="tablet"] .chat > .chat-bar { grid-row: 1; height: 68px; padding: 0 12px 0 10px; gap: 10px; }
+html[data-form="tablet"] .chat > .tb-figure { grid-row: 2; }
+html[data-form="tablet"] .chat > .find-bar { grid-row: 3; }
+html[data-form="tablet"] .chat > .cv-frame, html[data-form="tablet"] .chat > .stream { grid-row: 4; min-height: 0; }
+html[data-form="tablet"] .chat-bar .av { width: 44px; height: 44px; font-size: 20px; }
+html[data-form="tablet"] .chat-bar .cv-av { min-width: var(--tb-touch); min-height: var(--tb-touch); }
+html[data-form="tablet"] .chat-bar h1 { font-size: 16px; }
+html[data-form="tablet"] .chat-bar .t > span { font-size: 13px; }
+/* The figure has its own place: its small picture in the bar only brings that place back. */
+html[data-form="tablet"] .chat:has(> .tb-figure) .chat-bar .cv-av { display: none; }
+html[data-form="tablet"] .chat:has(> .tb-figure) .chat-bar .t { padding-left: 6px; }
+html[data-form="tablet"] .chat-tools { gap: 2px; }
+html[data-form="tablet"] .chat-tools .btn.sm { width: var(--tb-touch); height: var(--tb-touch); padding: 0; }
+html[data-form="tablet"] .chat-tools .btn.sm:not(.on) { border-color: transparent; color: var(--muted); }
+html[data-form="tablet"] .chat-tools .hide-sm { display: none; }
+html[data-form="tablet"] .chat-tools .cp-text { display: none; }
+
+html[data-form="tablet"] .tb-figure { position: relative; min-width: 0; min-height: 0; background: hsl(var(--h, 30) var(--hue-head)); }
+html[data-form="tablet"] .tb-figure-pic { position: relative; overflow: hidden; background: hsl(var(--h, 30) var(--hue-tile)); }
+html[data-form="tablet"] .tb-figure-img { display: block; width: 100%; height: 100%; object-fit: cover; }
+html[data-form="tablet"] .tb-figure-close { position: absolute; top: 8px; right: 8px; z-index: 1; background: var(--scrim); color: var(--text); }
+html[data-form="tablet"] .tb-figure-name { font: 400 28px/1.15 var(--display); color: hsl(var(--h, 30) var(--hue-name)); letter-spacing: -0.01em; overflow-wrap: anywhere; }
+html[data-form="tablet"] .tb-figure-about { margin-top: 6px; color: var(--muted); font-size: 14px; line-height: 1.5; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+html[data-form="tablet"] .tb-figure-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+html[data-form="tablet"] .tb-figure-head h2 { font: 500 13px/1.3 var(--font); color: var(--faint); }
+html[data-form="tablet"] .tb-chat-link { display: grid; gap: 2px; min-height: 56px; align-content: center; padding: 8px 14px; border-radius: 14px; color: var(--muted); min-width: 0; transition: background-color .15s, color .15s, transform .12s var(--ease-out); }
+html[data-form="tablet"] .tb-chat-link:active { transform: scale(.98); background: hsl(var(--h, 30) var(--hue-field-hover)); }
+html[data-form="tablet"] .tb-chat-link b { font-weight: 500; font-size: 14.5px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+html[data-form="tablet"] .tb-chat-link span { font-size: 12.5px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+html[data-form="tablet"] .tb-chat-link[aria-current="page"] { background: hsl(var(--h, 30) var(--hue-line)); }
+html[data-form="tablet"] .tb-figure-note { font-size: 13px; color: var(--negative); padding: 0 4px; }
+html[data-form="tablet"] .tb-figure-new { flex: none; }
+
+/* Sideways: a column of its own over the full height. The picture stays, the chats scroll.
+   (`data-turn` comes from app/formfactor.ts and not from CSS `orientation`: an open keyboard
+   makes an upright window wider than tall, and the layout must not jump then.) */
+html[data-form="tablet"][data-turn="sideways"] .chat-main.chat:has(> .tb-figure) { grid-template-columns: clamp(272px, 29%, 372px) minmax(0, 1fr); }
+html[data-form="tablet"][data-turn="sideways"] .chat:has(> .tb-figure) > :is(.chat-bar, .find-bar, .cv-frame, .stream) { grid-column: 2; }
+html[data-form="tablet"][data-turn="sideways"] .chat > .tb-figure { grid-column: 1; grid-row: 1 / -1; display: flex; flex-direction: column; border-right: 1px solid hsl(var(--h, 30) var(--hue-line)); }
+html[data-form="tablet"][data-turn="sideways"] .tb-figure-pic { flex: 0 1 56%; min-height: 120px; }
+/* A figure without a picture: its letter needs less of the column, its chats get the rest. */
+html[data-form="tablet"][data-turn="sideways"] .tb-figure-pic:has(> .initial) { flex-basis: 34%; }
+html[data-form="tablet"][data-turn="sideways"] .tb-figure-img.initial { font-size: 120px; }
+html[data-form="tablet"][data-turn="sideways"] .tb-figure-text { padding: 18px 20px 4px; flex: none; }
+html[data-form="tablet"][data-turn="sideways"] .tb-figure-chats { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; gap: 6px; padding: 14px 8px 10px; }
+html[data-form="tablet"][data-turn="sideways"] .tb-figure-head { padding: 0 6px 0 12px; flex: none; }
+html[data-form="tablet"][data-turn="sideways"] .tb-chat-list { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; display: grid; gap: 2px; align-content: start; }
+html[data-form="tablet"][data-turn="sideways"] .tb-chat-list::-webkit-scrollbar { display: none; }
+/* The keyboard is open: the picture and the writing keep the room. */
+@media (max-height: 560px) {
+  html[data-form="tablet"][data-turn="sideways"] .tb-figure-pic { flex: 1 1 0; }
+  html[data-form="tablet"][data-turn="sideways"] .tb-figure-chats, html[data-form="tablet"][data-turn="sideways"] .tb-figure-about { display: none; }
+  html[data-form="tablet"][data-turn="sideways"] .tb-figure-text { padding-bottom: 14px; }
+}
+
+/* Upright: a head above the story. Picture, name, and the chats as a row to flick through. */
+html[data-form="tablet"][data-turn="upright"] .chat > .tb-figure { display: grid; grid-template-columns: 132px minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); gap: 0 20px; padding: 16px 20px 14px; border-bottom: 1px solid hsl(var(--h, 30) var(--hue-line)); }
+html[data-form="tablet"][data-turn="upright"] .tb-figure-pic { grid-row: 1 / -1; width: 132px; height: 176px; border-radius: 16px; }
+html[data-form="tablet"][data-turn="upright"] .tb-figure-img.initial { font-size: 64px; }
+html[data-form="tablet"][data-turn="upright"] .tb-figure-close { background: none; color: var(--muted); }
+html[data-form="tablet"][data-turn="upright"] .tb-figure-text { padding: 4px 56px 0 0; position: relative; }
+html[data-form="tablet"][data-turn="upright"] .tb-figure-about { -webkit-line-clamp: 2; }
+html[data-form="tablet"][data-turn="upright"] .tb-figure-chats { align-self: end; min-width: 0; display: grid; gap: 8px; }
+html[data-form="tablet"][data-turn="upright"] .tb-figure-head { padding-right: 0; }
+html[data-form="tablet"][data-turn="upright"] .tb-chat-list { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none; margin-right: -20px; padding-right: 20px; }
+html[data-form="tablet"][data-turn="upright"] .tb-chat-list::-webkit-scrollbar { display: none; }
+html[data-form="tablet"][data-turn="upright"] .tb-figure .tb-chat-link { flex: none; width: 216px; scroll-snap-align: start; background: hsl(var(--h, 30) var(--hue-field-hover)); }
+html[data-form="tablet"][data-turn="upright"] .tb-figure .tb-chat-link[aria-current="page"] { background: hsl(var(--h, 30) var(--hue-line)); }
+/* The keyboard is open: the story and the field keep the room. */
+@media (max-height: 820px) {
+  html[data-form="tablet"][data-turn="upright"] .chat > .tb-figure { display: none; }
+}
+
+/* Story and message field. */
+html[data-form="tablet"] .stream { padding: 32px 28px 16px; scrollbar-width: none; }
+html[data-form="tablet"] .stream::-webkit-scrollbar { display: none; }
+html[data-form="tablet"] .msg-actions { gap: 0; margin-right: -12px; }
+html[data-form="tablet"] .msg-actions .icon-btn, html[data-form="tablet"] .x7-swipe .icon-btn { width: var(--tb-touch); height: var(--tb-touch); }
+html[data-form="tablet"] .msg-foot { min-height: var(--tb-touch); }
+html[data-form="tablet"] .x7-swipe { margin-left: -14px; }
+/* An answer with variants can be flicked sideways (tablet/swipe.ts); the page still scrolls up and down. */
+html[data-form="tablet"] .msg:has(.x7-swipe) .prose { touch-action: pan-y; }
+html[data-form="tablet"] .composer { padding: 6px 28px 16px; }
+html[data-form="tablet"] .box { border-radius: 28px; padding: 6px 6px 6px 22px; }
+html[data-form="tablet"] .box textarea { font-size: 17px; height: 48px; padding: 11px 0; }
+html[data-form="tablet"] .send, html[data-form="tablet"] .box .cv-star { width: var(--tb-touch); height: var(--tb-touch); }
+html[data-form="tablet"] .to-end { height: var(--tb-touch); padding: 0 20px 0 16px; font-size: 14px; }
+/* The jump row above the chat look settings (Settings → Chat and a chat's "Aussehen"). */
+html[data-form="tablet"] .cv-jump-btn { height: var(--tb-touch); padding: 0 16px; }
+/* The keys named under the field belong to a keyboard on a desk. */
+@media (pointer: coarse) {
+  html[data-form="tablet"] .composer .hint, html[data-form="tablet"] .hint-inline { display: none; }
+}
+@media (max-height: 560px) {
+  html[data-form="tablet"] .stream { padding-top: 14px; }
+  html[data-form="tablet"] .chat > .chat-bar { height: 56px; }
+}
+/* "Aussehen" lies over the story from the right at every tablet width. */
+html[data-form="tablet"] .cv-panel { position: absolute; order: 0; flex: none; width: min(420px, 100%); box-shadow: var(--float-shadow); }
+html[data-form="tablet"] .cv-panel-head .icon-btn { width: var(--tb-touch); height: var(--tb-touch); }
+
+/* ---------- Settings: the areas as a list, the open one beside it ---------- */
+@media (min-width: 1000px) {
+  html[data-form="tablet"] .chat-main:has(> .settings-head:not(.persona-head)) { display: grid; grid-template-columns: 272px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); }
+  html[data-form="tablet"] .settings-head:not(.persona-head) { display: flex; flex-direction: column; gap: 18px; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; padding: 28px 12px 16px; border-right: 1px solid var(--border); }
+  html[data-form="tablet"] .settings-head:not(.persona-head) .chat-head { padding: 0 12px; }
+  /* Every area's line under the title gets the room of two lines, so the list under it stays put
+     when another area is opened. */
+  html[data-form="tablet"] .settings-head:not(.persona-head) .chat-head .t > span { white-space: normal; display: block; line-height: 20px; min-height: 40px; }
+  html[data-form="tablet"] .settings-head:not(.persona-head) .tabs { flex-direction: column; gap: 2px; padding: 0; box-shadow: none; overflow: visible; }
+  html[data-form="tablet"] .settings-head:not(.persona-head) .tabs a { min-height: 52px; margin: 0; padding: 0 14px; gap: 14px; border: 0; border-radius: 14px; font-size: 15px; transition: background-color .15s, color .15s, transform .12s var(--ease-out); }
+  html[data-form="tablet"] .settings-head:not(.persona-head) .tabs a .ic { width: 20px; height: 20px; }
+  html[data-form="tablet"] .settings-head:not(.persona-head) .tabs a:active { transform: scale(.98); background: var(--surface); }
+  html[data-form="tablet"] .settings-head:not(.persona-head) .tabs a[aria-current="page"] { background: var(--raised); color: var(--text); }
+  html[data-form="tablet"] .chat-main:has(> .settings-head:not(.persona-head)) > .view { --page-max: 1040px; }
+}
+
+/* ---------- Personas: from 1000 px the list and the open persona (the active one at first) side by
+   side, as on a wide desktop, instead of a lone list in the middle of the screen ---------- */
+@media (min-width: 1000px) and (max-width: 1099px) {
+  html[data-form="tablet"] .personas { grid-template-columns: 248px minmax(0, 1fr); max-width: none; margin-inline: 0; }
+  html[data-form="tablet"] .personas.at-editor .pl { display: grid; }
+  html[data-form="tablet"] .personas.at-list .pe-pane { display: block; }
+  html[data-form="tablet"] .pl { position: sticky; }
+  html[data-form="tablet"] .persona-head .back { display: none; }
+}
+
+/* ---------- Card builder: suggestion chips to aim at, and one row of actions at the bottom ---------- */
+html[data-form="tablet"] .cb-pick { min-height: var(--tb-touch); padding: 0 18px; font-size: 14px; }
+html[data-form="tablet"] .cb-bar { flex-wrap: nowrap; }
+html[data-form="tablet"] .cb-bar > span { flex: 1 1 0; text-wrap: balance; }
+/* "Entwurf verwerfen" as its sign alone (it keeps its name for screen readers and as a tooltip). */
+html[data-form="tablet"] .cb-bar .cb-drop { flex: none; width: var(--tb-touch); padding: 0; justify-content: center; }
+html[data-form="tablet"] .cb-bar .cb-drop .hide-sm { display: none; }
+/* Asking before throwing the draft away, or an error: the words take a row of their own. */
+html[data-form="tablet"] .cb-bar:has(> span.bad, > span.cb-asking) { flex-wrap: wrap; }
+html[data-form="tablet"] .cb-bar > :is(span.bad, span.cb-asking) { flex-basis: 100%; }
+
+/* ---------- Characters: the cards, and the chosen figure in a pane of its own ---------- */
+html[data-form="tablet"] .grid-chars:not(.lib-compact, .lib-list) { grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); }
+html[data-form="tablet"] .cc-star { width: var(--tb-touch); height: var(--tb-touch); top: 4px; right: 4px; }
+html[data-form="tablet"] .tb-pane { display: flex; flex-direction: column; min-height: 0; overflow: hidden; background: hsl(var(--h, 30) var(--hue-head)); }
+html[data-form="tablet"] .tb-pane-pic { position: relative; flex: 0 1 44%; min-height: 150px; overflow: hidden; background: hsl(var(--h, 30) var(--hue-tile)); }
+html[data-form="tablet"] .tb-pane-img { display: block; width: 100%; height: 100%; object-fit: cover; }
+html[data-form="tablet"] .tb-pane-img.initial { font-size: 120px; }
+html[data-form="tablet"] .tb-pane-close { position: absolute; top: 8px; right: 8px; background: var(--scrim); color: var(--text); }
+html[data-form="tablet"] .tb-pane-body { flex: 1 1 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; padding: 20px 20px 24px; display: flex; flex-direction: column; gap: 16px; }
+html[data-form="tablet"] .tb-pane-body > * { flex: none; }
+html[data-form="tablet"] .tb-pane-body::-webkit-scrollbar { display: none; }
+html[data-form="tablet"] .tb-pane-title { display: flex; align-items: center; gap: 8px 12px; flex-wrap: wrap; }
+html[data-form="tablet"] .tb-pane-title h2 { font: 400 30px/1.15 var(--display); letter-spacing: -0.01em; color: hsl(var(--h, 30) var(--hue-name)); overflow-wrap: anywhere; min-width: 0; }
+html[data-form="tablet"] .tb-pane-about { color: var(--muted); font-size: 14.5px; line-height: 1.55; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 5; overflow: hidden; }
+html[data-form="tablet"] .tb-pane-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+html[data-form="tablet"] .tb-pane-tags .tag { background: hsl(var(--h, 30) var(--hue-line)); height: 26px; padding: 0 11px; font-size: 12.5px; }
+html[data-form="tablet"] .tb-pane-acts { display: grid; gap: 8px; }
+html[data-form="tablet"] .tb-pane-acts .btn { width: 100%; height: 52px; font-size: 15px; }
+html[data-form="tablet"] .tb-pane-acts .btn.solid { background: hsl(var(--h, 30) var(--hue-line)); }
+html[data-form="tablet"] .tb-pane-chats { display: grid; gap: 4px; min-width: 0; }
+html[data-form="tablet"] .tb-pane-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px; }
+html[data-form="tablet"] .tb-pane-head h3 { margin: 0; font: 500 13px/1.3 var(--font); color: var(--faint); }
+html[data-form="tablet"] .tb-pane-all { display: inline-flex; align-items: center; min-height: var(--tb-touch); padding: 0 10px; margin: -8px -10px -8px 0; border-radius: 12px; color: var(--muted); font-size: 13px; font-weight: 500; }
+html[data-form="tablet"] .tb-pane-list { display: grid; gap: 2px; margin-inline: -12px; }
+html[data-form="tablet"] .tb-pane-more { display: flex; flex-wrap: wrap; gap: 2px 4px; margin: 0 -14px; }
+
+/* Wide: the pane is always there, the cards scroll beside it. */
+@media (min-width: 1000px) {
+  html[data-form="tablet"] .view:has(> .tb-pane) { display: grid; grid-template-columns: minmax(0, 1fr) clamp(320px, 32%, 400px); align-items: start; scrollbar-width: none; }
+  html[data-form="tablet"] .view:has(> .tb-pane) > .page { grid-column: 1; grid-row: 1; width: 100%; }
+  html[data-form="tablet"] .view > .tb-pane { grid-column: 2; grid-row: 1; position: sticky; top: 0; height: calc(var(--vvh, 100dvh) - env(safe-area-inset-top) - env(safe-area-inset-bottom)); border-left: 1px solid hsl(var(--h, 30) var(--hue-line)); }
+  html[data-form="tablet"] .tb-pane-close { display: none; }
+  html[data-form="tablet"] .cc.tb-shown { box-shadow: 0 0 0 2px var(--ground), 0 0 0 4px hsl(var(--h, 30) var(--hue-caret)); }
+}
+/* Narrow: the pane comes in from the right over the cards and leaves the same way. */
+@media (max-width: 999px) {
+  html[data-form="tablet"] .view > .tb-pane { position: fixed; z-index: 30; top: env(safe-area-inset-top); right: env(safe-area-inset-right); bottom: env(safe-area-inset-bottom); width: min(400px, 64vw); border-radius: 24px 0 0 24px; box-shadow: var(--float-shadow); transform: translateX(104%); visibility: hidden; transition: transform .26s cubic-bezier(0.32, 0.72, 0, 1), visibility 0s .26s; }
+  /* Sideways the pane is the finger's (tablet/swipe.ts); its text still scrolls up and down. The value has to stand on the
+     scrolling part itself: a scroll container does not take it from its parent. */
+  html[data-form="tablet"] .view > .tb-pane, html[data-form="tablet"] .view > .tb-pane .tb-pane-body { touch-action: pan-y; }
+  html[data-form="tablet"] .view > .tb-pane[data-open="true"] { transform: none; visibility: visible; transition: transform .34s cubic-bezier(0.32, 0.72, 0, 1); }
+  html[data-form="tablet"] .cc.open { box-shadow: 0 0 0 2px var(--ground), 0 0 0 4px hsl(var(--h, 30) var(--hue-caret)); }
+}
