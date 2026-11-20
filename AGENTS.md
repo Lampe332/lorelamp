@@ -9,7 +9,7 @@ The full architecture and the project rules live in [CLAUDE.md](CLAUDE.md). Read
 - GitHub: `Lampe332/lorelamp`, public, AGPL-3.0, default branch `main`.
 - Never push, create a release or change the repository settings without the owner's explicit go right before it. Commit only when asked.
 - Run the private grep from `docs/releasing.md` (step 5) before every push, as a command of its own.
-- Release files (`release-*/`, `target/release-assets/`) are never committed. They go into the GitHub release as assets.
+- Release files (root folders `release-*/`, `target/release-assets/`) are never committed. The ignore rule is `/release-*/`; without the leading slash it would also hide `docs/release-notes/`. They go into the GitHub release as assets.
 
 ## Required release-note style
 

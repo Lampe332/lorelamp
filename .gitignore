@@ -36,4 +36,4 @@ apps/mobile/src-tauri/gen/schemas/
 
 # Agent worktrees and local Claude files
 .claude/
-release-*/
+/release-*/
