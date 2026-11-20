@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Lampe332/lorelamp/releases"><img src="https://img.shields.io/badge/download-0.1.0%20beta-f4b860?style=flat-square&labelColor=15132b" alt="Download the latest release"></a>
+  <a href="https://github.com/Lampe332/lorelamp/releases"><img src="https://img.shields.io/badge/download-0.2.0%20beta-f4b860?style=flat-square&labelColor=15132b" alt="Download the latest release"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-f4b860?style=flat-square&labelColor=15132b" alt="Windows 10 or 11">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0-f4b860?style=flat-square&labelColor=15132b" alt="License: AGPL-3.0"></a>
 </p>
@@ -25,7 +25,7 @@
 
 Lorelamp is a roleplay and character chat app for Windows. You bring character cards (or build your own), Lorelamp sets up [llama.cpp](https://github.com/ggml-org/llama.cpp) and a model that fits your graphics card, and the stories stay on your disk. It speaks English, German, Spanish and Russian, and the characters answer in the language you pick.
 
-It is a young project with one maintainer, and 0.1.0 is its first release. What is in it is listed in the [changelog](CHANGELOG.md).
+It is a young project with one maintainer and still a beta. What changed in each version is listed in the [changelog](CHANGELOG.md).
 
 <p align="center">
   <img src="docs/images/readme/desktop-635aa5b0.webp" alt="Two desktop screens. Left: the home screen with the last story up front and six character portraits below. Right: a chat with a botanist on a space station in messenger layout, her portrait large beside the chat." width="100%">
@@ -89,9 +89,9 @@ Everything is on the [release page](https://github.com/Lampe332/lorelamp/release
 
 | File | What it is |
 |---|---|
-| `Lorelamp-0.1.0-setup.exe` | Installs Lorelamp for your Windows user, with a Start menu entry |
-| `Lorelamp-0.1.0-portable.exe` | The same app without installing. Both keep their data in the same place, so you can switch |
-| `Lorelamp-0.1.0.apk` | The Android remote, see [Phone and tablet](#phone-and-tablet) |
+| `Lorelamp-0.2.0-setup.exe` | Installs Lorelamp for your Windows user, with a Start menu entry |
+| `Lorelamp-0.2.0-portable.exe` | The same app without installing. Both keep their data in the same place, so you can switch |
+| `Lorelamp-0.2.0.apk` | The Android remote, see [Phone and tablet](#phone-and-tablet) |
 | `SHA256SUMS.txt` | The checksum of each file above |
 
 Lorelamp is not signed yet, so Windows SmartScreen warns on the first start. Click *More info*, then *Run anyway*.
@@ -99,7 +99,7 @@ Lorelamp is not signed yet, so Windows SmartScreen warns on the first start. Cli
 To check a download first, compute its SHA-256 hash in PowerShell, from the folder with the file, and compare it with the line for that file in `SHA256SUMS.txt`:
 
 ```powershell
-Get-FileHash .\Lorelamp-0.1.0-setup.exe -Algorithm SHA256
+Get-FileHash .\Lorelamp-0.2.0-setup.exe -Algorithm SHA256
 ```
 
 The two must be identical; upper or lower case does not matter. If they match, the file arrived complete and is the one that was published. It is not a signature, so it cannot tell you who published it.
@@ -138,7 +138,7 @@ Phones talk to your PC inside your Wi-Fi only. See [SECURITY.md](SECURITY.md) fo
 The phone is a remote: the model, your characters and chats stay on the PC, which has to be on and in the same Wi-Fi.
 
 1. On the PC, open *Settings → Phone* and switch on *Phones may connect*. The first time, Windows asks about its firewall: allow it.
-2. **Android app** (Android 7 or newer, 64-bit ARM): download `Lorelamp-0.1.0.apk` from the [release page](https://github.com/Lampe332/lorelamp/releases) and allow installing from this source. Tap *Scan QR code* and point the phone at the code on the PC. No camera? Tap *Enter code*: the app finds the PC in the Wi-Fi and you type the 6-digit code shown there (valid for 10 minutes). The app's start page follows the phone's language (English, German, Spanish or Russian); once connected, it shows the PC's interface in the language you set there.
+2. **Android app** (Android 7 or newer, 64-bit ARM): download `Lorelamp-0.2.0.apk` from the [release page](https://github.com/Lampe332/lorelamp/releases) and allow installing from this source. Tap *Scan QR code* and point the phone at the code on the PC. No camera? Tap *Enter code*: the app finds the PC in the Wi-Fi and you type the 6-digit code shown there (valid for 10 minutes). The app's start page follows the phone's language (English, German, Spanish or Russian); once connected, it shows the PC's interface in the language you set there.
 3. **Without the app** (an iPhone, say): open the QR code with the phone's camera. *Add to Home Screen* starts Lorelamp like an app.
 
 The app remembers the PC and tries again by itself while the PC is off. Things that only make sense at the PC (engines, model folders, the benchmark, restoring backups) are marked *runs on the PC*. *Disconnect all phones* in the same tab locks every phone out and renews the code. The Wi-Fi connection is plain HTTP with a key in the QR code, so use it at home, not on a public network.

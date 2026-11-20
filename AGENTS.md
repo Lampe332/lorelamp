@@ -61,5 +61,5 @@ Things learned while working on Lorelamp that are easy to get wrong. When you fi
 - Never start a second model server next to a running one, and never start the Vulkan backend without asking (it crashed the dev PC once). VRAM numbers come from the WDDM counters in `crates/hw`, not from llama.cpp.
 - Agent worktrees under `.claude/worktrees/` each build their own `target/` (10 to 20 GB). Remove a worktree as soon as its branch is merged.
 - Test servers for UI work run from a temp folder with their own `--data-dir`, so the owner's chats and settings stay untouched (see CLAUDE.md rule 9).
-- Release notes exist for 0.1.0 and 0.2.0 (`docs/release-notes/`). The GitHub repository was created on 2026-11-20 with no releases yet; the built 0.2.0 files were in the local folder `release-0.2.0/` (ignored).
-- `README.md` links a `CHANGELOG.md` in the root, and its download badge still says 0.1.0. Check both before the next release.
+- The GitHub repository was created on 2026-11-20. 0.2.0 is the first release published there; 0.1.0 has notes in `docs/release-notes/` and an entry in `CHANGELOG.md` but no GitHub release.
+- Every release also updates `README.md`: the download badge and the file names in the download table, the `Get-FileHash` example and the Android section.
